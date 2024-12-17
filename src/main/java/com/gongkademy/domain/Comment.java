@@ -24,8 +24,10 @@ public class Comment {
     @Column(name="comment_id")
     private Long id;
 
+    @Column(nullable = false, length = 1_000)
     private String content;
 
+    @Column(nullable = false)
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

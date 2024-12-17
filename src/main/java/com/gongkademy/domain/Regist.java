@@ -23,6 +23,7 @@ public class Regist {
     @Column(name="regist_id")
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

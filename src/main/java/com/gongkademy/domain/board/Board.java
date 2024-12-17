@@ -12,12 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -30,8 +28,11 @@ public abstract class Board extends BaseEntity {
     @Column(name="board_id")
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String title;
 
+    @Lob
+    @Column(nullable = false, length = 10_000)
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)

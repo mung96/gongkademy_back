@@ -23,6 +23,7 @@ public class Play {
     @Column(name="play_id")
     private Long id;
 
+    @Column(nullable = false)
     private int recentPlay;
 
     @ManyToOne(fetch = FetchType.LAZY)

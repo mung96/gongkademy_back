@@ -22,12 +22,16 @@ public class Lecture extends BaseEntity{
     @Column(name="lecture_id")
     private Long id;
 
+    @Column(nullable = false,length = 100)
     private String title;
 
+    @Column(nullable = false)
     private int time;
 
+    @Column(nullable = false)
     private int order;
 
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
