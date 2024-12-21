@@ -21,7 +21,7 @@ public class LectureRepositoryImpl implements LectureRepository{
     }
 
     @Override
-    public Lecture findById(Long LectureId) {
-        return null;
+    public Lecture findById(Long lectureId) {
+        return em.find(Lecture.class,lectureId);
     }
 }
