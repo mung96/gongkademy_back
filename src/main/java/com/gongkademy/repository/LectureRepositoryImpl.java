@@ -15,7 +15,7 @@ public class LectureRepositoryImpl implements LectureRepository{
     @Override
     //courseId로 강의 목록 조회
     public List<Lecture> findLecturesByCourseId(Long courseId) {
-        return em.createQuery("SELECT l FROM Lecture l JOIN Course c Where c.id = :courseId",Lecture.class)
+        return em.createQuery("SELECT l FROM Lecture l JOIN l.course c Where c.id = :courseId",Lecture.class)
                 .setParameter("courseId",courseId)
                 .getResultList();
     }
