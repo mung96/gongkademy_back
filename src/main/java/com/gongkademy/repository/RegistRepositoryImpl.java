@@ -18,7 +18,14 @@ public class RegistRepositoryImpl implements RegistRepository{
     }
 
     @Override
-    public Long deleteById(Long registId) {
-        return 0L;
+    public Long deleteById(Long memberId, Long courseId) {
+        Regist regist = em.createQuery("SELECT r FROM Regist r WHERE r.member.id = :memberId AND r.course.id = :courseId",Regist.class)
+                .setParameter("memberId", memberId)
+                .setParameter("courseId", courseId)
+                .getSingleResult();
+        em.remove(regist);
+        return regist.getId();
     }
+
+
 }
