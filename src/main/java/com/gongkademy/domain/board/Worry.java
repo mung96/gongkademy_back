@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @DiscriminatorValue("Worry")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class Worry extends Board {
 

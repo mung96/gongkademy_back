@@ -30,10 +30,12 @@ public class Lecture extends BaseEntity{
     private String title;
 
     @Column(nullable = false)
-    private int time;
+    //강의 시간 : 초 단위로 기록
+    private int runtime;
 
-    @Column(nullable = false)
-    private int order;
+    @Column(nullable = false,unique = true)
+    //TODO: 강의 순서 unique 테스트코드 작성
+    private int lectureOrder;
 
     @Column(nullable = false)
     private String url;
