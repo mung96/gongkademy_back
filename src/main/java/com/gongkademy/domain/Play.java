@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Play {
+public class Play extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class Play {
     private Long id;
 
     @Column(nullable = false)
-    private int recentPlay;
+    private int lastPlayedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
