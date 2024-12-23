@@ -25,7 +25,10 @@ public class PlayRepositoryImpl implements PlayRepository{
     }
 
     @Override
-    public Play findByLectureId(Long playId) {
-        return null;
+    public Play findByMemberIdAndLectureId(Long memberId,Long lectureId) {
+        return em.createQuery("SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.id = :lectureId ", Play.class)
+                 .setParameter("memberId", memberId)
+                 .setParameter("lectureId", lectureId)
+                .getSingleResult();
     }
 }
