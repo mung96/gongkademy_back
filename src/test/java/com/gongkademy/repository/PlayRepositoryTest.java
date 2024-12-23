@@ -91,40 +91,55 @@ class PlayRepositoryTest {
         em.persist(lecture2);
 
         //When
-        Play play1 = Play.builder()
+        Play firstPlayByMember1 = Play.builder()
                          .member(member1)
                          .lecture(lecture1)
                          .lastPlayedTime(140)
                          .build();
-        Play play2 = Play.builder()
+        Play lastPlayByMember1 = Play.builder()
                          .member(member1)
                          .lecture(lecture2)
                          .lastPlayedTime(160)
                          .build();
-        Play play3 = Play.builder()
+        Play firstPlayByMember2 = Play.builder()
                          .member(member2)
                          .lecture(lecture1)
                          .lastPlayedTime(180)
                          .build();
-        Play play4 = Play.builder()
-                         .member(member2)
-                         .lecture(lecture2)
-                         .lastPlayedTime(200)
-                         .build();
+        Play lastPlayByMember2 = Play.builder()
+                                     .member(member2)
+                                     .lecture(lecture2)
+                                     .lastPlayedTime(250)
+                                     .build();
 
 
-        playRepository.save(play1);
-        playRepository.save(play2);
-        playRepository.save(play3);
-        playRepository.save(play4);
+        playRepository.save(firstPlayByMember1);
+        playRepository.save(lastPlayByMember1);
+        playRepository.save(firstPlayByMember2);
+        playRepository.save(lastPlayByMember2);
 
-        Play findPlay1 = playRepository.findByMemberIdAndCourseIdByModifiedTime(member1.getId(), course.getId());
-        Play findPlay2 = playRepository.findByMemberIdAndCourseIdByModifiedTime(member2.getId(), course.getId());
+        Play findedLastPlayByMember1AndCourseId = playRepository.findByMemberIdAndCourseIdByModifiedTime(member1.getId(), course.getId());
+        Play findedLastPlayByMember2AndCourseId = playRepository.findByMemberIdAndCourseIdByModifiedTime(member2.getId(), course.getId());
+
+        Play findedLastPlayByMember1AndLectureId = playRepository.findByMemberIdAndLectureId(member1.getId(), lecture1.getId());
+        Play findedLastPlayByMember2AndLectureId = playRepository.findByMemberIdAndLectureId(member2.getId(), lecture1.getId());
 
         //Then
-        assertEquals(lecture2.getId(),findPlay1.getLecture().getId());
-        assertEquals(lecture2.getId(),findPlay2.getLecture().getId());
+        //회원1이 강좌에서 가장 최근 수강한 강의
+        assertEquals(lecture2.getId(),findedLastPlayByMember1AndCourseId.getLecture().getId());
+        assertEquals(lastPlayByMember1.getLastPlayedTime(),findedLastPlayByMember1AndCourseId.getLastPlayedTime());
 
+        //회원2가 강좌에서 가장 최근 수강한 강의
+        assertEquals(lecture2.getId(),findedLastPlayByMember2AndCourseId.getLecture().getId());
+        assertEquals(lastPlayByMember2.getLastPlayedTime(),findedLastPlayByMember2AndCourseId.getLastPlayedTime());
+
+        //회원1이 강의1에서 가장 최근 수강기록
+        assertEquals(lecture1.getId(),findedLastPlayByMember1AndLectureId.getLecture().getId());
+        assertEquals(firstPlayByMember1.getLastPlayedTime(),findedLastPlayByMember1AndLectureId.getLastPlayedTime());
+
+        //회원2가 강의1에서 가장 최근 수강기록
+        //TODO: service에서 update query적용해야함.
+        assertEquals(lecture1.getId(),findedLastPlayByMember2AndLectureId.getLecture().getId());
+        assertEquals(firstPlayByMember2.getLastPlayedTime(),findedLastPlayByMember2AndLectureId.getLastPlayedTime());
     }
-
 }

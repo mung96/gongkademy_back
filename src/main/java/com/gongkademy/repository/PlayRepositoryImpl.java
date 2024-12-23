@@ -13,7 +13,11 @@ public class PlayRepositoryImpl implements PlayRepository{
 
     @Override
     public Long save(Play play) {
-        em.persist(play);
+        if(play.getId() == null){
+            em.persist(play);
+        }else{
+            em.merge(play);
+        }
         return play.getId();
     }
 
