@@ -22,7 +22,7 @@ class PlayRepositoryTest {
     @Test
     void 강의_수강_기록_남기기(){
         //Given
-        Member member = Member.builder()
+        Member member1 = Member.builder()
                               .nickname("유저1")
                               .email("aaaa@naver.com")
                               .build();
@@ -37,30 +37,35 @@ class PlayRepositoryTest {
                                   .runtime(15 * 60)
                                   .course(course)
                                   .build();
+
         em.persist(course);
-        em.persist(member);
+        em.persist(member1);
         em.persist(lecture1);
 
         //When
-        Play play = Play.builder()
-                        .member(member)
+        Play play1 = Play.builder()
+                        .member(member1)
                         .lecture(lecture1)
                         .lastPlayedTime(140)
                         .build();
 
-        Long savedPlayId = playRepository.save(play);
+        Long savedPlayId1 = playRepository.save(play1);
 
         //Then
-        assertEquals(play.getId(),savedPlayId);
+        assertEquals(play1.getId(),savedPlayId1);
     }
 
     @Test
     void 강좌의_가장_최근_수강_강의기록_조회(){
         //Given
-        Member member = Member.builder()
-                              .nickname("유저1")
-                              .email("aaaa@naver.com")
-                              .build();
+        Member member1 = Member.builder()
+                               .nickname("유저1")
+                               .email("aaaa@naver.com")
+                               .build();
+        Member member2 = Member.builder()
+                               .nickname("유저2")
+                               .email("aaas@naver.com")
+                               .build();
         Course course = Course.builder()
                               .title("재료역학")
                               .thumbnail("aaa")
@@ -80,29 +85,45 @@ class PlayRepositoryTest {
                                   .course(course)
                                   .build();
         em.persist(course);
-        em.persist(member);
+        em.persist(member1);
+        em.persist(member2);
         em.persist(lecture1);
         em.persist(lecture2);
 
         //When
-        Play play = Play.builder()
-                        .member(member)
-                        .lecture(lecture1)
-                        .lastPlayedTime(140)
-                        .build();
+        Play play1 = Play.builder()
+                         .member(member1)
+                         .lecture(lecture1)
+                         .lastPlayedTime(140)
+                         .build();
         Play play2 = Play.builder()
-                        .member(member)
-                        .lecture(lecture2)
-                        .lastPlayedTime(120)
-                        .build();
+                         .member(member1)
+                         .lecture(lecture2)
+                         .lastPlayedTime(160)
+                         .build();
+        Play play3 = Play.builder()
+                         .member(member2)
+                         .lecture(lecture1)
+                         .lastPlayedTime(180)
+                         .build();
+        Play play4 = Play.builder()
+                         .member(member2)
+                         .lecture(lecture2)
+                         .lastPlayedTime(200)
+                         .build();
 
-        playRepository.save(play);
+
+        playRepository.save(play1);
         playRepository.save(play2);
+        playRepository.save(play3);
+        playRepository.save(play4);
 
-        Play findPlay = playRepository.findByCourseIdByModifiedTime(course.getId());
+        Play findPlay1 = playRepository.findByMemberIdAndCourseIdByModifiedTime(member1.getId(), course.getId());
+        Play findPlay2 = playRepository.findByMemberIdAndCourseIdByModifiedTime(member2.getId(), course.getId());
 
         //Then
-        assertEquals(lecture2.getId(),findPlay.getLecture().getId());
+        assertEquals(lecture2.getId(),findPlay1.getLecture().getId());
+        assertEquals(lecture2.getId(),findPlay2.getLecture().getId());
 
     }
 

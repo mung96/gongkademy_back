@@ -18,9 +18,10 @@ public class PlayRepositoryImpl implements PlayRepository{
     }
 
     @Override
-    public Play findByCourseIdByModifiedTime(Long courseId) {
-        return em.createQuery("SELECT p FROM Play p WHERE p.lecture.course.id = :courseId ORDER BY p.modifiedTime DESC", Play.class)
-                .setParameter("courseId", courseId)
+    public Play findByMemberIdAndCourseIdByModifiedTime(Long memberId, Long courseId) {
+        return em.createQuery("SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.course.id = :courseId ORDER BY p.modifiedTime DESC", Play.class)
+                 .setParameter("memberId", memberId)
+                 .setParameter("courseId", courseId)
                 .getResultList()
                  .getFirst();
     }
