@@ -20,15 +20,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Regist {
+public class Regist extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="regist_id")
     private Long id;
-
-    @Column(nullable = false)
-    private LocalDateTime createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
