@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Course extends BaseEntity{
 
     @Id
@@ -32,5 +30,10 @@ public class Course extends BaseEntity{
     //강좌 자료
     private String courseNote;
 
-
+    @Builder
+    private Course(String title, String thumbnail, String courseNote) {
+        this.title = title;
+        this.thumbnail = thumbnail;
+        this.courseNote = courseNote;
+    }
 }

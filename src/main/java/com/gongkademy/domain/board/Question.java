@@ -18,11 +18,14 @@ import lombok.Setter;
 @DiscriminatorValue("Question")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Question extends Board{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="lecture_id")
     private Lecture lecture;
+
+    @Builder
+    private Question(Lecture lecture) {
+        this.lecture = lecture;
+    }
 }

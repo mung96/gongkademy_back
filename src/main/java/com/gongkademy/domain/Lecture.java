@@ -17,8 +17,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Lecture extends BaseEntity{
 
     @Id
@@ -43,4 +41,13 @@ public class Lecture extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id")
     private Course course;
+
+    @Builder
+    private Lecture(String title, int runtime, int lectureOrder, String url, Course course) {
+        this.title = title;
+        this.runtime = runtime;
+        this.lectureOrder = lectureOrder;
+        this.url = url;
+        this.course = course;
+    }
 }

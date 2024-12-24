@@ -36,4 +36,11 @@ public class Comment extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="board_id")
     private Board board;
+
+    @Builder
+    private Comment(String content, Member member, Board board) {
+        this.content = content;
+        this.member = member;
+        this.board = board;
+    }
 }

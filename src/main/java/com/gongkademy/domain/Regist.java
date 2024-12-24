@@ -18,8 +18,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Regist extends BaseEntity{
 
     @Id
@@ -34,4 +32,10 @@ public class Regist extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id")
     private Course course;
+
+    @Builder
+    private Regist(Member member, Course course) {
+        this.member = member;
+        this.course = course;
+    }
 }

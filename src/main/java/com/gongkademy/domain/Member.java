@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Member extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +26,9 @@ public class Member extends BaseEntity{
     @Column(nullable = false, length = 320)
     private String email;
 
+    @Builder
+    private Member(String nickname, String email) {
+        this.nickname = nickname;
+        this.email = email;
+    }
 }
