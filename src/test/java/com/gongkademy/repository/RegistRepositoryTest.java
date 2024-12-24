@@ -37,7 +37,6 @@ class RegistRepositoryTest {
         Regist regist = Regist.builder()
                               .member(member)
                               .course(course)
-                                .createdTime(LocalDateTime.now())
                               .build();
         //When
         Long findRegistId = registRepository.save(regist);
@@ -63,7 +62,6 @@ class RegistRepositoryTest {
         Regist regist = Regist.builder()
                               .member(member)
                               .course(course)
-                              .createdTime(LocalDateTime.now())
                               .build();
         //When
         Long findRegistId = registRepository.save(regist);
