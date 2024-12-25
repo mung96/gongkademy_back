@@ -18,17 +18,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-public class Regist {
+public class Regist extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="regist_id")
     private Long id;
-
-    @Column(nullable = false)
-    private LocalDateTime createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
@@ -37,4 +32,10 @@ public class Regist {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id")
     private Course course;
+
+    @Builder
+    private Regist(Member member, Course course) {
+        this.member = member;
+        this.course = course;
+    }
 }

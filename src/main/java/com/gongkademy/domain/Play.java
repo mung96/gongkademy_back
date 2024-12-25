@@ -17,8 +17,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Play extends BaseEntity{
 
     @Id
@@ -36,4 +34,11 @@ public class Play extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="lecture_id")
     private Lecture lecture;
+
+    @Builder
+    private Play(int lastPlayedTime, Member member, Lecture lecture) {
+        this.lastPlayedTime = lastPlayedTime;
+        this.member = member;
+        this.lecture = lecture;
+    }
 }

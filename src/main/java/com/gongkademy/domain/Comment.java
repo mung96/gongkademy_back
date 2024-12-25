@@ -20,9 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-public class Comment {
+public class Comment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="comment_id")
@@ -31,9 +29,6 @@ public class Comment {
     @Column(nullable = false, length = 1_000)
     private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdTime;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
@@ -41,4 +36,11 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="board_id")
     private Board board;
+
+    @Builder
+    private Comment(String content, Member member, Board board) {
+        this.content = content;
+        this.member = member;
+        this.board = board;
+    }
 }
