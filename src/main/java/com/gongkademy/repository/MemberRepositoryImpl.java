@@ -12,12 +12,12 @@ public class MemberRepositoryImpl implements MemberRepository{
     private final EntityManager em;
 
     @Override
-    public Long update(Member member) {
+    public Long update(String email, Member updateMember) {
         Member findMember = em.createQuery("SELECT m FROM Member m WHERE m.email = :email", Member.class)
-                .setParameter("email", member.getEmail())
+                .setParameter("email", email)
                 .getSingleResult();
 
-        findMember.updateProfile(member);
+        findMember.updateProfile(updateMember);
        return findMember.getId();
     }
 }
