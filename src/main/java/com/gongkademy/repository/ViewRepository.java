@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface ViewRepository {
 
-     void save(View view);
-     List<View> findAllByBoardId(Long board_id);
+     Long save(View view);
+     List<View> findAllByBoardId(Long boardId);
 }
