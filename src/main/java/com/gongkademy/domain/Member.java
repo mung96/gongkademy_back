@@ -20,15 +20,20 @@ public class Member extends BaseEntity{
     @Column(name="member_id")
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String nickname;
 
-    @Column(nullable = false, length = 320)
+    @Column(nullable = false, length = 320, unique = true)
     private String email;
 
     @Builder
     private Member(String nickname, String email) {
         this.nickname = nickname;
         this.email = email;
+    }
+
+    //변경 메소드
+    public void updateProfile(Member member){
+        this.nickname = member.nickname;
     }
 }
