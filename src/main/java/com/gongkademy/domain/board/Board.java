@@ -16,12 +16,14 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name="DTYPE")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class Board extends BaseEntity {
 
@@ -40,6 +42,12 @@ public abstract class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+
+    protected Board(String title, String body, Member member){
+        this.title = title;
+        this.body = body;
+        this.member = member;
+    }
 
     //수정 메소드
     public void changeTitle(String title){

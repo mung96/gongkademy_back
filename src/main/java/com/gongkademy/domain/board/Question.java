@@ -25,7 +25,8 @@ public class Question extends Board{
     private Lecture lecture;
 
     @Builder
-    private Question(Lecture lecture) {
+    private Question(String title, String body,Member member,Lecture lecture) {
+        super(title,body,member);
         this.lecture = lecture;
     }
 
@@ -33,5 +34,4 @@ public class Question extends Board{
     public void changeLecture(Lecture lecture){
         this.lecture = lecture;
     }
-
 }
