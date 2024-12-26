@@ -25,7 +25,13 @@ public class Question extends Board{
     private Lecture lecture;
 
     @Builder
-    private Question(Lecture lecture) {
+    private Question(String title, String body,Member member,Lecture lecture) {
+        super(title,body,member);
+        this.lecture = lecture;
+    }
+
+    //수정 메소드
+    public void changeLecture(Lecture lecture){
         this.lecture = lecture;
     }
 }
