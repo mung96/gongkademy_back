@@ -28,4 +28,10 @@ public class Question extends Board{
     private Question(Lecture lecture) {
         this.lecture = lecture;
     }
+
+    //수정 메소드
+    public void changeLecture(Lecture lecture){
+        this.lecture = lecture;
+    }
+
 }

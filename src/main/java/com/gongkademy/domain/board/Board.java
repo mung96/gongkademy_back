@@ -40,4 +40,12 @@ public abstract class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+
+    //수정 메소드
+    public void changeTitle(String title){
+        this.title = title;
+    }
+    public void changeBody(String body){
+        this.body = body;
+    }
 }
