@@ -1,6 +1,7 @@
 package com.gongkademy.repository;
 
 import com.gongkademy.domain.board.Board;
+import com.gongkademy.domain.board.Question;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,10 @@ public class BoardRepositoryImpl implements BoardRepository{
 
         findBoard.changeTitle(board.getTitle());
         findBoard.changeBody(board.getBody());
+
+        if(findBoard instanceof Question){
+            ((Question) findBoard).changeLecture(((Question) board).getLecture());
+        }
         return findBoard.getId();
     }
 
