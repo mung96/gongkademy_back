@@ -4,13 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.gongkademy.domain.Course;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.Regist;
+import com.gongkademy.domain.Register;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -34,14 +32,14 @@ class RegistRepositoryTest {
         em.persist(course);
         em.persist(member);
 
-        Regist regist = Regist.builder()
-                              .member(member)
-                              .course(course)
-                              .build();
+        Register register = Register.builder()
+                                  .member(member)
+                                  .course(course)
+                                  .build();
         //When
-        Long findRegistId = registRepository.save(regist);
+        Long findRegistId = registRepository.save(register);
         //Then
-        assertEquals(regist.getId(),findRegistId);
+        assertEquals(register.getId(),findRegistId);
     }
 
     @Test
@@ -59,16 +57,16 @@ class RegistRepositoryTest {
         em.persist(course);
         em.persist(member);
 
-        Regist regist = Regist.builder()
-                              .member(member)
-                              .course(course)
-                              .build();
+        Register register = Register.builder()
+                                  .member(member)
+                                  .course(course)
+                                  .build();
         //When
-        Long findRegistId = registRepository.save(regist);
+        Long findRegistId = registRepository.save(register);
         Long deletedRegistId = registRepository.deleteById(member.getId(), course.getId());
 
         //then
-        assertEquals(regist.getId(),deletedRegistId);
+        assertEquals(register.getId(),deletedRegistId);
     }
 
 }

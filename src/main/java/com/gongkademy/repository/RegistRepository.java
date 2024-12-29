@@ -1,9 +1,9 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Regist;
+import com.gongkademy.domain.Register;
 
 public interface RegistRepository {
-    Long save(Regist regist);
+    Long save(Register register);
 
     Long deleteById(Long memberId, Long courseId);
 }
