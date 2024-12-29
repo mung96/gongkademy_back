@@ -26,6 +26,7 @@ public class CourseServiceImpl implements CourseService {
     private final RegisterRepository registerRepository;
 
     @Override
+    //수강 신청
     public Long registerCourse(Long memberId, Long courseId) {
         //가입한 회원인지 확인
         Member member = memberRepository.findById(memberId)
@@ -46,9 +47,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    //수강 취소
     public Long dropCourse(Long memberId, Long courseId) {
-        // TODO Auto-generated method stub
-        return 0L;
+        Register register = registerRepository.findByMemberIdAndCourseId(memberId, courseId)
+                                              .orElseThrow(() -> new CustomException(ErrorCode.REGISTER_NOT_FOUND));
+        registerRepository.delete(register);
+        return register.getId();
     }
 
 }
