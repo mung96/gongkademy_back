@@ -10,7 +10,7 @@ public interface CourseService {
 
     Long dropCourse(Long memberId, Long courseId);
 
-    CourseDetailResponse findCourseDetail(Long courseId);
+    CourseDetailResponse findCourseDetail(Long memberId, Long courseId);
 
     List<LectureDetailResponse> findLectureList(Long courseId);
 }

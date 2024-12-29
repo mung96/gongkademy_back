@@ -5,11 +5,13 @@ import static com.gongkademy.exception.ErrorCode.COURSE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 import com.gongkademy.domain.Course;
+import com.gongkademy.domain.Lecture;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.Register;
 import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.CourseRepository;
+import com.gongkademy.repository.LectureRepository;
 import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.CourseDetailResponse;
@@ -27,9 +29,10 @@ public class CourseServiceImpl implements CourseService {
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
     private final RegisterRepository registerRepository;
+    private final LectureRepository lectureRepository;
 
-    @Override
     //수강 신청
+    @Override
     public Long registerCourse(Long memberId, Long courseId) {
         //가입한 회원인지 확인
         Member member = memberRepository.findById(memberId)
@@ -49,8 +52,8 @@ public class CourseServiceImpl implements CourseService {
         return register.getId();
     }
 
-    @Override
     //수강 취소
+    @Override
     public Long dropCourse(Long memberId, Long courseId) {
         Register register = registerRepository.findByMemberIdAndCourseId(memberId, courseId)
                                               .orElseThrow(() -> new CustomException(ErrorCode.REGISTER_NOT_FOUND));
@@ -58,9 +61,30 @@ public class CourseServiceImpl implements CourseService {
         return register.getId();
     }
 
+    //강좌 상세 조회
     @Override
-    public CourseDetailResponse findCourseDetail(Long courseId) {
-        return null;
+    public CourseDetailResponse findCourseDetail(Long memberId, Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                                        .orElseThrow(()-> new CustomException(COURSE_NOT_FOUND));
+        List<Lecture> lectureList = lectureRepository.findLecturesByCourseId(courseId);
+
+        //수강 중인지 확인
+        boolean isRegister = registerRepository.findByMemberIdAndCourseId(memberId, courseId)
+                                               .isPresent();
+
+        //총 강좌 시간
+        int courseTime = 0;
+        for(Lecture lecture:lectureList){
+            courseTime += lecture.getRuntime();
+        }
+
+        return CourseDetailResponse.builder()
+                                    .title(course.getTitle())
+                                    .thumbnail(course.getThumbnail())
+                                    .courseNote(course.getCourseNote())
+                                    .courseTime(courseTime)
+                                    .isRegister(isRegister)
+                                    .build();
     }
 
     @Override
