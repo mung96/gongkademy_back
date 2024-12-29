@@ -27,7 +27,7 @@ class MemberRepositoryTest {
                               .build();
         //when
         em.persist(member);
-        Member findMember = memberRepository.findById(member.getId());
+        Member findMember = memberRepository.findById(member.getId()).get();
 
         //then
         assertEquals(member,findMember);
@@ -42,7 +42,7 @@ class MemberRepositoryTest {
                               .build();
         //when
         em.persist(member);
-        Member findMember = memberRepository.findByNickname(member.getNickname());
+        Member findMember = memberRepository.findByNickname(member.getNickname()).get();
 
         //then
         assertEquals(member,findMember);
