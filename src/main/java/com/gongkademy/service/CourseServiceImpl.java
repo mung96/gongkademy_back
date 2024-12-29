@@ -12,6 +12,9 @@ import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.CourseRepository;
 import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.repository.RegisterRepository;
+import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureDetailResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +56,16 @@ public class CourseServiceImpl implements CourseService {
                                               .orElseThrow(() -> new CustomException(ErrorCode.REGISTER_NOT_FOUND));
         registerRepository.delete(register);
         return register.getId();
+    }
+
+    @Override
+    public CourseDetailResponse findCourseDetail(Long courseId) {
+        return null;
+    }
+
+    @Override
+    public List<LectureDetailResponse> findLectureList(Long courseId) {
+        return List.of();
     }
 
 }
