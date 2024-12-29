@@ -33,7 +33,7 @@ public class Member extends BaseEntity{
     }
 
     //변경 메소드
-    public void updateProfile(Member member){
-        this.nickname = member.nickname;
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
     }
 }
