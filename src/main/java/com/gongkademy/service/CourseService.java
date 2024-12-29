@@ -2,7 +2,7 @@ package com.gongkademy.service;
 
 public interface CourseService {
 
-    void registerCourse(Long courseId, Long memberId);
+    Long registerCourse(Long memberId, Long courseId);
 
-    void dropCourse(Long courseId, Long memberId);
+    Long dropCourse(Long memberId, Long courseId);
 }

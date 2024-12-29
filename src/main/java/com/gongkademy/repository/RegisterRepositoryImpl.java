@@ -2,6 +2,7 @@ package com.gongkademy.repository;
 
 import com.gongkademy.domain.Register;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,20 +15,19 @@ public class RegisterRepositoryImpl implements RegisterRepository {
 
     @Override
     public Long save(Register register) {
-        //TODO: 이미 있는 예외면 여기서 터트려야하나?
         em.persist(register);
         return register.getId();
     }
 
     @Override
     public Optional<Register> findByMemberIdAndCourseId(Long memberId, Long courseId) {
-        Register register = em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.course.id = :courseId",
-                                         Register.class)
-                            .setParameter("memberId", memberId)
-                            .setParameter("courseId", courseId)
-                            .getResultList().getFirst();
+        List<Register> registerList = em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.course.id = :courseId",
+                                                     Register.class)
+                                        .setParameter("memberId", memberId)
+                                        .setParameter("courseId", courseId)
+                                        .getResultList();
 
-        return Optional.ofNullable(register);
+        return registerList.isEmpty() ? Optional.empty() : Optional.of(registerList.getFirst());
     }
 
     @Override
