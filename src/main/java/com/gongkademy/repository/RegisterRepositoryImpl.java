@@ -31,13 +31,7 @@ public class RegisterRepositoryImpl implements RegisterRepository {
     }
 
     @Override
-    public Long deleteById(Long memberId, Long courseId) {
-        //TODO: 삭제 대상이 있어야 터트릴 수 있음.예외처리
-        Register register = em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.course.id = :courseId",
-                                         Register.class)
-                            .setParameter("memberId", memberId)
-                            .setParameter("courseId", courseId)
-                            .getSingleResult();
+    public Long delete(Register register) {
         em.remove(register);
         return register.getId();
     }

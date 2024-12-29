@@ -8,5 +8,5 @@ public interface RegisterRepository {
 
     Optional<Register> findByMemberIdAndCourseId(Long memberId, Long courseId);
 
-    Long deleteById(Long memberId, Long courseId);
+    Long delete(Register register);
 }

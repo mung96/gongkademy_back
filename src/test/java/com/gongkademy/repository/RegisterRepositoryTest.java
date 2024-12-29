@@ -47,7 +47,7 @@ class RegisterRepositoryTest {
     }
 
     @Test
-    void 회원id_강좌id_강좌_수강_철회(){
+    void 강좌_수강_철회(){
         //given
         //Given
         Member member = Member.builder()
@@ -67,7 +67,7 @@ class RegisterRepositoryTest {
                                   .build();
         //When
         Long findRegistId = registerRepository.save(register);
-        Long deletedRegistId = registerRepository.deleteById(member.getId(), course.getId());
+        Long deletedRegistId = registerRepository.delete(register);
 
         //then
         assertEquals(register.getId(),deletedRegistId);
