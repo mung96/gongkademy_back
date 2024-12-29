@@ -8,9 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +16,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Regist extends BaseEntity{
+public class Register extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="regist_id")
+    @Column(name="register_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +32,7 @@ public class Regist extends BaseEntity{
     private Course course;
 
     @Builder
-    private Regist(Member member, Course course) {
+    private Register(Member member, Course course) {
         this.member = member;
         this.course = course;
     }

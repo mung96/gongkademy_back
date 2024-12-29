@@ -4,21 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.gongkademy.domain.Course;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.Regist;
+import com.gongkademy.domain.Register;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class RegistRepositoryTest {
+class RegisterRepositoryTest {
 
     @Autowired EntityManager em;
-    @Autowired RegistRepository registRepository;
+    @Autowired
+    RegisterRepository registerRepository;
 
     @Test
     void 강좌_수강_신청(){
@@ -34,18 +33,21 @@ class RegistRepositoryTest {
         em.persist(course);
         em.persist(member);
 
-        Regist regist = Regist.builder()
-                              .member(member)
-                              .course(course)
-                              .build();
+        Register register = Register.builder()
+                                  .member(member)
+                                  .course(course)
+                                  .build();
         //When
-        Long findRegistId = registRepository.save(regist);
+        Long findRegistId = registerRepository.save(register);
+        Register findRegister = registerRepository.findByMemberIdAndCourseId(member.getId(), course.getId()).get();
+
         //Then
-        assertEquals(regist.getId(),findRegistId);
+        assertEquals(register.getId(),findRegistId);
+        assertEquals(findRegister,register);
     }
 
     @Test
-    void 회원id_강좌id_강좌_수강_철회(){
+    void 강좌_수강_철회(){
         //given
         //Given
         Member member = Member.builder()
@@ -59,16 +61,16 @@ class RegistRepositoryTest {
         em.persist(course);
         em.persist(member);
 
-        Regist regist = Regist.builder()
-                              .member(member)
-                              .course(course)
-                              .build();
+        Register register = Register.builder()
+                                  .member(member)
+                                  .course(course)
+                                  .build();
         //When
-        Long findRegistId = registRepository.save(regist);
-        Long deletedRegistId = registRepository.deleteById(member.getId(), course.getId());
+        Long findRegistId = registerRepository.save(register);
+        Long deletedRegistId = registerRepository.delete(register);
 
         //then
-        assertEquals(regist.getId(),deletedRegistId);
+        assertEquals(register.getId(),deletedRegistId);
     }
 
 }

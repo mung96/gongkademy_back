@@ -118,11 +118,11 @@ class PlayRepositoryTest {
         playRepository.save(firstPlayByMember2);
         playRepository.save(lastPlayByMember2);
 
-        Play findedLastPlayByMember1AndCourseId = playRepository.findByMemberIdAndCourseIdByModifiedTime(member1.getId(), course.getId());
-        Play findedLastPlayByMember2AndCourseId = playRepository.findByMemberIdAndCourseIdByModifiedTime(member2.getId(), course.getId());
+        Play findedLastPlayByMember1AndCourseId = playRepository.findByMemberIdAndCourseIdByModifiedTime(member1.getId(), course.getId()).get();
+        Play findedLastPlayByMember2AndCourseId = playRepository.findByMemberIdAndCourseIdByModifiedTime(member2.getId(), course.getId()).get();
 
-        Play findedLastPlayByMember1AndLectureId = playRepository.findByMemberIdAndLectureId(member1.getId(), lecture1.getId());
-        Play findedLastPlayByMember2AndLectureId = playRepository.findByMemberIdAndLectureId(member2.getId(), lecture1.getId());
+        Play findedLastPlayByMember1AndLectureId = playRepository.findByMemberIdAndLectureId(member1.getId(), lecture1.getId()).get();
+        Play findedLastPlayByMember2AndLectureId = playRepository.findByMemberIdAndLectureId(member2.getId(), lecture1.getId()).get();
 
         //Then
         //회원1이 강좌에서 가장 최근 수강한 강의
