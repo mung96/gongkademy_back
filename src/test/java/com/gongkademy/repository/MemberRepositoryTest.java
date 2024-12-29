@@ -19,7 +19,7 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    void 회원_프로필_수정(){
+    void id로_회원_조회(){
         //given
         Member member = Member.builder()
                               .nickname("유저1")
@@ -27,12 +27,24 @@ class MemberRepositoryTest {
                               .build();
         //when
         em.persist(member);
-        Long memberId = memberRepository.update(member.getEmail(),Member.builder().nickname("유저2").build());
-        Member findMember = em.find(Member.class,memberId);
+        Member findMember = memberRepository.findById(member.getId()).get();
 
         //then
-        assertEquals("유저2",findMember.getNickname());
-        assertEquals(member.getId(),findMember.getId());
+        assertEquals(member,findMember);
+    }
 
+    @Test
+    void 닉네임으로_회원_조회(){
+        //given
+        Member member = Member.builder()
+                              .nickname("유저1")
+                              .email("aaa@naver.com")
+                              .build();
+        //when
+        em.persist(member);
+        Member findMember = memberRepository.findByNickname(member.getNickname()).get();
+
+        //then
+        assertEquals(member,findMember);
     }
 }

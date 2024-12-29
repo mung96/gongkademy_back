@@ -2,6 +2,8 @@ package com.gongkademy.repository;
 
 import com.gongkademy.domain.Member;
 import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,12 +14,16 @@ public class MemberRepositoryImpl implements MemberRepository{
     private final EntityManager em;
 
     @Override
-    public Long update(String email, Member updateMember) {
-        Member findMember = em.createQuery("SELECT m FROM Member m WHERE m.email = :email", Member.class)
-                .setParameter("email", email)
-                .getSingleResult();
+    public Optional<Member> findById(Long memberId) {
+        return Optional.ofNullable(em.find(Member.class, memberId));
+    }
 
-        findMember.updateProfile(updateMember);
-       return findMember.getId();
+    @Override
+    public Optional<Member> findByNickname(String nickname) {
+        List<Member> memberList = em.createQuery("SELECT m FROM Member m WHERE m.nickname = :nickname", Member.class)
+                                    .setParameter("nickname", nickname)
+                                    .getResultList();
+
+        return memberList.isEmpty() ? Optional.empty() : Optional.of(memberList.getFirst());
     }
 }
