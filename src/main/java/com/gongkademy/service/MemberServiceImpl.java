@@ -1,6 +1,11 @@
 package com.gongkademy.service;
 
+import static com.gongkademy.exception.ErrorCode.DUPLICATED_NICKNAME;
+import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
+
 import com.gongkademy.domain.Member;
+import com.gongkademy.exception.CustomException;
+import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.service.dto.UpdateProfileRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +24,9 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(memberId);
 
         //가입한 회원인지 확인
-        if(member == null) throw new IllegalStateException("가입한 회원이 아닙니다.");
+        if(member == null) throw new CustomException(MEMBER_NOT_FOUND);
         //nickname 중복 처리
-        if(memberRepository.findByNickname(request.getNickname()) == null) throw new IllegalStateException("다른 사람이 가지고 있는 닉네임입니다.");
+        if(memberRepository.findByNickname(request.getNickname()) == null) throw new CustomException(DUPLICATED_NICKNAME);
 
         member.updateNickname(request.getNickname());
 
