@@ -4,6 +4,7 @@ import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.Question;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +15,8 @@ public class BoardRepositoryImpl implements BoardRepository{
     private final EntityManager em;
 
     @Override
-    public Board findById(Long boardId) {
-        return em.find(Board.class,boardId);
+    public Optional<Board> findById(Long boardId) {
+        return Optional.ofNullable(em.find(Board.class, boardId));
     }
 
     @Override

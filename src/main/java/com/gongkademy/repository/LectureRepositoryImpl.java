@@ -3,6 +3,7 @@ package com.gongkademy.repository;
 import com.gongkademy.domain.Lecture;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +22,7 @@ public class LectureRepositoryImpl implements LectureRepository{
     }
 
     @Override
-    public Lecture findById(Long lectureId) {
-        return em.find(Lecture.class,lectureId);
+    public Optional<Lecture> findById(Long lectureId) {
+        return Optional.ofNullable(em.find(Lecture.class, lectureId));
     }
 }

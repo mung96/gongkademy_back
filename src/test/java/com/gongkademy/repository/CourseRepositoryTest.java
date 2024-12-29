@@ -27,7 +27,7 @@ class CourseRepositoryTest {
         em.persist(course);
 
         //when
-        Course findCourse = courseRepository.findById(1L);
+        Course findCourse = courseRepository.findById(1L).get();
 
         //then
         assertEquals("재료역학",findCourse.getTitle());

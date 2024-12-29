@@ -40,8 +40,8 @@ class BoardRepositoryTest {
         em.persist(worry);
 
         //when
-        Board findQuestion = boardRepository.findById(question.getId());
-        Board findWorry = boardRepository.findById(worry.getId());
+        Board findQuestion = boardRepository.findById(question.getId()).get();
+        Board findWorry = boardRepository.findById(worry.getId()).get();
         List<Board> findBoardList = boardRepository.findAllByMemberId(member.getId());
 
         //then

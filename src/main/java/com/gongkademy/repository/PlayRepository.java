@@ -1,9 +1,10 @@
 package com.gongkademy.repository;
 
 import com.gongkademy.domain.Play;
+import java.util.Optional;
 
 public interface PlayRepository {
     Long save(Play play);
-    Play findByMemberIdAndCourseIdByModifiedTime(Long memberId, Long courseId);
-    Play findByMemberIdAndLectureId(Long memberId, Long lectureId);
+    Optional<Play> findByMemberIdAndCourseIdByModifiedTime(Long memberId, Long courseId);
+    Optional<Play> findByMemberIdAndLectureId(Long memberId, Long lectureId);
 }

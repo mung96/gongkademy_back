@@ -78,8 +78,8 @@ class LectureRepositoryTest {
         em.persist(lecture2);
 
         //when
-        Lecture findLecture1 = lectureRepository.findById(lecture1.getId());
-        Lecture findLecture2 = lectureRepository.findById(lecture2.getId());
+        Lecture findLecture1 = lectureRepository.findById(lecture1.getId()).get();
+        Lecture findLecture2 = lectureRepository.findById(lecture2.getId()).get();
 
         //then
         assertEquals(lecture1,findLecture1);
