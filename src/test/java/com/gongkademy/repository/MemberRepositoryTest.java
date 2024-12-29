@@ -19,6 +19,36 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
+    void id로_회원_조회(){
+        //given
+        Member member = Member.builder()
+                              .nickname("유저1")
+                              .email("aaa@naver.com")
+                              .build();
+        //when
+        em.persist(member);
+        Member findMember = memberRepository.findById(member.getId());
+
+        //then
+        assertEquals(member,findMember);
+    }
+
+    @Test
+    void 닉네임으로_회원_조회(){
+        //given
+        Member member = Member.builder()
+                              .nickname("유저1")
+                              .email("aaa@naver.com")
+                              .build();
+        //when
+        em.persist(member);
+        Member findMember = memberRepository.findByNickname(member.getNickname());
+
+        //then
+        assertEquals(member,findMember);
+    }
+
+    @Test
     void 회원_프로필_수정(){
         //given
         Member member = Member.builder()
@@ -33,6 +63,5 @@ class MemberRepositoryTest {
         //then
         assertEquals("유저2",findMember.getNickname());
         assertEquals(member.getId(),findMember.getId());
-
     }
 }
