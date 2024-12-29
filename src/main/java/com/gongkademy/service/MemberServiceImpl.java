@@ -21,12 +21,13 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public String updateProfile(Long memberId, UpdateProfileRequest request) {
-        Member member = memberRepository.findById(memberId);
-
         //가입한 회원인지 확인
-        if(member == null) throw new CustomException(MEMBER_NOT_FOUND);
+        Member member = memberRepository.findById(memberId)
+                                        .orElseThrow(()-> new CustomException(MEMBER_NOT_FOUND));
+
         //nickname 중복 처리
-        if(memberRepository.findByNickname(request.getNickname()) == null) throw new CustomException(DUPLICATED_NICKNAME);
+        memberRepository.findByNickname(request.getNickname())
+                        .ifPresent(m -> {throw new CustomException(DUPLICATED_NICKNAME);});
 
         member.updateNickname(request.getNickname());
 
