@@ -13,10 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class RegistRepositoryTest {
+class RegisterRepositoryTest {
 
     @Autowired EntityManager em;
-    @Autowired RegistRepository registRepository;
+    @Autowired
+    RegisterRepository registerRepository;
 
     @Test
     void 강좌_수강_신청(){
@@ -37,9 +38,12 @@ class RegistRepositoryTest {
                                   .course(course)
                                   .build();
         //When
-        Long findRegistId = registRepository.save(register);
+        Long findRegistId = registerRepository.save(register);
+        Register findRegister = registerRepository.findByMemberIdAndCourseId(member.getId(), course.getId()).get();
+
         //Then
         assertEquals(register.getId(),findRegistId);
+        assertEquals(findRegister,register);
     }
 
     @Test
@@ -62,8 +66,8 @@ class RegistRepositoryTest {
                                   .course(course)
                                   .build();
         //When
-        Long findRegistId = registRepository.save(register);
-        Long deletedRegistId = registRepository.deleteById(member.getId(), course.getId());
+        Long findRegistId = registerRepository.save(register);
+        Long deletedRegistId = registerRepository.deleteById(member.getId(), course.getId());
 
         //then
         assertEquals(register.getId(),deletedRegistId);
