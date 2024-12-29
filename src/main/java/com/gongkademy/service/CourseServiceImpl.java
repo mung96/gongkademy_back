@@ -63,14 +63,17 @@ public class CourseServiceImpl implements CourseService {
 
     //강좌 상세 조회
     @Override
+    @Transactional(readOnly = true)
     public CourseDetailResponse findCourseDetail(Long memberId, Long courseId) {
         Course course = courseRepository.findById(courseId)
                                         .orElseThrow(()-> new CustomException(COURSE_NOT_FOUND));
         List<Lecture> lectureList = lectureRepository.findLecturesByCourseId(courseId);
 
-        //수강 중인지 확인
-        boolean isRegister = registerRepository.findByMemberIdAndCourseId(memberId, courseId)
-                                               .isPresent();
+        //수강 중인지 확인\
+        boolean isRegister = false;
+        if(memberId != null){
+            isRegister = registerRepository.findByMemberIdAndCourseId(memberId, courseId).isPresent();
+        }
 
         //총 강좌 시간
         int courseTime = 0;
@@ -88,8 +91,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LectureDetailResponse> findLectureList(Long courseId) {
+        List<Lecture> lectureList = lectureRepository.findLecturesByCourseId(courseId);
+
+//        List<LectureDetailResponse> lectureList = new ArrayList<>();
+//        for(Lecture lecture:lectureList){
+//
+//        }
         return List.of();
     }
-
 }

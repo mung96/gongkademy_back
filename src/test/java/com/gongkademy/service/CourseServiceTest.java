@@ -99,21 +99,29 @@ class CourseServiceTest {
         courseService.registerCourse(member1.getId(),course.getId());
         CourseDetailResponse registerCourseDetail = courseService.findCourseDetail(member1.getId(),course.getId());
         CourseDetailResponse unregisterCourseDetail = courseService.findCourseDetail(member2.getId(),course.getId());
+        CourseDetailResponse nonLoginCourseDetail = courseService.findCourseDetail(null,course.getId());
 
         //Then
-        //수강한 강좌
+        //수강한 유저
         assertEquals(course.getTitle(), registerCourseDetail.getTitle());
         assertEquals(course.getThumbnail(), registerCourseDetail.getThumbnail());
         assertEquals(null, registerCourseDetail.getCourseNote());
         assertTrue(registerCourseDetail.isRegister());
         assertEquals(lecture1.getRuntime()+lecture2.getRuntime(), registerCourseDetail.getCourseTime());
 
-        //수강하지 않은 강좌
+        //수강하지 않은 유저
         assertEquals(course.getTitle(), unregisterCourseDetail.getTitle());
         assertEquals(course.getThumbnail(), unregisterCourseDetail.getThumbnail());
         assertEquals(null, unregisterCourseDetail.getCourseNote());
         assertFalse(unregisterCourseDetail.isRegister());
         assertEquals(lecture1.getRuntime()+lecture2.getRuntime(), unregisterCourseDetail.getCourseTime());
+
+        //로그인 안한 유저
+        assertEquals(course.getTitle(), nonLoginCourseDetail.getTitle());
+        assertEquals(course.getThumbnail(), nonLoginCourseDetail.getThumbnail());
+        assertEquals(null, nonLoginCourseDetail.getCourseNote());
+        assertFalse(nonLoginCourseDetail.isRegister());
+        assertEquals(lecture1.getRuntime()+lecture2.getRuntime(), nonLoginCourseDetail.getCourseTime());
     }
 
 }
