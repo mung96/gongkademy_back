@@ -1,7 +1,7 @@
 package com.gongkademy.service;
 
 import com.gongkademy.service.dto.CourseDetailResponse;
-import com.gongkademy.service.dto.LectureDetailResponse;
+import com.gongkademy.service.dto.LectureListResponse;
 import java.util.List;
 
 public interface CourseService {
@@ -12,5 +12,5 @@ public interface CourseService {
 
     CourseDetailResponse findCourseDetail(Long memberId, Long courseId);
 
-    List<LectureDetailResponse> findLectureList(Long courseId);
+    LectureListResponse findLectureList(Long memberId, Long courseId);
 }

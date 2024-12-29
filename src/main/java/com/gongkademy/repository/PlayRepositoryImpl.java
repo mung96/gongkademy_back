@@ -2,6 +2,7 @@ package com.gongkademy.repository;
 
 import com.gongkademy.domain.Play;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -35,11 +36,11 @@ public class PlayRepositoryImpl implements PlayRepository{
 
     @Override
     public Optional<Play> findByMemberIdAndLectureId(Long memberId, Long lectureId) {
-        return Optional.ofNullable(
-                em.createQuery("SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.id = :lectureId ",
-                               Play.class)
-                  .setParameter("memberId", memberId)
-                  .setParameter("lectureId", lectureId)
-                  .getResultList().getFirst());
+        List<Play> playList =  em.createQuery("SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.id = :lectureId ", Play.class)
+                                 .setParameter("memberId", memberId)
+                                 .setParameter("lectureId", lectureId)
+                                 .getResultList();
+
+        return playList.isEmpty() ? Optional.empty() : Optional.of(playList.getFirst());
     }
 }
