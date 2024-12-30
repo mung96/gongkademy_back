@@ -1,6 +1,7 @@
 package com.gongkademy.service;
 
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
 import java.util.List;
@@ -19,5 +20,5 @@ public interface CourseService {
 
     Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime);
 
-    LectureItemDto findLectureDetail(Long memberId, Long lectureId);
+    LectureDetailResponse findLectureDetail(Long memberId, Long lectureId);
 }

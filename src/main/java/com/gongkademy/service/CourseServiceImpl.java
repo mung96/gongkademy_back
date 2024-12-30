@@ -17,6 +17,7 @@ import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.repository.PlayRepository;
 import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
 import java.util.ArrayList;
@@ -130,6 +131,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public LectureItemDto findLastLecture(Long memberId, Long courseId) {
         return null;
     }
@@ -140,7 +142,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public LectureItemDto findLectureDetail(Long memberId, Long lectureId) {
-        return null;
+    @Transactional(readOnly = true)
+    public LectureDetailResponse findLectureDetail(Long memberId, Long lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId)
+                                          .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
+        Play play = playRepository.findByMemberIdAndLectureId(memberId, lectureId).orElse(null);
+
+        return LectureDetailResponse.builder()
+                                    .title(lecture.getTitle())
+                                    .url(lecture.getUrl())
+                                    .lastPlayedTime(play == null ? 0 : play.getLastPlayedTime())
+                                    .build();
     }
 }

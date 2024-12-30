@@ -14,7 +14,8 @@ public enum ErrorCode {
     //강좌관련
     COURSE_NOT_FOUND("존재하지 않는 강좌입니다.",HttpStatus.NOT_FOUND),
     REGISTERED_COURSE("이미 수강 중인 강좌입니다.",HttpStatus.CONFLICT),
-    REGISTER_NOT_FOUND("수강 중인 강좌가 아닙니다.",HttpStatus.NOT_FOUND);
+    REGISTER_NOT_FOUND("수강 중인 강좌가 아닙니다.",HttpStatus.NOT_FOUND),
+    LECTURE_NOT_FOUND("존재하지 않는 강의입니다.",HttpStatus.NOT_FOUND);
 
     private final String message;
     private final HttpStatus httpStatus;
