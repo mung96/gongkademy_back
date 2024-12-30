@@ -128,4 +128,19 @@ public class CourseServiceImpl implements CourseService {
                                   .isRegister(isRegister)
                                   .build();
     }
+
+    @Override
+    public LectureItemDto findLastLecture(Long memberId, Long courseId) {
+        return null;
+    }
+
+    @Override
+    public Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime) {
+        return 0L;
+    }
+
+    @Override
+    public LectureItemDto findLectureDetail(Long memberId, Long lectureId) {
+        return null;
+    }
 }
