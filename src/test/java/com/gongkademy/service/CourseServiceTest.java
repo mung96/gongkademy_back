@@ -13,6 +13,7 @@ import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureListResponse;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -173,5 +174,36 @@ class CourseServiceTest {
         assertFalse(nonLoginLectureList.isRegister());
         assertFalse(nonLoginLectureList.getLectureList().get(0).isComplete());
         assertFalse(nonLoginLectureList.getLectureList().get(1).isComplete());
+    }
+
+    @Test
+    void 강의_상세_조회() {
+        //Given
+        Member member1 = Member.builder().nickname("유저1").email("aaa@naver.com").build();
+        Course course = Course.builder().title("재료역학").thumbnail("aaa").build();
+        Lecture lecture1 = Lecture.builder().title("재료역학이란").lectureOrder(1).url("ys5niu4Sabg&list=PLwzYFiJ0Ed6kGyX0M_IW1LGiLO_Ggh4Jy").runtime(15 * 60)
+                                  .course(course).build();
+        Lecture lecture2 = Lecture.builder().title("응력이란").lectureOrder(2).url("y1b7jfIg_2w&list=PLwzYFiJ0Ed6kGyX0M_IW1LGiLO_Ggh4Jy&index=2").runtime(16 * 60)
+                                  .course(course).build();
+        Play play1 = Play.builder().lastPlayedTime(lecture1.getRuntime()-30).member(member1).lecture(lecture1).build();
+
+        em.persist(member1);
+        em.persist(course);
+        em.persist(lecture1);
+        em.persist(lecture2);
+        em.persist(play1);
+
+        //When
+        LectureDetailResponse lectureDetailResponse1 = courseService.findLectureDetail(member1.getId(), lecture1.getId());
+        LectureDetailResponse lectureDetailResponse2 = courseService.findLectureDetail(member1.getId(), lecture2.getId());
+
+        //Then
+        assertEquals(lecture1.getTitle(), lectureDetailResponse1.getTitle());
+        assertEquals(lecture1.getUrl(), lectureDetailResponse1.getUrl());
+        assertEquals(play1.getLastPlayedTime(), lectureDetailResponse1.getLastPlayedTime());
+        assertEquals(lecture2.getTitle(), lectureDetailResponse2.getTitle());
+        assertEquals(lecture2.getUrl(), lectureDetailResponse2.getUrl());
+        assertEquals(0, lectureDetailResponse2.getLastPlayedTime());
+
     }
 }
