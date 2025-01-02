@@ -42,6 +42,7 @@ public class BoardServiceImpl implements BoardService{
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public BoardListResponse findBoardList(BoardCategory category, int page) {
         //TODO: 페이징 처리, 일단 전체 조회로 구현
         List<Board> boardList = boardRepository.findAllByCategory(category);
@@ -53,8 +54,8 @@ public class BoardServiceImpl implements BoardService{
                     .title(board.getTitle())
                     .body(board.getBody())
                     .date(board.getModifiedTime().toString())
+                     .courseTitle(category == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
                      .commentCount(commentList.size())
-                     .courseTitle(category == QUESTION ? ((Question)board).getLecture().getTitle() : null)
                     .build());
         }
 
@@ -62,6 +63,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BoardDetailResponse findBoardDetail(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
         List<Comment> commentList = commentRepository.findByBoardId(boardId);
@@ -79,7 +81,7 @@ public class BoardServiceImpl implements BoardService{
                 .date(board.getModifiedTime().toString())
                 .nickname(board.getMember().getNickname())
                 .commentList(commentDtoList)
-                .courseTitle(board instanceof Question ? ((Question)board).getLecture().getTitle() : null)
+                .courseTitle(board instanceof Question ? ((Question)board).getLecture().getCourse().getTitle() : null)
                 .lectureTitle(board instanceof Question ? ((Question)board).getLecture().getTitle() : null)
                 .build();
     }
