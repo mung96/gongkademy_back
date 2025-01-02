@@ -22,6 +22,7 @@ import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardItemDto;
 import com.gongkademy.service.dto.BoardListResponse;
+import com.gongkademy.service.dto.CommentItemDto;
 import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
 import java.util.ArrayList;
@@ -62,7 +63,25 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardDetailResponse findBoardDetail(Long boardId) {
-        return null;
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
+        List<Comment> commentList = commentRepository.findByBoardId(boardId);
+        List<CommentItemDto> commentDtoList = new ArrayList<>();
+        for(Comment comment:commentList){
+            commentDtoList.add(CommentItemDto.builder()
+                                             .content(comment.getContent())
+                                             .nickname(comment.getMember().getNickname())
+                                             .date(comment.getModifiedTime().toString())
+                                             .build());
+        }
+        return BoardDetailResponse.builder()
+                .title(board.getTitle())
+                .body(board.getBody())
+                .date(board.getModifiedTime().toString())
+                .nickname(board.getMember().getNickname())
+                .commentList(commentDtoList)
+                .courseTitle(board instanceof Question ? ((Question)board).getLecture().getTitle() : null)
+                .lectureTitle(board instanceof Question ? ((Question)board).getLecture().getTitle() : null)
+                .build();
     }
 
     @Override
