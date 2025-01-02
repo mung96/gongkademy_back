@@ -1,5 +1,6 @@
 package com.gongkademy.service;
 
+import static com.gongkademy.domain.board.BoardCategory.QUESTION;
 import static com.gongkademy.exception.ErrorCode.BOARD_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.LECTURE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
@@ -16,6 +17,7 @@ import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.BoardRepository;
 import com.gongkademy.repository.LectureRepository;
 import com.gongkademy.repository.MemberRepository;
+import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,7 @@ public class BoardServiceImpl implements BoardService{
                                      .member(member)
                                      .build();
 
-        } else if (category == BoardCategory.QUESTION) {
+        } else if (category == QUESTION) {
             Lecture lecture = lectureRepository.findById(board.getLectureId()).orElseThrow(() -> new CustomException(LECTURE_NOT_FOUND));
             newBoard = Question.builder()
                                         .title(board.getTitle())
@@ -58,10 +60,24 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public Long edit(Long memberId, WriteBoardRequest board) {
-        //TODO: 작성자와 요청 회원이 같은지
-        return 0L;
+    public Long edit(Long memberId, Long boardId, EditBoardRequest newBoard, BoardCategory category) {
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
+        if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_WRITER);
+
+        if(newBoard.getTitle() != null){
+            board.changeTitle(newBoard.getTitle());
+        }
+        if(newBoard.getBody() != null){
+            board.changeBody(newBoard.getBody());
+        }
+        if(category == QUESTION && newBoard.getLectureId() != null){
+            Lecture lecture = lectureRepository.findById(newBoard.getLectureId()).orElseThrow(()->new CustomException(LECTURE_NOT_FOUND));
+            ((Question)board).changeLecture(lecture);
+        }
+
+        return board.getId();
     }
+
 
     @Override
     public Long delete(Long memberId, Long boardId) {
