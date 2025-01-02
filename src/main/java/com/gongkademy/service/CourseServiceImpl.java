@@ -132,8 +132,22 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public LectureItemDto findLastLecture(Long memberId, Long courseId) {
-        return null;
+    public LectureDetailResponse findLastLecture(Long memberId, Long courseId) {
+        Play lastPlayLecture = playRepository.findByMemberIdAndCourseIdByModifiedTime(memberId,courseId).orElse(null);
+
+        if(lastPlayLecture == null){
+            Lecture firstLecture = lectureRepository.findLecturesByCourseId(courseId).getFirst();
+            return LectureDetailResponse.builder()
+                                        .title(firstLecture.getTitle())
+                                        .url(firstLecture.getUrl())
+                                        .lastPlayedTime(0).build();
+        }
+
+        return LectureDetailResponse.builder()
+                                    .title(lastPlayLecture.getLecture().getTitle())
+                                    .url(lastPlayLecture.getLecture().getUrl())
+                                    .lastPlayedTime(lastPlayLecture.getLastPlayedTime())
+                                    .build();
     }
 
     @Override

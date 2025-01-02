@@ -16,7 +16,7 @@ public interface CourseService {
 
     LectureListResponse findLectureList(Long memberId, Long courseId);
 
-    LectureItemDto findLastLecture(Long memberId, Long courseId);
+    LectureDetailResponse findLastLecture(Long memberId, Long courseId);
 
     Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime);
 
