@@ -138,7 +138,18 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime) {
-        return 0L;
+        Play play = playRepository.findByMemberIdAndLectureId(memberId, lectureId).orElse(null);
+        if(play == null){
+            Member member = memberRepository.findById(memberId)
+                                            .orElseThrow(()-> new CustomException(MEMBER_NOT_FOUND));
+            Lecture lecture = lectureRepository.findById(lectureId)
+                                              .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
+            play = Play.builder().lastPlayedTime(lastPlayedTime).member(member).lecture(lecture).build();
+            playRepository.save(play);
+        }else{
+            play.changeLastPlayedTime(lastPlayedTime);
+        }
+        return play.getId();
     }
 
     @Override

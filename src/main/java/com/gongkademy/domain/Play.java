@@ -41,4 +41,8 @@ public class Play extends BaseEntity{
         this.member = member;
         this.lecture = lecture;
     }
+
+    public void changeLastPlayedTime(int lastPlayedTime){
+        this.lastPlayedTime = lastPlayedTime;
+    }
 }
