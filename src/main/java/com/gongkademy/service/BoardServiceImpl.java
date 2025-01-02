@@ -6,6 +6,7 @@ import static com.gongkademy.exception.ErrorCode.LECTURE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.NOT_WRITER;
 
+import com.gongkademy.domain.Comment;
 import com.gongkademy.domain.Lecture;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.Board;
@@ -15,10 +16,16 @@ import com.gongkademy.domain.board.Worry;
 import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.BoardRepository;
+import com.gongkademy.repository.CommentRepository;
 import com.gongkademy.repository.LectureRepository;
 import com.gongkademy.repository.MemberRepository;
+import com.gongkademy.service.dto.BoardDetailResponse;
+import com.gongkademy.service.dto.BoardItemDto;
+import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +38,32 @@ public class BoardServiceImpl implements BoardService{
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
     private final LectureRepository lectureRepository;
+    private final CommentRepository commentRepository;
+
+    @Override
+    public BoardListResponse findBoardList(BoardCategory category, int page) {
+        //TODO: 페이징 처리, 일단 전체 조회로 구현
+        List<Board> boardList = boardRepository.findAllByCategory(category);
+        List<BoardItemDto> boardItemDtoList = new ArrayList<>();
+
+        for(Board board:boardList){
+            List<Comment> commentList = commentRepository.findByBoardId(board.getId());
+            boardItemDtoList.add(BoardItemDto.builder()
+                    .title(board.getTitle())
+                    .body(board.getBody())
+                    .date(board.getModifiedTime().toString())
+                     .commentCount(commentList.size())
+                     .courseTitle(category == QUESTION ? ((Question)board).getLecture().getTitle() : null)
+                    .build());
+        }
+
+        return BoardListResponse.builder().boardList(boardItemDtoList).build();
+    }
+
+    @Override
+    public BoardDetailResponse findBoardDetail(Long boardId) {
+        return null;
+    }
 
     @Override
     public Long write(Long memberId, WriteBoardRequest board, BoardCategory category) {

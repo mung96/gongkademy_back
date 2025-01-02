@@ -14,6 +14,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,7 +44,7 @@ public abstract class Board extends BaseEntity {
     @JoinColumn(name="member_id")
     private Member member;
 
-    protected Board(String title, String body, Member member){
+    protected Board(String title, String body, Member member) {
         this.title = title;
         this.body = body;
         this.member = member;

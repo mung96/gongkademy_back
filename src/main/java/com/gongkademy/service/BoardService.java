@@ -15,6 +15,6 @@ public interface BoardService {
     Long write(Long memberId, WriteBoardRequest board, BoardCategory category);
 
     Long edit(Long memberId, Long boardId, EditBoardRequest board, BoardCategory category);
-    
+
     Long delete(Long memberId, Long boardId);
 }
