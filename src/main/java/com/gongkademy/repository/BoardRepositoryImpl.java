@@ -48,9 +48,8 @@ public class BoardRepositoryImpl implements BoardRepository{
     }
 
     @Override
-    public Long delete(Long boardId) {
-        Board findBoard = em.find(Board.class,boardId);
-        em.remove(findBoard);
-        return findBoard.getId();
+    public Long delete(Board board) {
+        em.remove(board);
+        return board.getId();
     }
 }

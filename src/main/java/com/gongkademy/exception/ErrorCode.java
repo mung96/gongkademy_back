@@ -15,7 +15,12 @@ public enum ErrorCode {
     COURSE_NOT_FOUND("존재하지 않는 강좌입니다.",HttpStatus.NOT_FOUND),
     REGISTERED_COURSE("이미 수강 중인 강좌입니다.",HttpStatus.CONFLICT),
     REGISTER_NOT_FOUND("수강 중인 강좌가 아닙니다.",HttpStatus.NOT_FOUND),
-    LECTURE_NOT_FOUND("존재하지 않는 강의입니다.",HttpStatus.NOT_FOUND);
+    LECTURE_NOT_FOUND("존재하지 않는 강의입니다.",HttpStatus.NOT_FOUND),
+
+    //게시글 관련
+    BOARD_NOT_FOUND("존재하지 않는 게시글입니다.",HttpStatus.NOT_FOUND),
+    BOARD_CATEGORY_NOT_FOUND("존재하지 않는 게시글 카테고리입니다.",HttpStatus.NOT_FOUND),
+    NOT_WRITER("게시글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN);
 
     private final String message;
     private final HttpStatus httpStatus;

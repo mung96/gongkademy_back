@@ -10,5 +10,5 @@ public interface BoardRepository {
     List<Board> findAllByMemberId(Long memberId);
     Long save(Board board);
     Long update(Long boardId, Board board);
-    Long delete(Long boardId);
+    Long delete(Board board);
 }
