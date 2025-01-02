@@ -204,6 +204,34 @@ class CourseServiceTest {
         assertEquals(lecture2.getTitle(), lectureDetailResponse2.getTitle());
         assertEquals(lecture2.getUrl(), lectureDetailResponse2.getUrl());
         assertEquals(0, lectureDetailResponse2.getLastPlayedTime());
+    }
+
+    @Test
+    void 수강_기록_남기기(){
+        //Given
+        Member member1 = Member.builder().nickname("유저1").email("aaa@naver.com").build();
+        Course course = Course.builder().title("재료역학").thumbnail("aaa").build();
+        Lecture lecture1 = Lecture.builder().title("재료역학이란").lectureOrder(1).url("ys5niu4Sabg&list=PLwzYFiJ0Ed6kGyX0M_IW1LGiLO_Ggh4Jy").runtime(15 * 60)
+                                  .course(course).build();
+        Lecture lecture2 = Lecture.builder().title("응력이란").lectureOrder(2).url("y1b7jfIg_2w&list=PLwzYFiJ0Ed6kGyX0M_IW1LGiLO_Ggh4Jy&index=2").runtime(16 * 60)
+                                  .course(course).build();
+        Play play1 = Play.builder().lastPlayedTime(10).member(member1).lecture(lecture1).build();
+
+        em.persist(member1);
+        em.persist(course);
+        em.persist(lecture1);
+        em.persist(lecture2);
+        em.persist(play1);
+
+        //When
+        Long updatedPlayId = courseService.saveLastPlayedTime(member1.getId(), lecture1.getId(), 100); //기존 수강 기록 업데이트
+        Long newPlayId = courseService.saveLastPlayedTime(member1.getId(), lecture2.getId(), 200); //새로운 수강 기록
+        LectureDetailResponse updatedPlay =  courseService.findLectureDetail(member1.getId(),lecture1.getId());
+        LectureDetailResponse newPlay = courseService.findLectureDetail(member1.getId(),lecture2.getId());
+
+        //Then
+        assertEquals(100,updatedPlay.getLastPlayedTime());
+        assertEquals(200,newPlay.getLastPlayedTime());
 
     }
 }
