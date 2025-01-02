@@ -1,7 +1,9 @@
 package com.gongkademy.service;
 
+import static com.gongkademy.exception.ErrorCode.BOARD_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.LECTURE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.gongkademy.exception.ErrorCode.NOT_WRITER;
 
 import com.gongkademy.domain.Lecture;
 import com.gongkademy.domain.Member;
@@ -57,11 +59,15 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Long edit(Long memberId, WriteBoardRequest board) {
+        //TODO: 작성자와 요청 회원이 같은지
         return 0L;
     }
 
     @Override
     public Long delete(Long memberId, Long boardId) {
-        return 0L;
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
+        if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_WRITER);
+
+        return boardRepository.delete(board);
     }
 }

@@ -120,7 +120,7 @@ class BoardRepositoryTest {
         em.persist(worry);
 
         //when
-        Long deleteId =  boardRepository.delete(question.getId());
+        Long deleteId =  boardRepository.delete(question);
 
         //then
         assertEquals(question.getId(),deleteId);
