@@ -9,10 +9,8 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class CourseDetailResponse {
+public class WriteBoardRequest {
     private String title;
-    private String thumbnail;
-    private String courseNote;
-    private int courseTime;
-    private boolean isRegister;
+    private String body;
+    private Long lectureId;
 }
