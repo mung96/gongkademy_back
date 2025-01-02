@@ -146,7 +146,15 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Long writeComment(Long memberId, Long boardId, WriteCommentRequest comment) {
-        return 0L;
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new CustomException(MEMBER_NOT_FOUND));
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
+
+        Comment newComment = Comment.builder()
+                                    .content(comment.getContent())
+                                    .member(member)
+                                    .board(board)
+                                    .build();
+        return newComment.getId();
     }
 
     @Override

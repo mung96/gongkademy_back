@@ -77,7 +77,7 @@ class CommentRepositoryTest {
         em.persist(comment);
 
         //when
-        Long deleteCommentId =  commentRepository.delete(comment.getId());
+        Long deleteCommentId =  commentRepository.delete(comment);
 
         //then
         assertEquals(comment.getId(),deleteCommentId);

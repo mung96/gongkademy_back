@@ -3,15 +3,12 @@ package com.gongkademy.service;
 import static com.gongkademy.domain.board.BoardCategory.QUESTION;
 import static com.gongkademy.domain.board.BoardCategory.WORRY;
 import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
-import static com.gongkademy.exception.ErrorCode.NOT_WRITER;
-import static com.gongkademy.exception.ErrorCode.REGISTERED_COURSE;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.gongkademy.domain.Comment;
 import com.gongkademy.domain.Course;
 import com.gongkademy.domain.Lecture;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.Question;
 import com.gongkademy.domain.board.Worry;
 import com.gongkademy.exception.CustomException;
@@ -147,4 +144,10 @@ class BoardServiceTest {
             assertNull(findWorry);
             assertEquals(NOT_BOARD_WRITER,e.getErrorCode());
         }
+
+    @Test
+    void 댓글_삭제(){
+        //given
+
+    }
 }
