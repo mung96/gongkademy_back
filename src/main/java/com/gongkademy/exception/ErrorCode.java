@@ -20,7 +20,9 @@ public enum ErrorCode {
     //게시글 관련
     BOARD_NOT_FOUND("존재하지 않는 게시글입니다.",HttpStatus.NOT_FOUND),
     BOARD_CATEGORY_NOT_FOUND("존재하지 않는 게시글 카테고리입니다.",HttpStatus.NOT_FOUND),
-    NOT_WRITER("게시글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN);
+    COMMENT_NOT_FOUND("존재하지 않는 댓글입니다.",HttpStatus.NOT_FOUND),
+    NOT_BOARD_WRITER("게시글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN),
+    NOT_COMMENT_WRITER("댓글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN);
 
     private final String message;
     private final HttpStatus httpStatus;

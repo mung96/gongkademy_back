@@ -2,21 +2,20 @@ package com.gongkademy.service;
 
 import static com.gongkademy.domain.board.BoardCategory.QUESTION;
 import static com.gongkademy.domain.board.BoardCategory.WORRY;
-import static com.gongkademy.exception.ErrorCode.NOT_WRITER;
-import static com.gongkademy.exception.ErrorCode.REGISTERED_COURSE;
+import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.gongkademy.domain.Comment;
 import com.gongkademy.domain.Course;
 import com.gongkademy.domain.Lecture;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.Question;
 import com.gongkademy.domain.board.Worry;
 import com.gongkademy.exception.CustomException;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
+import com.gongkademy.service.dto.WriteCommentRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +43,14 @@ class BoardServiceTest {
 
         WriteBoardRequest questionRequest = WriteBoardRequest.builder().title("질문1").body("질문내용1").lectureId(lecture.getId()).build();
         Long questionId = boardService.write(member.getId(),questionRequest , QUESTION);
-        Question question = em.find(Question.class,questionId);
-        Comment comment = Comment.builder().content("댓글1").member(member).board(question).build();
-        em.persist(comment);
+        WriteCommentRequest comment1 = WriteCommentRequest.builder().content("댓글1").build();
+        WriteCommentRequest comment2 = WriteCommentRequest.builder().content("댓글2").build();
+
 
         //when
+        Long comment1Id =  boardService.writeComment(member.getId(),questionId, comment1);
+        Long comment2Id = boardService.writeComment(member.getId(),questionId, comment2);
+        boardService.deleteComment(member.getId(),comment2Id);
         BoardDetailResponse findQuestion = boardService.findBoardDetail(questionId);
 
 
@@ -144,6 +146,6 @@ class BoardServiceTest {
 
             //then
             assertNull(findWorry);
-            assertEquals(NOT_WRITER,e.getErrorCode());
+            assertEquals(NOT_BOARD_WRITER,e.getErrorCode());
         }
 }
