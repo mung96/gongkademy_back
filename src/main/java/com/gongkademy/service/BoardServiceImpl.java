@@ -25,6 +25,7 @@ import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.CommentItemDto;
 import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
+import com.gongkademy.service.dto.WriteCommentRequest;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -140,4 +141,16 @@ public class BoardServiceImpl implements BoardService{
 
         return boardRepository.delete(board);
     }
+
+    @Override
+    public Long writeComment(Long memberId, Long boardId, WriteCommentRequest comment) {
+        return 0L;
+    }
+
+    @Override
+    public Long deleteComment(Long memberId, Long commentId) {
+        return 0L;
+    }
+
+
 }

@@ -5,6 +5,7 @@ import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
+import com.gongkademy.service.dto.WriteCommentRequest;
 
 public interface BoardService {
 
@@ -17,4 +18,8 @@ public interface BoardService {
     Long edit(Long memberId, Long boardId, EditBoardRequest board, BoardCategory category);
 
     Long delete(Long memberId, Long boardId);
+
+    Long writeComment(Long memberId, Long boardId, WriteCommentRequest comment);
+
+    Long deleteComment(Long memberId, Long commentId);
 }
