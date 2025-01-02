@@ -177,6 +177,37 @@ class CourseServiceTest {
     }
 
     @Test
+    void 강좌의_최근_수강강의_조회(){
+        //Given
+        Member member1 = Member.builder().nickname("유저1").email("aaa@naver.com").build();
+        Member member2 = Member.builder().nickname("유저2").email("bbb@naver.com").build();
+        Course course = Course.builder().title("재료역학").thumbnail("aaa").build();
+        Lecture lecture1 = Lecture.builder().title("재료역학이란").lectureOrder(1).url("ys5niu4Sabg&list=PLwzYFiJ0Ed6kGyX0M_IW1LGiLO_Ggh4Jy").runtime(15 * 60)
+                                  .course(course).build();
+        Lecture lecture2 = Lecture.builder().title("응력이란").lectureOrder(2).url("y1b7jfIg_2w&list=PLwzYFiJ0Ed6kGyX0M_IW1LGiLO_Ggh4Jy&index=2").runtime(16 * 60)
+                                  .course(course).build();
+        Play play = Play.builder().lastPlayedTime(lecture1.getRuntime()-30).member(member1).lecture(lecture2).build();
+
+
+        em.persist(member1);
+        em.persist(member2);
+        em.persist(course);
+        em.persist(lecture1);
+        em.persist(lecture2);
+        em.persist(play);
+        courseService.registerCourse(member1.getId(), course.getId());
+        courseService.registerCourse(member2.getId(), course.getId());
+
+        //When
+        LectureDetailResponse lastLectureByMember1 = courseService.findLastLecture(member1.getId(), course.getId());
+        LectureDetailResponse lastLectureByMember2 = courseService.findLastLecture(member2.getId(), course.getId());
+
+        //Then
+        assertEquals(lecture2.getTitle(), lastLectureByMember1.getTitle());
+        assertEquals(lecture1.getTitle(), lastLectureByMember2.getTitle());
+    }
+
+    @Test
     void 강의_상세_조회() {
         //Given
         Member member1 = Member.builder().nickname("유저1").email("aaa@naver.com").build();
@@ -194,6 +225,7 @@ class CourseServiceTest {
         em.persist(play1);
 
         //When
+        courseService.registerCourse(member1.getId(), course.getId());
         LectureDetailResponse lectureDetailResponse1 = courseService.findLectureDetail(member1.getId(), lecture1.getId());
         LectureDetailResponse lectureDetailResponse2 = courseService.findLectureDetail(member1.getId(), lecture2.getId());
 
@@ -224,14 +256,14 @@ class CourseServiceTest {
         em.persist(play1);
 
         //When
-        Long updatedPlayId = courseService.saveLastPlayedTime(member1.getId(), lecture1.getId(), 100); //기존 수강 기록 업데이트
-        Long newPlayId = courseService.saveLastPlayedTime(member1.getId(), lecture2.getId(), 200); //새로운 수강 기록
+        courseService.registerCourse(member1.getId(), course.getId());
+        courseService.saveLastPlayedTime(member1.getId(), lecture1.getId(), 100); //기존 수강 기록 업데이트
+        courseService.saveLastPlayedTime(member1.getId(), lecture2.getId(), 200); //새로운 수강 기록
         LectureDetailResponse updatedPlay =  courseService.findLectureDetail(member1.getId(),lecture1.getId());
         LectureDetailResponse newPlay = courseService.findLectureDetail(member1.getId(),lecture2.getId());
 
         //Then
         assertEquals(100,updatedPlay.getLastPlayedTime());
         assertEquals(200,newPlay.getLastPlayedTime());
-
     }
 }
