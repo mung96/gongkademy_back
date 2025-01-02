@@ -25,13 +25,13 @@ public class PlayRepositoryImpl implements PlayRepository{
 
     @Override
     public Optional<Play> findByMemberIdAndCourseIdByModifiedTime(Long memberId, Long courseId) {
-        return Optional.ofNullable(em.createQuery(
-                                             "SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.course.id = :courseId ORDER BY p.modifiedTime DESC",
-                                             Play.class)
-                                     .setParameter("memberId", memberId)
-                                     .setParameter("courseId", courseId)
-                                     .getResultList()
-                                     .getFirst());
+        List<Play> playList = em.createQuery(
+                                        "SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.course.id = :courseId ORDER BY p.modifiedTime DESC",
+                                        Play.class)
+                                .setParameter("memberId", memberId)
+                                .setParameter("courseId", courseId)
+                                .getResultList();
+        return playList.isEmpty() ? Optional.empty() : Optional.of(playList.getFirst());
     }
 
     @Override

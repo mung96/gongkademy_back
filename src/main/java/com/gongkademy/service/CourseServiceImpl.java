@@ -3,6 +3,7 @@ package com.gongkademy.service;
 
 import static com.gongkademy.exception.ErrorCode.COURSE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.gongkademy.exception.ErrorCode.REGISTER_NOT_FOUND;
 
 import com.gongkademy.domain.Course;
 import com.gongkademy.domain.Lecture;
@@ -17,6 +18,7 @@ import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.repository.PlayRepository;
 import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
 import java.util.ArrayList;
@@ -61,7 +63,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Long dropCourse(Long memberId, Long courseId) {
         Register register = registerRepository.findByMemberIdAndCourseId(memberId, courseId)
-                                              .orElseThrow(() -> new CustomException(ErrorCode.REGISTER_NOT_FOUND));
+                                              .orElseThrow(() -> new CustomException(REGISTER_NOT_FOUND));
         registerRepository.delete(register);
         return register.getId();
     }
@@ -127,5 +129,62 @@ public class CourseServiceImpl implements CourseService {
                                   .lectureList(lectureItemDtoList)
                                   .isRegister(isRegister)
                                   .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LectureDetailResponse findLastLecture(Long memberId, Long courseId) {
+        //수강 중인지 확인
+        registerRepository.findByMemberIdAndCourseId(memberId, courseId).orElseThrow(()->new CustomException(REGISTER_NOT_FOUND));
+
+        Play lastPlayLecture = playRepository.findByMemberIdAndCourseIdByModifiedTime(memberId,courseId).orElse(null);
+
+        if(lastPlayLecture == null){
+            Lecture firstLecture = lectureRepository.findLecturesByCourseId(courseId).getFirst();
+            return LectureDetailResponse.builder()
+                                        .title(firstLecture.getTitle())
+                                        .url(firstLecture.getUrl())
+                                        .lastPlayedTime(0).build();
+        }
+
+        return LectureDetailResponse.builder()
+                                    .title(lastPlayLecture.getLecture().getTitle())
+                                    .url(lastPlayLecture.getLecture().getUrl())
+                                    .lastPlayedTime(lastPlayLecture.getLastPlayedTime())
+                                    .build();
+    }
+
+    @Override
+    public Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime) {
+        Play play = playRepository.findByMemberIdAndLectureId(memberId, lectureId).orElse(null);
+        if(play == null){
+            Member member = memberRepository.findById(memberId)
+                                            .orElseThrow(()-> new CustomException(MEMBER_NOT_FOUND));
+            Lecture lecture = lectureRepository.findById(lectureId)
+                                              .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
+            play = Play.builder().lastPlayedTime(lastPlayedTime).member(member).lecture(lecture).build();
+            playRepository.save(play);
+        }else{
+            play.changeLastPlayedTime(lastPlayedTime);
+        }
+        return play.getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LectureDetailResponse findLectureDetail(Long memberId, Long lectureId) {
+        //수강 중인지 확인
+        Long courseId = lectureRepository.findById(lectureId).get().getCourse().getId();
+        registerRepository.findByMemberIdAndCourseId(memberId, courseId).orElseThrow(()->new CustomException(REGISTER_NOT_FOUND));
+
+        Lecture lecture = lectureRepository.findById(lectureId)
+                                          .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
+        Play play = playRepository.findByMemberIdAndLectureId(memberId, lectureId).orElse(null);
+
+        return LectureDetailResponse.builder()
+                                    .title(lecture.getTitle())
+                                    .url(lecture.getUrl())
+                                    .lastPlayedTime(play == null ? 0 : play.getLastPlayedTime())
+                                    .build();
     }
 }
