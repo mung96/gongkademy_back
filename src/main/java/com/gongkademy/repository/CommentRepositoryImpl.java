@@ -1,8 +1,10 @@
 package com.gongkademy.repository;
 
 import com.gongkademy.domain.Comment;
+import com.gongkademy.domain.Course;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +13,12 @@ import org.springframework.stereotype.Repository;
 public class CommentRepositoryImpl implements CommentRepository{
 
     private final EntityManager em;
+
+    @Override
+    public Optional<Comment> findById(Long commentId) {
+        //TODO: test코드 작성해야함
+        return Optional.ofNullable(em.find(Comment.class, commentId));
+    }
 
     @Override
     public List<Comment> findByBoardId(Long boardId) {
