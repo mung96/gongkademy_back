@@ -154,6 +154,7 @@ public class BoardServiceImpl implements BoardService{
                                     .member(member)
                                     .board(board)
                                     .build();
+        commentRepository.save(newComment);
         return newComment.getId();
     }
 

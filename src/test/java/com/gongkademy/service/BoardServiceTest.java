@@ -15,6 +15,7 @@ import com.gongkademy.exception.CustomException;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.WriteBoardRequest;
+import com.gongkademy.service.dto.WriteCommentRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,14 @@ class BoardServiceTest {
 
         WriteBoardRequest questionRequest = WriteBoardRequest.builder().title("질문1").body("질문내용1").lectureId(lecture.getId()).build();
         Long questionId = boardService.write(member.getId(),questionRequest , QUESTION);
-        Question question = em.find(Question.class,questionId);
-        Comment comment = Comment.builder().content("댓글1").member(member).board(question).build();
-        em.persist(comment);
+        WriteCommentRequest comment1 = WriteCommentRequest.builder().content("댓글1").build();
+        WriteCommentRequest comment2 = WriteCommentRequest.builder().content("댓글2").build();
+
 
         //when
+        Long comment1Id =  boardService.writeComment(member.getId(),questionId, comment1);
+        Long comment2Id = boardService.writeComment(member.getId(),questionId, comment2);
+        boardService.deleteComment(member.getId(),comment2Id);
         BoardDetailResponse findQuestion = boardService.findBoardDetail(questionId);
 
 
@@ -144,10 +148,4 @@ class BoardServiceTest {
             assertNull(findWorry);
             assertEquals(NOT_BOARD_WRITER,e.getErrorCode());
         }
-
-    @Test
-    void 댓글_삭제(){
-        //given
-
-    }
 }
