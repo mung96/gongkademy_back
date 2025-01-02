@@ -8,5 +8,5 @@ public interface CommentRepository {
     Optional<Comment> findById(Long commentId);
     List<Comment> findByBoardId(Long boardId);
     Long save(Comment comment);
-    Long delete(Long commentId);
+    Long delete(Comment comment);
 }

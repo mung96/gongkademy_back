@@ -34,9 +34,8 @@ public class CommentRepositoryImpl implements CommentRepository{
     }
 
     @Override
-    public Long delete(Long commentId) {
-        Comment findComment = em.find(Comment.class,commentId);
-        em.remove(findComment);
-        return findComment.getId();
+    public Long delete(Comment comment) {
+        em.remove(comment);
+        return comment.getId();
     }
 }

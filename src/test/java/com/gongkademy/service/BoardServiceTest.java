@@ -2,6 +2,7 @@ package com.gongkademy.service;
 
 import static com.gongkademy.domain.board.BoardCategory.QUESTION;
 import static com.gongkademy.domain.board.BoardCategory.WORRY;
+import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static com.gongkademy.exception.ErrorCode.NOT_WRITER;
 import static com.gongkademy.exception.ErrorCode.REGISTERED_COURSE;
 import static org.junit.jupiter.api.Assertions.*;
@@ -144,6 +145,6 @@ class BoardServiceTest {
 
             //then
             assertNull(findWorry);
-            assertEquals(NOT_WRITER,e.getErrorCode());
+            assertEquals(NOT_BOARD_WRITER,e.getErrorCode());
         }
 }

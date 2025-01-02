@@ -2,9 +2,11 @@ package com.gongkademy.service;
 
 import static com.gongkademy.domain.board.BoardCategory.QUESTION;
 import static com.gongkademy.exception.ErrorCode.BOARD_NOT_FOUND;
+import static com.gongkademy.exception.ErrorCode.COMMENT_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.LECTURE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
-import static com.gongkademy.exception.ErrorCode.NOT_WRITER;
+import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
+import static com.gongkademy.exception.ErrorCode.NOT_COMMENT_WRITER;
 
 import com.gongkademy.domain.Comment;
 import com.gongkademy.domain.Lecture;
@@ -117,7 +119,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public Long edit(Long memberId, Long boardId, EditBoardRequest newBoard, BoardCategory category) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
-        if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_WRITER);
+        if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_BOARD_WRITER);
 
         if(newBoard.getTitle() != null){
             board.changeTitle(newBoard.getTitle());
@@ -137,7 +139,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public Long delete(Long memberId, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
-        if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_WRITER);
+        if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_BOARD_WRITER);
 
         return boardRepository.delete(board);
     }
@@ -149,8 +151,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Long deleteComment(Long memberId, Long commentId) {
-        return 0L;
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->new CustomException(COMMENT_NOT_FOUND));
+        if(!comment.getMember().getId().equals(memberId)) throw new CustomException(NOT_COMMENT_WRITER);
+
+        return commentRepository.delete(comment);
     }
-
-
 }
