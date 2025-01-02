@@ -3,6 +3,7 @@ package com.gongkademy.service;
 
 import static com.gongkademy.exception.ErrorCode.COURSE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.gongkademy.exception.ErrorCode.REGISTER_NOT_FOUND;
 
 import com.gongkademy.domain.Course;
 import com.gongkademy.domain.Lecture;
@@ -62,7 +63,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Long dropCourse(Long memberId, Long courseId) {
         Register register = registerRepository.findByMemberIdAndCourseId(memberId, courseId)
-                                              .orElseThrow(() -> new CustomException(ErrorCode.REGISTER_NOT_FOUND));
+                                              .orElseThrow(() -> new CustomException(REGISTER_NOT_FOUND));
         registerRepository.delete(register);
         return register.getId();
     }
@@ -133,6 +134,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public LectureDetailResponse findLastLecture(Long memberId, Long courseId) {
+        //수강 중인지 확인
+        registerRepository.findByMemberIdAndCourseId(memberId, courseId).orElseThrow(()->new CustomException(REGISTER_NOT_FOUND));
+
         Play lastPlayLecture = playRepository.findByMemberIdAndCourseIdByModifiedTime(memberId,courseId).orElse(null);
 
         if(lastPlayLecture == null){
@@ -169,6 +173,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public LectureDetailResponse findLectureDetail(Long memberId, Long lectureId) {
+        //수강 중인지 확인
+        Long courseId = lectureRepository.findById(lectureId).get().getCourse().getId();
+        registerRepository.findByMemberIdAndCourseId(memberId, courseId).orElseThrow(()->new CustomException(REGISTER_NOT_FOUND));
+
         Lecture lecture = lectureRepository.findById(lectureId)
                                           .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
         Play play = playRepository.findByMemberIdAndLectureId(memberId, lectureId).orElse(null);
