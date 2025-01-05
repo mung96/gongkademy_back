@@ -26,4 +26,10 @@ public class MemberRepositoryImpl implements MemberRepository{
 
         return memberList.isEmpty() ? Optional.empty() : Optional.of(memberList.getFirst());
     }
+
+    @Override
+    public Long save(Member member) {
+        em.persist(member);
+        return member.getId();
+    }
 }
