@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -30,6 +31,9 @@ public class SecurityConfig {
         httpSecurity.oauth2Login((oauth2) -> oauth2
                 .userInfoEndpoint((userInfoEndpointConfig) ->
                                           userInfoEndpointConfig.userService(oAuth2UserService)));
+
+        httpSecurity.sessionManagement((session) -> session
+                        .sessionFixation(SessionFixationConfigurer::newSession));
 
         return httpSecurity.build();
     }
