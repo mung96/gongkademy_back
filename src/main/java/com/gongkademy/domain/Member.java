@@ -37,9 +37,11 @@ public class Member extends BaseEntity{
     private String providerId;
 
     @Builder
-    private Member(String nickname, String email) {
+    private Member(String nickname, String email,Provider provider, String providerId) {
         this.nickname = nickname;
         this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     //변경 메소드

@@ -47,4 +47,9 @@ class MemberRepositoryTest {
         //then
         assertEquals(member,findMember);
     }
+
+    @Test
+    void findByProviderAndProviderId() {
+        //TOOD:작성해야함
+    }
 }
