@@ -29,6 +29,9 @@ public class Member extends BaseEntity{
     @Column(nullable = false, length = 320, unique = true)
     private String email;
 
+    @Column(nullable = false, length = 20, unique = true)
+    private String name;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Provider provider;
@@ -37,9 +40,10 @@ public class Member extends BaseEntity{
     private String providerId;
 
     @Builder
-    private Member(String nickname, String email,Provider provider, String providerId) {
+    private Member(String nickname, String email,String name,Provider provider, String providerId) {
         this.nickname = nickname;
         this.email = email;
+        this.name = name;
         this.provider = provider;
         this.providerId = providerId;
     }
@@ -47,5 +51,11 @@ public class Member extends BaseEntity{
     //변경 메소드
     public void updateNickname(String nickname){
         this.nickname = nickname;
+    }
+    public void changeEmail(String email){
+        this.email = email;
+    }
+    public void changeName(String name){
+        this.name = name;
     }
 }

@@ -5,7 +5,6 @@ import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.service.dto.NaverResponse;
 import com.gongkademy.service.dto.OAuth2Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -38,12 +37,14 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             memberRepository.save(Member.builder()
                                         .email(oAuth2Response.getEmail())
                                         .nickname(oAuth2Response.getName())
+                                        .name(oAuth2Response.getName())
                                         .provider(oAuth2Response.getProvider())
                                         .providerId(oAuth2Response.getProviderId())
                                         .build());
         }
         else {
-
+            findMember.changeEmail(oAuth2Response.getEmail());
+            findMember.changeName(oAuth2Response.getName());
         }
 
         return oAuth2User;
