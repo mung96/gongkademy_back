@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberRole {
+public class HasRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="member_role_id")
+    @Column(name="has_role_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,7 +32,7 @@ public class MemberRole {
     private Role role;
 
     @Builder
-    private MemberRole(Member member, Role role) {
+    private HasRole(Member member, Role role) {
         this.member = member;
         this.role = role;
     }
