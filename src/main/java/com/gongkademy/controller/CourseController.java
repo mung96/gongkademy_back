@@ -5,6 +5,8 @@ import com.gongkademy.service.dto.CourseDetailResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
+import com.gongkademy.service.dto.SavePlayRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,6 +73,14 @@ public class CourseController {
     }
 
     //강의 수강 기록 남기기
+    @PostMapping("/lectures/{lectureId}/play")
+    public ResponseEntity<?> saveLastPlayTime (@AuthenticationPrincipal PrincipalDetails principalDetails
+            , @PathVariable Long lectureId, @Valid @RequestBody SavePlayRequest savePlayRequest) {
+
+        courseService.saveLastPlayedTime(principalDetails.getMember().getId(), lectureId, savePlayRequest.getLastPlayedTime());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
 
     //강의 상세 조회
     @GetMapping("/lectures/{lectureId}")
