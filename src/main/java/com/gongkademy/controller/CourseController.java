@@ -38,7 +38,7 @@ public class CourseController {
 
     //강좌 수강 취소하기
     @DeleteMapping("/{courseId}/drop")
-    public ResponseEntity<LectureDetailResponse> dropCourse (@AuthenticationPrincipal PrincipalDetails principalDetails
+    public ResponseEntity<?> dropCourse (@AuthenticationPrincipal PrincipalDetails principalDetails
             , @PathVariable Long courseId) {
 
         courseService.dropCourse(principalDetails.getMember().getId(), courseId);
