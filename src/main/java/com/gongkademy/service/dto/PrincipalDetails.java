@@ -1,14 +1,11 @@
 package com.gongkademy.service.dto;
 
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.MemberRole;
-import com.gongkademy.domain.Role;
 import com.gongkademy.domain.RoleType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
