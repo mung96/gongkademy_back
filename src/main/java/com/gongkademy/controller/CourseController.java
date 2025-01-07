@@ -6,10 +6,12 @@ import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +23,13 @@ public class CourseController {
     private final CourseService courseService;
 
     //강좌 수강 신청하기
+    @PostMapping("/{courseId}/register")
+    public ResponseEntity<LectureDetailResponse> registerCourse (@AuthenticationPrincipal PrincipalDetails principalDetails
+            , @PathVariable Long courseId) {
 
+        courseService.registerCourse(principalDetails.getMember().getId(), courseId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
     //강좌 수강 취소하기
 
     //강좌의 최근 수강 강의 조회
