@@ -2,6 +2,7 @@ package com.gongkademy.controller;
 
 import com.gongkademy.service.CourseService;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,13 @@ public class CourseController {
     }
 
     //강좌 목차 조회
+    @GetMapping("/{courseId}/lectures")
+    public ResponseEntity<LectureListResponse> getLecture(@AuthenticationPrincipal PrincipalDetails principalDetails
+            , @PathVariable Long courseId) {
+
+        LectureListResponse lectureList = courseService.findLectureList(principalDetails.getMember().getId(), courseId);
+        return ResponseEntity.ok(lectureList);
+    }
 
     //강의 수강 기록 남기기
 
