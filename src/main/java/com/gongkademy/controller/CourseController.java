@@ -25,6 +25,13 @@ public class CourseController {
     //강좌 수강 취소하기
 
     //강좌의 최근 수강 강의 조회
+    @GetMapping("/{courseId}/recent")
+    public ResponseEntity<LectureDetailResponse> getLastLecture (@AuthenticationPrincipal PrincipalDetails principalDetails
+            , @PathVariable Long courseId) {
+
+        LectureDetailResponse lastLecture = courseService.findLastLecture(principalDetails.getMember().getId(), courseId);
+        return ResponseEntity.ok(lastLecture);
+    }
 
     //강좌 상세 조회
     @GetMapping("/{courseId}")
