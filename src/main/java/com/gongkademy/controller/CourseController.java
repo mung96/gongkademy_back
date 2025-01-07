@@ -2,6 +2,7 @@ package com.gongkademy.controller;
 
 import com.gongkademy.service.CourseService;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +47,15 @@ public class CourseController {
     //강의 수강 기록 남기기
 
     //강의 상세 조회
+    @GetMapping("/lectures/{lectureId}")
+    public ResponseEntity<LectureDetailResponse> getLectureDetail(@AuthenticationPrincipal PrincipalDetails principalDetails
+            , @PathVariable Long lectureId) {
 
-    //강좌 자료 다운
+        LectureDetailResponse lectureDetail = courseService.findLectureDetail(principalDetails.getMember().getId(), lectureId);
+        return ResponseEntity.ok(lectureDetail);
+    }
 
-    //강좌 홈 화면
+    //TODO: 강좌 자료 다운
+
+    //TODO: 강좌 홈 화면
 }
