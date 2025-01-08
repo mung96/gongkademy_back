@@ -61,8 +61,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
             Role role = roleRepository.findByRoleType(USER).orElse(null);
             HasRole hasRole = HasRole.builder().member(newMember).role(role).build();
-            log.info("hasRole={}", hasRole.toString());
-            log.info("getRole={}", hasRole.getRole());
             hasRoleRepository.save(hasRole);
 
             principalDetails = PrincipalDetails.builder()
@@ -74,7 +72,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         else {
             findMember.changeEmail(oAuth2Response.getEmail());
             findMember.changeName(oAuth2Response.getName());
-//            log.info("SessionId={}", SecurityContextHolder.getContext().getAuthentication().getDetails().toString());
 
             List<HasRole> hasRoles = hasRoleRepository.findByMemberId(findMember.getId());
             List<RoleType> roleTypes = new ArrayList<>();
@@ -87,5 +84,4 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         return principalDetails;
     }
-
 }

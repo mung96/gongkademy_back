@@ -38,7 +38,7 @@ public class CourseController {
 
     //강좌 수강 취소하기
     @DeleteMapping("/{courseId}/drop")
-    public ResponseEntity<LectureDetailResponse> dropCourse (@AuthenticationPrincipal PrincipalDetails principalDetails
+    public ResponseEntity<?> dropCourse (@AuthenticationPrincipal PrincipalDetails principalDetails
             , @PathVariable Long courseId) {
 
         courseService.dropCourse(principalDetails.getMember().getId(), courseId);
@@ -51,7 +51,7 @@ public class CourseController {
             , @PathVariable Long courseId) {
 
         LectureDetailResponse lastLecture = courseService.findLastLecture(principalDetails.getMember().getId(), courseId);
-        return ResponseEntity.ok(lastLecture);
+        return ResponseEntity.status(HttpStatus.OK).body(lastLecture);
     }
 
     //강좌 상세 조회
@@ -60,7 +60,7 @@ public class CourseController {
             , @PathVariable Long courseId) {
 
         CourseDetailResponse courseDetailResponse = courseService.findCourseDetail(principalDetails.getMember().getId(), courseId);
-        return ResponseEntity.ok(courseDetailResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(courseDetailResponse);
     }
 
     //강좌 목차 조회
@@ -69,7 +69,7 @@ public class CourseController {
             , @PathVariable Long courseId) {
 
         LectureListResponse lectureList = courseService.findLectureList(principalDetails.getMember().getId(), courseId);
-        return ResponseEntity.ok(lectureList);
+        return ResponseEntity.status(HttpStatus.OK).body(lectureList);
     }
 
     //강의 수강 기록 남기기
@@ -88,7 +88,7 @@ public class CourseController {
             , @PathVariable Long lectureId) {
 
         LectureDetailResponse lectureDetail = courseService.findLectureDetail(principalDetails.getMember().getId(), lectureId);
-        return ResponseEntity.ok(lectureDetail);
+        return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
     }
 
     //TODO: 강좌 자료 다운
