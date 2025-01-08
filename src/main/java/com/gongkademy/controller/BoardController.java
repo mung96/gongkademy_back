@@ -2,6 +2,7 @@ package com.gongkademy.controller;
 
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.service.BoardService;
+import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
@@ -31,6 +32,11 @@ public class BoardController {
     }
 
     //게시글 상세 조회
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardDetailResponse> getBoards(@PathVariable Long boardId){
+        BoardDetailResponse boardDetail = boardService.findBoardDetail(boardId);
+        return ResponseEntity.ok(boardDetail);
+    }
 
     //게시글 작성
 
