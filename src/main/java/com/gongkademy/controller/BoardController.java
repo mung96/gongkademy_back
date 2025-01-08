@@ -8,6 +8,7 @@ import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import com.gongkademy.service.dto.WriteBoardRequest;
+import com.gongkademy.service.dto.WriteCommentRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class BoardController {
     public ResponseEntity<BoardListResponse> getBoards(@RequestParam BoardCategory category){
 
         BoardListResponse boardList = boardService.findBoardList(category, 0);
-        return ResponseEntity.ok(boardList);
+        return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 
     //게시글 상세 조회
@@ -43,7 +44,7 @@ public class BoardController {
     public ResponseEntity<BoardDetailResponse> getBoardDetail(@PathVariable Long boardId){
 
         BoardDetailResponse boardDetail = boardService.findBoardDetail(boardId);
-        return ResponseEntity.ok(boardDetail);
+        return ResponseEntity.status(HttpStatus.OK).body(boardDetail);
     }
 
     //게시글 작성
@@ -59,12 +60,12 @@ public class BoardController {
 
     //게시글 수정
     @PatchMapping("/{boardId}")
-    public ResponseEntity<?> writeBoard(@AuthenticationPrincipal PrincipalDetails principalDetails
+    public ResponseEntity<?> editBoard(@AuthenticationPrincipal PrincipalDetails principalDetails
                                         , @PathVariable Long boardId
                                         , @RequestParam BoardCategory category
                                         , @Valid @RequestBody EditBoardRequest editBoardRequest){
         boardService.edit(principalDetails.getMember().getId(),boardId,editBoardRequest,category);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     //게시글 삭제
@@ -77,7 +78,14 @@ public class BoardController {
     }
 
     //댓글 작성
+    @PostMapping("/{boardId}/comments")
+    public ResponseEntity<?> writeComment(@AuthenticationPrincipal PrincipalDetails principalDetails
+                                          , @PathVariable Long boardId
+                                          , @Valid @RequestBody WriteCommentRequest writeCommentRequest) {
 
+        boardService.writeComment(principalDetails.getMember().getId(),boardId,writeCommentRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
     //댓글 삭제
     @DeleteMapping("/comments/{commentId}")
