@@ -28,6 +28,12 @@ public class BoardController {
     //게시글 수정
 
     //게시글 삭제
+    @DeleteMapping("/boards/{boardId}")
+    public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails
+            , @PathVariable Long boardId) {
+        boardService.delete(principalDetails.getMember().getId(),boardId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     //댓글 작성
 
