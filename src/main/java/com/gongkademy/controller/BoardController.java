@@ -4,6 +4,7 @@ import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.service.BoardService;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardListResponse;
+import com.gongkademy.service.dto.EditBoardRequest;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import com.gongkademy.service.dto.WriteBoardRequest;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,13 +49,23 @@ public class BoardController {
     //게시글 작성
     @PostMapping
     public ResponseEntity<?> writeBoard(@AuthenticationPrincipal PrincipalDetails principalDetails
+                                        , @RequestParam BoardCategory category
                                         , @Valid @RequestBody WriteBoardRequest writeBoardRequest
-                                        , @RequestParam BoardCategory category){
+                                        ){
 
         boardService.write(principalDetails.getMember().getId(),writeBoardRequest,category);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     //게시글 수정
+    @PatchMapping("/{boardId}")
+    public ResponseEntity<?> writeBoard(@AuthenticationPrincipal PrincipalDetails principalDetails
+                                        , @PathVariable Long boardId
+                                        , @RequestParam BoardCategory category
+                                        , @Valid @RequestBody EditBoardRequest editBoardRequest){
+        boardService.edit(principalDetails.getMember().getId(),boardId,editBoardRequest,category);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
     //게시글 삭제
     @DeleteMapping("/{boardId}")
