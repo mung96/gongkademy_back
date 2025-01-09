@@ -140,7 +140,7 @@ public class CourseServiceImpl implements CourseService {
         Play lastPlayLecture = playRepository.findByMemberIdAndCourseIdByModifiedTime(memberId,courseId).orElse(null);
 
         if(lastPlayLecture == null){
-            Lecture firstLecture = lectureRepository.findLecturesByCourseId(courseId).getFirst();
+            Lecture firstLecture = lectureRepository.findLecturesByCourseId(courseId).get(0);
             return LectureDetailResponse.builder()
                                         .title(firstLecture.getTitle())
                                         .url(firstLecture.getUrl())

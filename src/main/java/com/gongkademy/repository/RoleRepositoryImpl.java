@@ -21,7 +21,7 @@ public class RoleRepositoryImpl implements RoleRepository{
                                .setParameter("roleType", roleType)
                                .getResultList();
 
-        return roleList.isEmpty() ? Optional.empty() : Optional.of(roleList.getFirst());
+        return roleList.isEmpty() ? Optional.empty() : Optional.of(roleList.get(0));
     }
 
 }
