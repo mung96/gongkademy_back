@@ -27,7 +27,7 @@ public class RegisterRepositoryImpl implements RegisterRepository {
                                         .setParameter("courseId", courseId)
                                         .getResultList();
 
-        return registerList.isEmpty() ? Optional.empty() : Optional.of(registerList.getFirst());
+        return registerList.isEmpty() ? Optional.empty() : Optional.of(registerList.get(0));
     }
 
     @Override

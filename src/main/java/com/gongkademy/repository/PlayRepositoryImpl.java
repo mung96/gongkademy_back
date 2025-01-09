@@ -31,7 +31,7 @@ public class PlayRepositoryImpl implements PlayRepository{
                                 .setParameter("memberId", memberId)
                                 .setParameter("courseId", courseId)
                                 .getResultList();
-        return playList.isEmpty() ? Optional.empty() : Optional.of(playList.getFirst());
+        return playList.isEmpty() ? Optional.empty() : Optional.of(playList.get(0));
     }
 
     @Override
@@ -41,6 +41,6 @@ public class PlayRepositoryImpl implements PlayRepository{
                                  .setParameter("lectureId", lectureId)
                                  .getResultList();
 
-        return playList.isEmpty() ? Optional.empty() : Optional.of(playList.getFirst());
+        return playList.isEmpty() ? Optional.empty() : Optional.of(playList.get(0));
     }
 }

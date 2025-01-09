@@ -25,7 +25,7 @@ public class MemberRepositoryImpl implements MemberRepository{
                                     .setParameter("nickname", nickname)
                                     .getResultList();
 
-        return memberList.isEmpty() ? Optional.empty() : Optional.of(memberList.getFirst());
+        return memberList.isEmpty() ? Optional.empty() : Optional.of(memberList.get(0));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MemberRepositoryImpl implements MemberRepository{
                                     .setParameter("providerId", providerId)
                                     .getResultList();
 
-        return memberList.isEmpty() ? Optional.empty() : Optional.of(memberList.getFirst());
+        return memberList.isEmpty() ? Optional.empty() : Optional.of(memberList.get(0));
     }
 
     @Override
