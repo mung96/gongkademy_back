@@ -1,6 +1,6 @@
 package com.gongkademy.domain.board;
 
-import com.gongkademy.domain.BaseEntity;
+import com.gongkademy.domain.BaseTimeEntity;
 import com.gongkademy.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -14,10 +14,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +23,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorColumn(name="DTYPE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public abstract class Board extends BaseEntity {
+public abstract class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

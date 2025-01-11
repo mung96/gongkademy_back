@@ -10,6 +10,10 @@ application-local.properties
 application-dev.properties
 application-prod.properties
 
+### SQL ###
+schema.sql
+data.sql
+
 ### STS ###
 .apt_generated
 .classpath
