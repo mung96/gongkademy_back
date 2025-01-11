@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService{
             boardItemDtoList.add(BoardItemDto.builder()
                     .title(board.getTitle())
                     .body(board.getBody())
-                    .date(board.getModifiedTime().toString())
+                    .date(board.getUpdatedAt().toString())
                      .courseTitle(category == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
                      .commentCount(commentList.size())
                     .build());
@@ -75,13 +75,13 @@ public class BoardServiceImpl implements BoardService{
             commentDtoList.add(CommentItemDto.builder()
                                              .content(comment.getContent())
                                              .nickname(comment.getMember().getNickname())
-                                             .date(comment.getModifiedTime().toString())
+                                             .date(comment.getUpdatedAt().toString())
                                              .build());
         }
         return BoardDetailResponse.builder()
                 .title(board.getTitle())
                 .body(board.getBody())
-                .date(board.getModifiedTime().toString())
+                .date(board.getUpdatedAt().toString())
                 .nickname(board.getMember().getNickname())
                 .commentList(commentDtoList)
                 .courseTitle(board instanceof Question ? ((Question)board).getLecture().getCourse().getTitle() : null)

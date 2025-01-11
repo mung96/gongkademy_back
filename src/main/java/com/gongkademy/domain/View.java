@@ -25,11 +25,11 @@ public class View {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="board_id")
+    @JoinColumn(nullable = false, name="board_id")
     private Board board;
 
     @Builder
