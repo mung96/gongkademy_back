@@ -24,11 +24,11 @@ public class HasRole {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="role_id")
+    @JoinColumn(nullable = false, name="role_id")
     private Role role;
 
     @Builder

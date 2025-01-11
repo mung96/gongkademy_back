@@ -39,7 +39,7 @@ public class Lecture extends BaseEntity{
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="course_id")
+    @JoinColumn(nullable = false, name="course_id")
     private Course course;
 
     @Builder

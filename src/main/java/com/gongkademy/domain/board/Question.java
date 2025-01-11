@@ -21,7 +21,7 @@ import lombok.Setter;
 public class Question extends Board{
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="lecture_id")
+    @JoinColumn(nullable = false, name="lecture_id")
     private Lecture lecture;
 
     @Builder

@@ -28,11 +28,11 @@ public class Play extends BaseEntity{
     private int lastPlayedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="lecture_id")
+    @JoinColumn(nullable = false, name="lecture_id")
     private Lecture lecture;
 
     @Builder
