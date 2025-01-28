@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -16,6 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,7 +33,8 @@ public class SecurityConfig {
 
         httpSecurity.oauth2Login((oauth2) -> oauth2
                 .userInfoEndpoint((userInfoEndpointConfig) ->
-                                          userInfoEndpointConfig.userService(oAuth2UserService)));
+                                          userInfoEndpointConfig.userService(oAuth2UserService))
+                .successHandler(authenticationSuccessHandler));
 
         httpSecurity.sessionManagement((session) -> session
                         .sessionFixation(SessionFixationConfigurer::newSession));
