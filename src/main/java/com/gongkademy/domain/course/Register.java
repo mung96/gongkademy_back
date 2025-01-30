@@ -1,5 +1,7 @@
-package com.gongkademy.domain;
+package com.gongkademy.domain.course;
 
+import com.gongkademy.domain.BaseTimeEntity;
+import com.gongkademy.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,32 +18,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Play extends BaseTimeEntity {
+public class Register extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="play_id")
+    @Column(name="register_id")
     private Long id;
-
-    @Column(nullable = false)
-    private int lastPlayedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name="lecture_id")
-    private Lecture lecture;
+    @JoinColumn(nullable = false, name="course_id")
+    private Course course;
 
     @Builder
-    private Play(int lastPlayedTime, Member member, Lecture lecture) {
-        this.lastPlayedTime = lastPlayedTime;
+    private Register(Member member, Course course) {
         this.member = member;
-        this.lecture = lecture;
-    }
-
-    public void changeLastPlayedTime(int lastPlayedTime){
-        this.lastPlayedTime = lastPlayedTime;
+        this.course = course;
     }
 }

@@ -1,6 +1,6 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Register;
+import com.gongkademy.domain.course.Register;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;

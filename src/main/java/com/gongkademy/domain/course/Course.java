@@ -1,5 +1,6 @@
-package com.gongkademy.domain;
+package com.gongkademy.domain.course;
 
+import com.gongkademy.domain.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

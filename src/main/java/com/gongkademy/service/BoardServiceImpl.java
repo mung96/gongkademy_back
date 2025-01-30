@@ -8,8 +8,8 @@ import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static com.gongkademy.exception.ErrorCode.NOT_COMMENT_WRITER;
 
-import com.gongkademy.domain.Comment;
-import com.gongkademy.domain.Lecture;
+import com.gongkademy.domain.board.Comment;
+import com.gongkademy.domain.course.Lecture;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.BoardCategory;

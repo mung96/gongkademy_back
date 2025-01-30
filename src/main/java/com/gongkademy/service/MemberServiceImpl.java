@@ -4,13 +4,11 @@ import static com.gongkademy.domain.board.BoardCategory.QUESTION;
 import static com.gongkademy.exception.ErrorCode.DUPLICATED_NICKNAME;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 
-import com.gongkademy.domain.Comment;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.domain.board.Question;
 import com.gongkademy.exception.CustomException;
-import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.BoardRepository;
 import com.gongkademy.repository.CommentRepository;
 import com.gongkademy.repository.MemberRepository;

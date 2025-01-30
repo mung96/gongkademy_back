@@ -1,6 +1,6 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Course;
+import com.gongkademy.domain.course.Course;
 import java.util.Optional;
 
 public interface CourseRepository {

@@ -5,12 +5,10 @@ import static com.gongkademy.domain.board.BoardCategory.WORRY;
 import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.gongkademy.domain.Comment;
-import com.gongkademy.domain.Course;
-import com.gongkademy.domain.Lecture;
+import com.gongkademy.domain.course.Course;
+import com.gongkademy.domain.course.Lecture;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.Provider;
-import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.domain.board.Question;
 import com.gongkademy.domain.board.Worry;

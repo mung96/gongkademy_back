@@ -2,11 +2,8 @@ package com.gongkademy.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.gongkademy.domain.Comment;
-import com.gongkademy.domain.Course;
-import com.gongkademy.domain.Lecture;
+import com.gongkademy.domain.board.Comment;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.board.Question;
 import com.gongkademy.domain.board.Worry;
 import jakarta.persistence.EntityManager;
 import java.util.List;
