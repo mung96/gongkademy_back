@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BoardRepository{
 
     List<Board> findAllByCategory(BoardCategory category,int page, BoardCriteria boardCriteria);
+    List<Board> findAllByCategoryAndMemberId(Long memberId,BoardCategory category,int page, BoardCriteria boardCriteria);
+    Long countAllByCategoryAndMemberId(Long memberId,BoardCategory category);
     Long countAllByCategory(BoardCategory category);
     Optional<Board> findById(Long boardId);
     List<Board> findAllByMemberId(Long memberId);

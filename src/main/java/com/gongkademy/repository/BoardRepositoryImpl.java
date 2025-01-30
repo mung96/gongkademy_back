@@ -27,12 +27,46 @@ public class BoardRepositoryImpl implements BoardRepository{
                     .setMaxResults(20)
                      .getResultList();
         }else if(category == WORRY){
-            return em.createQuery("SELECT w FROM Worry w",Board.class)
+            return em.createQuery("SELECT w FROM Worry w ORDER BY w.createdAt ASC",Board.class)
                      .setFirstResult((page-1)*20)
                      .setMaxResults(20)
                      .getResultList();
         }
         return List.of();
+    }
+
+    @Override
+    public List<Board> findAllByCategoryAndMemberId(Long memberId, BoardCategory category, int page,
+                                                    BoardCriteria boardCriteria) {
+        if(category == QUESTION){
+            return em.createQuery("SELECT q FROM Question q WHERE q.member.id = :memberId ORDER BY q.createdAt ASC",Board.class)
+                    .setParameter("memberId",memberId)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }else if(category == WORRY){
+            return em.createQuery("SELECT w FROM Worry w WHERE w.member.id = :memberId ORDER BY w.createdAt ASC",Board.class)
+                     .setParameter("memberId",memberId)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }
+        return List.of();
+    }
+
+    @Override
+    public Long countAllByCategoryAndMemberId(Long memberId, BoardCategory category) {
+        Long totalBoard = 0L;
+        if(category == QUESTION){
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.member.id = :memberId",Long.class)
+                           .setParameter("memberId",memberId)
+                           .getSingleResult();
+        }else if(category == WORRY){
+            totalBoard = em.createQuery("SELECT count(w) FROM Worry w WHERE w.member.id = :memberId",Long.class)
+                           .setParameter("memberId",memberId)
+                           .getSingleResult();
+        }
+        return ((totalBoard-1)/20)+1;
     }
 
     @Override

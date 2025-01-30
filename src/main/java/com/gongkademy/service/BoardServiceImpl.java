@@ -49,7 +49,6 @@ public class BoardServiceImpl implements BoardService{
     @Transactional(readOnly = true)
     public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
 
-
         List<BoardItemDto> boardList = boardRepository.findAllByCategory(boardCategory,page,boardCriteria).stream().map(board -> BoardItemDto.builder()
                 .title(board.getTitle())
                 .body(board.getBody())
