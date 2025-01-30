@@ -1,6 +1,7 @@
 package com.gongkademy.repository;
 
 import com.gongkademy.domain.course.Register;
+import com.gongkademy.domain.course.RegisterStatus;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +21,17 @@ public class RegisterRepositoryImpl implements RegisterRepository {
     }
 
     @Override
+    public List<Register> findByMemberIdAndRegisterStatus(Long memberId, RegisterStatus registerStatus) {
+        return  em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.registerStatus = :registerStatus", Register.class)
+                                        .setParameter("memberId", memberId)
+                                        .setParameter("registerStatus", registerStatus)
+                                        .getResultList();
+
+    }
+
+    @Override
     public Optional<Register> findByMemberIdAndCourseId(Long memberId, Long courseId) {
-        List<Register> registerList = em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.course.id = :courseId",
-                                                     Register.class)
+        List<Register> registerList = em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.course.id = :courseId", Register.class)
                                         .setParameter("memberId", memberId)
                                         .setParameter("courseId", courseId)
                                         .getResultList();
