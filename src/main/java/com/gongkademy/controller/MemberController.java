@@ -2,9 +2,11 @@ package com.gongkademy.controller;
 
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
+import com.gongkademy.domain.course.RegisterStatus;
 import com.gongkademy.service.BoardService;
 import com.gongkademy.service.MemberService;
 import com.gongkademy.service.dto.BoardListResponse;
+import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import com.gongkademy.service.dto.UpdateProfileRequest;
 import jakarta.validation.Valid;
@@ -45,4 +47,12 @@ public class MemberController {
         BoardListResponse boardList = memberService.findBoardListByMemberId(principalDetails.getMember().getId(),boardCategory, page,boardCriteria);
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
+
+    @GetMapping("/courses")
+    public ResponseEntity<CourseListResponse> getCourseList (@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                             @RequestParam(required = false, defaultValue = "0", value = "status") RegisterStatus status) {
+        CourseListResponse courseListResponse = memberService.findCourseListByMemberIdAndRegisterStatus(principalDetails.getMember().getId(), status);
+        return ResponseEntity.status(HttpStatus.OK).body(courseListResponse);
+    }
+
 }
