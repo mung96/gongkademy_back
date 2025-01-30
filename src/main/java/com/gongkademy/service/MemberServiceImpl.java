@@ -8,12 +8,16 @@ import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.domain.board.Question;
+import com.gongkademy.domain.course.RegisterStatus;
 import com.gongkademy.exception.CustomException;
 import com.gongkademy.repository.BoardRepository;
 import com.gongkademy.repository.CommentRepository;
 import com.gongkademy.repository.MemberRepository;
+import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.BoardItemDto;
 import com.gongkademy.service.dto.BoardListResponse;
+import com.gongkademy.service.dto.CourseItemDto;
+import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.UpdateProfileRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final RegisterRepository registerRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
@@ -60,5 +65,17 @@ public class MemberServiceImpl implements MemberService{
         Long totalPage = boardRepository.countAllByCategoryAndMemberId(memberId,boardCategory);
 
         return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
+    }
+
+    @Override
+    public CourseListResponse findCourseListByMemberIdAndRegisterStatus(Long memberId, RegisterStatus registerStatus) {
+        List<CourseItemDto> courseList = registerRepository.findByMemberIdAndRegisterStatus(memberId, registerStatus)
+                                                           .stream()
+                                                           .map(register -> CourseItemDto.builder()
+                                                                                         .courseId(register.getCourse().getId())
+                                                                                         .title(register.getCourse().getTitle())
+                                                                                         .thumbnail(register.getCourse().getThumbnail())
+                                                                                         .build()).toList();
+        return CourseListResponse.builder().courseList(courseList).build();
     }
 }
