@@ -23,11 +23,13 @@ public class BoardRepositoryImpl implements BoardRepository{
     public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
         if(category == QUESTION){
             return em.createQuery("SELECT q FROM Question q ORDER BY q.createdAt ASC",Board.class)
-                    .setFirstResult(page*20)
+                    .setFirstResult((page-1)*20)
                     .setMaxResults(20)
                      .getResultList();
         }else if(category == WORRY){
             return em.createQuery("SELECT w FROM Worry w",Board.class)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
                      .getResultList();
         }
         return List.of();
@@ -35,14 +37,15 @@ public class BoardRepositoryImpl implements BoardRepository{
 
     @Override
     public Long countAllByCategory(BoardCategory category) {
+        Long totalBoard = 0L;
         if(category == QUESTION){
-            return  em.createQuery("SELECT count(q) FROM Question q",Long.class)
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q",Long.class)
                       .getSingleResult();
         }else if(category == WORRY){
-            return  em.createQuery("SELECT count(w) FROM Worry w",Long.class)
+            totalBoard = em.createQuery("SELECT count(w) FROM Worry w",Long.class)
                       .getSingleResult();
         }
-        return 0L;
+        return ((totalBoard-1)/20)+1;
     }
 
     @Override
