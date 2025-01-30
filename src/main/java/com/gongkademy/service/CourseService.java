@@ -1,6 +1,7 @@
 package com.gongkademy.service;
 
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
@@ -8,6 +9,7 @@ import java.util.List;
 
 public interface CourseService {
 
+    CourseListResponse findCourse();
     Long registerCourse(Long memberId, Long courseId);
 
     Long dropCourse(Long memberId, Long courseId);

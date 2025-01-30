@@ -18,6 +18,8 @@ import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.repository.PlayRepository;
 import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.CourseItemDto;
+import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
@@ -37,6 +39,19 @@ public class CourseServiceImpl implements CourseService {
     private final RegisterRepository registerRepository;
     private final LectureRepository lectureRepository;
     private final PlayRepository playRepository;
+
+    @Override
+    public CourseListResponse findCourse() {
+        List<CourseItemDto> courseList = courseRepository.findCourse()
+                                                         .stream()
+                                                         .map(course -> CourseItemDto.builder()
+                                                                                    .courseId(course.getId())
+                                                                                    .title(course.getTitle())
+                                                                                    .thumbnail(course.getThumbnail())
+                                                                                    .build())
+                                                         .toList();
+        return CourseListResponse.builder().courseList(courseList).build();
+    }
 
     //수강 신청
     @Override
