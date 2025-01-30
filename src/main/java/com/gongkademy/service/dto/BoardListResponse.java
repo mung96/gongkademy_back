@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class BoardListResponse {
+    Long totalPage;
     List<BoardItemDto> boardList;
 }

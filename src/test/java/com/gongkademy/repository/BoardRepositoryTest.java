@@ -28,7 +28,6 @@ class BoardRepositoryTest {
     @Autowired
     EntityManager em;
     @Autowired BoardRepository boardRepository;
-    @Autowired BoardJPARepository boardJPARepository;
 
     @Test
     void 게시글_id로_조회(){

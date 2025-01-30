@@ -1,11 +1,11 @@
 package com.gongkademy.controller;
 
 import com.gongkademy.domain.board.BoardCategory;
+import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.service.BoardService;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.EditBoardRequest;
-import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
 import com.gongkademy.service.dto.WriteBoardRequest;
 import com.gongkademy.service.dto.WriteCommentRequest;
@@ -32,10 +32,12 @@ public class BoardController {
     private final BoardService boardService;
 
     //게시글 목록 조회
-    @GetMapping
-    public ResponseEntity<BoardListResponse> getBoards(@RequestParam BoardCategory category){
+    @GetMapping("/{boardCategory}")
+    public ResponseEntity<BoardListResponse> getBoards(@PathVariable BoardCategory boardCategory,
+                                                       @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                                       @RequestParam(required = false, defaultValue = "createdAt", value = "criteria") BoardCriteria boardCriteria) {
 
-        BoardListResponse boardList = boardService.findBoardList(category, 0);
+        BoardListResponse boardList = boardService.findBoardList(boardCategory, page,boardCriteria);
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 

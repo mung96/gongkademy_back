@@ -1,6 +1,7 @@
 package com.gongkademy.service;
 
 import com.gongkademy.domain.board.BoardCategory;
+import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.EditBoardRequest;
@@ -9,7 +10,7 @@ import com.gongkademy.service.dto.WriteCommentRequest;
 
 public interface BoardService {
 
-    BoardListResponse findBoardList(BoardCategory category, int page);
+    BoardListResponse findBoardList(BoardCategory category, int page, BoardCriteria boardOrder);
 
     BoardDetailResponse findBoardDetail(Long boardId);
 
