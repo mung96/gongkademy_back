@@ -2,6 +2,7 @@ package com.gongkademy.controller;
 
 import com.gongkademy.service.CourseService;
 import com.gongkademy.service.dto.CourseDetailResponse;
+import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
@@ -26,6 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
 
     private final CourseService courseService;
+
+    //홈화면 강좌 목록 조회
+    @GetMapping
+    public ResponseEntity<CourseListResponse> getCourseList () {
+        CourseListResponse courseListResponse = courseService.findCourse();
+        return ResponseEntity.status(HttpStatus.OK).body(courseListResponse);
+    }
 
     //강좌 수강 신청하기
     @PostMapping("/{courseId}/register")
