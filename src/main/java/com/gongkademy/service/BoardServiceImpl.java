@@ -8,11 +8,12 @@ import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static com.gongkademy.exception.ErrorCode.NOT_COMMENT_WRITER;
 
-import com.gongkademy.domain.Comment;
-import com.gongkademy.domain.Lecture;
+import com.gongkademy.domain.board.Comment;
+import com.gongkademy.domain.course.Lecture;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.BoardCategory;
+import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.domain.board.Question;
 import com.gongkademy.domain.board.Worry;
 import com.gongkademy.exception.CustomException;
@@ -46,23 +47,19 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional(readOnly = true)
-    public BoardListResponse findBoardList(BoardCategory category, int page) {
-        //TODO: 페이징 처리, 일단 전체 조회로 구현
-        List<Board> boardList = boardRepository.findAllByCategory(category);
-        List<BoardItemDto> boardItemDtoList = new ArrayList<>();
+    public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
 
-        for(Board board:boardList){
-            List<Comment> commentList = commentRepository.findByBoardId(board.getId());
-            boardItemDtoList.add(BoardItemDto.builder()
-                    .title(board.getTitle())
-                    .body(board.getBody())
-                    .date(board.getUpdatedAt().toString())
-                     .courseTitle(category == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
-                     .commentCount(commentList.size())
-                    .build());
-        }
+        List<BoardItemDto> boardList = boardRepository.findAllByCategory(boardCategory,page,boardCriteria).stream().map(board -> BoardItemDto.builder()
+                .title(board.getTitle())
+                .body(board.getBody())
+                .date(board.getUpdatedAt().toString())
+                .courseTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
+                .commentCount(commentRepository.findByBoardId(board.getId()).size())
+                .build()).toList();
 
-        return BoardListResponse.builder().boardList(boardItemDtoList).build();
+        Long totalPage = boardRepository.countAllByCategory(boardCategory);
+
+        return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
     }
 
     @Override

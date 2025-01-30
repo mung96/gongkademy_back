@@ -5,11 +5,11 @@ import static com.gongkademy.exception.ErrorCode.COURSE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.REGISTER_NOT_FOUND;
 
-import com.gongkademy.domain.Course;
-import com.gongkademy.domain.Lecture;
+import com.gongkademy.domain.course.Course;
+import com.gongkademy.domain.course.Lecture;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.Play;
-import com.gongkademy.domain.Register;
+import com.gongkademy.domain.course.Play;
+import com.gongkademy.domain.course.Register;
 import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.CourseRepository;

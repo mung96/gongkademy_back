@@ -2,10 +2,10 @@ package com.gongkademy.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.gongkademy.domain.Course;
-import com.gongkademy.domain.Lecture;
+import com.gongkademy.domain.course.Course;
+import com.gongkademy.domain.course.Lecture;
 import com.gongkademy.domain.Member;
-import com.gongkademy.domain.Play;
+import com.gongkademy.domain.course.Play;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

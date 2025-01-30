@@ -1,6 +1,6 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Play;
+import com.gongkademy.domain.course.Play;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;

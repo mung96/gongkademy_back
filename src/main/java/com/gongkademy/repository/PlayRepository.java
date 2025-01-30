@@ -1,6 +1,6 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Play;
+import com.gongkademy.domain.course.Play;
 import java.util.Optional;
 
 public interface PlayRepository {

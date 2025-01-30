@@ -1,7 +1,6 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Comment;
-import com.gongkademy.domain.Course;
+import com.gongkademy.domain.board.Comment;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;

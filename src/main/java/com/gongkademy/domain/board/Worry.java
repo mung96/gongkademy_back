@@ -1,11 +1,9 @@
 package com.gongkademy.domain.board;
 
-import com.gongkademy.domain.Lecture;
 import com.gongkademy.domain.Member;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

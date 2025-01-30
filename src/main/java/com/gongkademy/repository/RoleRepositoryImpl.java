@@ -1,6 +1,5 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.Register;
 import com.gongkademy.domain.Role;
 import com.gongkademy.domain.RoleType;
 import jakarta.persistence.EntityManager;

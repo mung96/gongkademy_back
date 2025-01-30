@@ -5,6 +5,7 @@ import static com.gongkademy.domain.board.BoardCategory.WORRY;
 
 import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.BoardCategory;
+import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.domain.board.Question;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -19,15 +20,66 @@ public class BoardRepositoryImpl implements BoardRepository{
     private final EntityManager em;
 
     @Override
-    public List<Board> findAllByCategory(BoardCategory category) {
+    public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
         if(category == QUESTION){
-            return em.createQuery("SELECT q FROM Question q",Board.class)
-                    .getResultList();
+            return em.createQuery("SELECT q FROM Question q ORDER BY q.createdAt ASC",Board.class)
+                    .setFirstResult((page-1)*20)
+                    .setMaxResults(20)
+                     .getResultList();
         }else if(category == WORRY){
-            return em.createQuery("SELECT w FROM Worry w",Board.class)
-                    .getResultList();
+            return em.createQuery("SELECT w FROM Worry w ORDER BY w.createdAt ASC",Board.class)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
         }
         return List.of();
+    }
+
+    @Override
+    public List<Board> findAllByCategoryAndMemberId(Long memberId, BoardCategory category, int page,
+                                                    BoardCriteria boardCriteria) {
+        if(category == QUESTION){
+            return em.createQuery("SELECT q FROM Question q WHERE q.member.id = :memberId ORDER BY q.createdAt ASC",Board.class)
+                    .setParameter("memberId",memberId)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }else if(category == WORRY){
+            return em.createQuery("SELECT w FROM Worry w WHERE w.member.id = :memberId ORDER BY w.createdAt ASC",Board.class)
+                     .setParameter("memberId",memberId)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }
+        return List.of();
+    }
+
+    @Override
+    public Long countAllByCategoryAndMemberId(Long memberId, BoardCategory category) {
+        Long totalBoard = 0L;
+        if(category == QUESTION){
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.member.id = :memberId",Long.class)
+                           .setParameter("memberId",memberId)
+                           .getSingleResult();
+        }else if(category == WORRY){
+            totalBoard = em.createQuery("SELECT count(w) FROM Worry w WHERE w.member.id = :memberId",Long.class)
+                           .setParameter("memberId",memberId)
+                           .getSingleResult();
+        }
+        return ((totalBoard-1)/20)+1;
+    }
+
+    @Override
+    public Long countAllByCategory(BoardCategory category) {
+        Long totalBoard = 0L;
+        if(category == QUESTION){
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q",Long.class)
+                      .getSingleResult();
+        }else if(category == WORRY){
+            totalBoard = em.createQuery("SELECT count(w) FROM Worry w",Long.class)
+                      .getSingleResult();
+        }
+        return ((totalBoard-1)/20)+1;
     }
 
     @Override
