@@ -6,6 +6,7 @@ import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
 import java.util.List;
+import org.springframework.core.io.UrlResource;
 
 public interface CourseService {
 
@@ -23,4 +24,6 @@ public interface CourseService {
     Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime);
 
     LectureDetailResponse findLectureDetail(Long memberId, Long lectureId);
+
+    UrlResource findCourseNote(Long courseId);
 }

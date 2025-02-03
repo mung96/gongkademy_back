@@ -1,5 +1,6 @@
 package com.gongkademy.controller;
 
+import com.gongkademy.repository.CourseRepository;
 import com.gongkademy.service.CourseService;
 import com.gongkademy.service.dto.CourseDetailResponse;
 import com.gongkademy.service.dto.CourseListResponse;
@@ -9,7 +10,11 @@ import com.gongkademy.service.dto.PrincipalDetails;
 import com.gongkademy.service.dto.SavePlayRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.buf.UriUtil;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,9 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/courses")
 public class CourseController {
 
@@ -32,6 +39,8 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<CourseListResponse> getCourseList () {
         CourseListResponse courseListResponse = courseService.findCourse();
+
+        log.info("courseListResponse = {}", courseListResponse);
         return ResponseEntity.status(HttpStatus.OK).body(courseListResponse);
     }
 
@@ -99,7 +108,16 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
     }
 
-    //TODO: 강좌 자료 다운
+    //강좌 자료 다운
+    @GetMapping("/{courseId}/note")
+    public ResponseEntity<Resource> downloadCourseNote (@PathVariable Long courseId) {
+        UrlResource courseNote = courseService.findCourseNote(courseId);
 
-    //TODO: 강좌 홈 화면
+        log.info("강좌자료 = {}", courseNote);
+
+        String contentDisposition = "attachment; filename=" + UriUtils.encode(courseNote.getFilename(), "UTF-8");
+
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition).body(courseNote);
+    }
+
 }
