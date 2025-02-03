@@ -23,9 +23,11 @@ import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
+import com.gongkademy.utils.FileUtil;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,7 @@ public class CourseServiceImpl implements CourseService {
     private final RegisterRepository registerRepository;
     private final LectureRepository lectureRepository;
     private final PlayRepository playRepository;
+    private final FileUtil fileUtil;
 
     @Override
     public CourseListResponse findCourse() {
@@ -201,5 +204,12 @@ public class CourseServiceImpl implements CourseService {
                                     .url(lecture.getUrl())
                                     .lastPlayedTime(play == null ? 0 : play.getLastPlayedTime())
                                     .build();
+    }
+
+    public UrlResource findCourseNote(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                            .orElseThrow(()-> new CustomException(COURSE_NOT_FOUND));
+
+        return fileUtil.getCourseNoteResource(course.getCourseNote());
     }
 }
