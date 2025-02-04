@@ -30,12 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
     private final BoardService boardService;
+    //TODO: 홈화면 게시글 조회
 
     //게시글 목록 조회
-    @GetMapping("/{boardCategory}")
-    public ResponseEntity<BoardListResponse> getBoards(@PathVariable BoardCategory boardCategory,
-                                                       @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                                       @RequestParam(required = false, defaultValue = "createdAt", value = "criteria") BoardCriteria boardCriteria) {
+    @GetMapping
+    public ResponseEntity<BoardListResponse> getBoards(@RequestParam(value = "category") BoardCategory boardCategory,
+                                                       @RequestParam(required = false, defaultValue = "1", value = "page") int page,
+                                                       @RequestParam(required = false, defaultValue = "CREATED_AT", value = "criteria") BoardCriteria boardCriteria) {
 
         BoardListResponse boardList = boardService.findBoardList(boardCategory, page,boardCriteria);
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
