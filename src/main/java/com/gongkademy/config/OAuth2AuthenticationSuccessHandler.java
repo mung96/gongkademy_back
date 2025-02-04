@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final String REDIRECT_URL = "http://localhost:3000";
+    private static final String REDIRECT_URL = "http://localhost:3000/redirect";
 
     @Override
     @Transactional

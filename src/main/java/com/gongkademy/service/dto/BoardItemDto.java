@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class BoardItemDto {
+    private Long boardId;
     private String title;
     private String body;
     private String date;

@@ -50,12 +50,13 @@ public class BoardServiceImpl implements BoardService{
     public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
 
         List<BoardItemDto> boardList = boardRepository.findAllByCategory(boardCategory,page,boardCriteria).stream().map(board -> BoardItemDto.builder()
-                .title(board.getTitle())
-                .body(board.getBody())
-                .date(board.getUpdatedAt().toString())
-                .courseTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
-                .commentCount(commentRepository.findByBoardId(board.getId()).size())
-                .build()).toList();
+                                                                                                                                             .boardId(board.getId())
+                                                                                                                                             .title(board.getTitle())
+                                                                                                                                             .body(board.getBody())
+                                                                                                                                             .date(board.getUpdatedAt().toString())
+                                                                                                                                             .courseTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
+                                                                                                                                             .commentCount(commentRepository.findByBoardId(board.getId()).size())
+                                                                                                                                             .build()).toList();
 
         Long totalPage = boardRepository.countAllByCategory(boardCategory);
 
