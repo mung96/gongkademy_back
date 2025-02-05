@@ -7,8 +7,10 @@ import static com.gongkademy.exception.ErrorCode.LECTURE_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static com.gongkademy.exception.ErrorCode.NOT_COMMENT_WRITER;
+import static com.gongkademy.exception.ErrorCode.NOT_VALID_QUESTION_REQUEST;
 
 import com.gongkademy.domain.board.Comment;
+import com.gongkademy.domain.course.Course;
 import com.gongkademy.domain.course.Lecture;
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.Board;
@@ -20,6 +22,7 @@ import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.BoardRepository;
 import com.gongkademy.repository.CommentRepository;
+import com.gongkademy.repository.CourseRepository;
 import com.gongkademy.repository.LectureRepository;
 import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.service.dto.BoardDetailResponse;
@@ -44,6 +47,7 @@ public class BoardServiceImpl implements BoardService{
 
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final CourseRepository courseRepository;
     private final LectureRepository lectureRepository;
     private final CommentRepository commentRepository;
 
@@ -52,15 +56,15 @@ public class BoardServiceImpl implements BoardService{
     public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
 
         List<BoardItemDto> boardList = boardRepository.findAllByCategory(boardCategory,page,boardCriteria).stream().map(board -> BoardItemDto.builder()
-                                                                                                                                            .boardCategory(board.getBoardCategory())
-                                                                                                                                             .boardId(board.getId())
-                                                                                                                                             .title(board.getTitle())
-                                                                                                                                             .body(board.getBody())
-                                                                                                                                             .date(board.getUpdatedAt().toString())
-                                                                                                                                             .courseTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
-                .lectureTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getTitle() : null)
-                                                                                                                                             .commentCount(commentRepository.findByBoardId(board.getId()).size())
-                                                                                                                                             .build()).toList();
+                                                                    .boardCategory(board.getBoardCategory())
+                                                                     .boardId(board.getId())
+                                                                     .title(board.getTitle())
+                                                                     .body(board.getBody())
+                                                                     .date(board.getUpdatedAt().toString())
+                                                                     .courseTitle(boardCategory == QUESTION ? ((Question)board).getCourse().getTitle() : null)
+                                                                     .lectureTitle((boardCategory == QUESTION && ((Question)board).getLecture() != null) ?((Question)board).getLecture().getTitle() : null)
+                                                                     .commentCount(commentRepository.findByBoardId(board.getId()).size())
+                                                                     .build()).toList();
 
         Long totalPage = boardRepository.countAllByCategory(boardCategory);
 
@@ -93,14 +97,17 @@ public class BoardServiceImpl implements BoardService{
                 .date(board.getUpdatedAt().toString())
                 .nickname(board.getMember().getNickname())
                 .commentList(commentDtoList)
-                .courseTitle(board instanceof Question ? ((Question)board).getLecture().getCourse().getTitle() : null)
-                .lectureTitle(board instanceof Question ? ((Question)board).getLecture().getTitle() : null)
+                .courseTitle(board.getBoardCategory() == QUESTION ? ((Question)board).getCourse().getTitle() : null)
+                .lectureTitle((board.getBoardCategory() == QUESTION && ((Question)board).getLecture() != null) ?((Question)board).getLecture().getTitle() : null)
                 .build();
     }
 
     @Override
     public Long write(Long memberId, WriteBoardRequest board, BoardCategory category) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        if(category == QUESTION && board.getCourseId() == null) throw new CustomException(NOT_VALID_QUESTION_REQUEST);
+
         Board newBoard = null;
         if (category == BoardCategory.WORRY) {
             newBoard = Worry.builder()
@@ -110,11 +117,17 @@ public class BoardServiceImpl implements BoardService{
                                      .build();
 
         } else if (category == QUESTION) {
-            Lecture lecture = lectureRepository.findById(board.getLectureId()).orElseThrow(() -> new CustomException(LECTURE_NOT_FOUND));
+            Lecture lecture = null;
+            if(board.getLectureId() != null){
+                lecture = lectureRepository.findById(board.getLectureId()).orElseThrow(() -> new CustomException(LECTURE_NOT_FOUND));
+            }
+
+            Course course = courseRepository.findById(board.getCourseId()).orElseThrow(() -> new CustomException(ErrorCode.COURSE_NOT_FOUND));
             newBoard = Question.builder()
                                         .title(board.getTitle())
                                         .body(board.getBody())
                                         .member(member)
+                                        .course(course)
                                         .lecture(lecture)
                                         .build();
         }
@@ -136,9 +149,11 @@ public class BoardServiceImpl implements BoardService{
         if(newBoard.getBody() != null){
             board.changeBody(newBoard.getBody());
         }
-        if(category == QUESTION && newBoard.getLectureId() != null){
+        if(category == QUESTION){
             Lecture lecture = lectureRepository.findById(newBoard.getLectureId()).orElseThrow(()->new CustomException(LECTURE_NOT_FOUND));
+            Course course = courseRepository.findById(newBoard.getCourseId()).orElseThrow(()->new CustomException(ErrorCode.COURSE_NOT_FOUND));
             ((Question)board).changeLecture(lecture);
+            ((Question)board).changeCourse(course);
         }
 
         return board.getId();

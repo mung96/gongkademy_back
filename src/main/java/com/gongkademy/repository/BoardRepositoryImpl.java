@@ -23,12 +23,12 @@ public class BoardRepositoryImpl implements BoardRepository{
     @Override
     public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
         if(category == QUESTION){
-            return em.createQuery("SELECT q FROM Question q WHERE q.isDeleted = false ORDER BY q.createdAt ASC",Board.class)
+            return em.createQuery("SELECT q FROM Question q WHERE q.isDeleted = false ORDER BY q.createdAt DESC ",Board.class)
                     .setFirstResult((page-1)*20)
                     .setMaxResults(20)
                      .getResultList();
         }else if(category == WORRY){
-            return em.createQuery("SELECT w FROM Worry w WHERE w.isDeleted = false ORDER BY w.createdAt ASC",Board.class)
+            return em.createQuery("SELECT w FROM Worry w WHERE w.isDeleted = false ORDER BY w.createdAt DESC",Board.class)
                      .setFirstResult((page-1)*20)
                      .setMaxResults(20)
                      .getResultList();

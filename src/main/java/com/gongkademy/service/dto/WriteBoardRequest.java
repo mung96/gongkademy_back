@@ -23,4 +23,5 @@ public class WriteBoardRequest {
     private String body;
 
     private Long lectureId;
+    private Long courseId;
 }

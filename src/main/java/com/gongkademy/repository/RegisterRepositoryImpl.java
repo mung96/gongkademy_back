@@ -22,11 +22,16 @@ public class RegisterRepositoryImpl implements RegisterRepository {
 
     @Override
     public List<Register> findByMemberIdAndRegisterStatus(Long memberId, RegisterStatus registerStatus) {
+        if(registerStatus == null){
+            return em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId", Register.class)
+                     .setParameter("memberId", memberId)
+                     .getResultList();
+        }
+
         return  em.createQuery("SELECT r FROM Register r WHERE r.member.id = :memberId AND r.registerStatus = :registerStatus", Register.class)
                                         .setParameter("memberId", memberId)
                                         .setParameter("registerStatus", registerStatus)
                                         .getResultList();
-
     }
 
     @Override
