@@ -3,6 +3,7 @@ package com.gongkademy.domain.board;
 
 import com.gongkademy.domain.BaseTimeEntity;
 import com.gongkademy.domain.Member;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +33,7 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name="board_id")
     private Board board;
 

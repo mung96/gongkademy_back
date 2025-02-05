@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CommentItemDto {
+    private Long commentId;
     private String nickname;
     private String content;
     private String date;

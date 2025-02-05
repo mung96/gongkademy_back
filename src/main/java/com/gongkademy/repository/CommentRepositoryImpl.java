@@ -21,7 +21,7 @@ public class CommentRepositoryImpl implements CommentRepository{
 
     @Override
     public List<Comment> findByBoardId(Long boardId) {
-        return em.createQuery("SELECT c FROM Comment c WHERE c.board.id = :boardId",Comment.class)
+        return em.createQuery("SELECT c FROM Comment c WHERE c.board.id = :boardId ORDER BY c.createdAt DESC",Comment.class)
                 .setParameter("boardId",boardId)
                 .getResultList();
     }

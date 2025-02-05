@@ -32,12 +32,14 @@ import com.gongkademy.service.dto.WriteCommentRequest;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Log4j2
 public class BoardServiceImpl implements BoardService{
 
     private final MemberRepository memberRepository;
@@ -63,20 +65,24 @@ public class BoardServiceImpl implements BoardService{
         return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
     }
 
+    //TODO: 댓글 불러오는거랑 게시글 상세 불러오는게 분리가 되어야하네. 그래야 프론트에서 댓글변경시 그거만 불러오는게 가능
     @Override
     @Transactional(readOnly = true)
-    public BoardDetailResponse findBoardDetail(Long boardId) {
+    public BoardDetailResponse findBoardDetail(Long memberId,Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
         List<Comment> commentList = commentRepository.findByBoardId(boardId);
         List<CommentItemDto> commentDtoList = new ArrayList<>();
         for(Comment comment:commentList){
             commentDtoList.add(CommentItemDto.builder()
+                                            .commentId(comment.getId())
                                              .content(comment.getContent())
                                              .nickname(comment.getMember().getNickname())
                                              .date(comment.getUpdatedAt().toString())
                                              .build());
         }
         return BoardDetailResponse.builder()
+                .boardId(board.getId())
+                .isMine(memberId.equals(board.getMember().getId()))
                 .title(board.getTitle())
                 .body(board.getBody())
                 .date(board.getUpdatedAt().toString())
@@ -139,6 +145,12 @@ public class BoardServiceImpl implements BoardService{
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
         if(!board.getMember().getId().equals(memberId)) throw new CustomException(NOT_BOARD_WRITER);
 
+        log.info("게시판 삭제: {}",boardId);
+        List<Comment> commentList = commentRepository.findByBoardId(boardId);
+        for(Comment comment:commentList){
+            commentRepository.delete(comment);
+        }
+        log.info("게시판 삭제 완료: {}",boardId);
         return boardRepository.delete(board);
     }
 

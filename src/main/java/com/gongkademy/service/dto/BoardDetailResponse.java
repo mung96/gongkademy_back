@@ -11,11 +11,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class BoardDetailResponse {
+    private Long boardId;
     private String title;
     private String body;
     private String date;
     private String nickname;
     private String courseTitle;
     private String lectureTitle;
+    private Boolean isMine;
     private List<CommentItemDto> commentList;
 }

@@ -10,7 +10,9 @@ import com.gongkademy.service.dto.PrincipalDetails;
 import com.gongkademy.service.dto.WriteBoardRequest;
 import com.gongkademy.service.dto.WriteCommentRequest;
 import jakarta.validation.Valid;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("api/boards")
 public class BoardController {
 
     private final BoardService boardService;
@@ -44,9 +46,9 @@ public class BoardController {
 
     //게시글 상세 조회
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardDetailResponse> getBoardDetail(@PathVariable Long boardId){
+    public ResponseEntity<BoardDetailResponse> getBoardDetail(@AuthenticationPrincipal PrincipalDetails principalDetails,@PathVariable Long boardId){
 
-        BoardDetailResponse boardDetail = boardService.findBoardDetail(boardId);
+        BoardDetailResponse boardDetail = boardService.findBoardDetail(principalDetails.getMember().getId(),boardId);
         return ResponseEntity.status(HttpStatus.OK).body(boardDetail);
     }
 
@@ -56,9 +58,13 @@ public class BoardController {
                                         , @RequestParam BoardCategory category
                                         , @Valid @RequestBody WriteBoardRequest writeBoardRequest
                                         ){
+        Long boardId = boardService.write(principalDetails.getMember().getId(),writeBoardRequest,category);
 
-        boardService.write(principalDetails.getMember().getId(),writeBoardRequest,category);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/boards/" + boardId));
+
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
     }
 
     //게시글 수정

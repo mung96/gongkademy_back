@@ -29,7 +29,7 @@ import org.springframework.web.util.UriUtils;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("/courses")
+@RequestMapping("api/courses")
 public class CourseController {
 
     private final CourseService courseService;
