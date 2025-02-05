@@ -125,7 +125,6 @@ public class BoardRepositoryImpl implements BoardRepository{
 
     @Override
     public Long delete(Board board) {
-//        em.remove(board);
         board.delete();
         em.persist(board);
         return board.getId();

@@ -52,11 +52,13 @@ public class BoardServiceImpl implements BoardService{
     public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
 
         List<BoardItemDto> boardList = boardRepository.findAllByCategory(boardCategory,page,boardCriteria).stream().map(board -> BoardItemDto.builder()
+                                                                                                                                            .boardCategory(board.getBoardCategory())
                                                                                                                                              .boardId(board.getId())
                                                                                                                                              .title(board.getTitle())
                                                                                                                                              .body(board.getBody())
                                                                                                                                              .date(board.getUpdatedAt().toString())
                                                                                                                                              .courseTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
+                .lectureTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getTitle() : null)
                                                                                                                                              .commentCount(commentRepository.findByBoardId(board.getId()).size())
                                                                                                                                              .build()).toList();
 
@@ -83,6 +85,7 @@ public class BoardServiceImpl implements BoardService{
                                              .build());
         }
         return BoardDetailResponse.builder()
+                .boardCategory(board.getBoardCategory())
                 .boardId(board.getId())
                 .isMine(memberId.equals(board.getMember().getId()))
                 .title(board.getTitle())

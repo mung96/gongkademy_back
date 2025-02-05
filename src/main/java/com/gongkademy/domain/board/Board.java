@@ -6,6 +6,8 @@ import com.gongkademy.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,14 +40,19 @@ public abstract class Board extends BaseSoftDeleteAndTimeEntity {
     @Column(nullable = false, length = 10_000)
     private String body;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BoardCategory boardCategory;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
-    protected Board(String title, String body, Member member) {
+    protected Board(String title, String body, Member member,BoardCategory boardCategory) {
         this.title = title;
         this.body = body;
         this.member = member;
+        this.boardCategory = boardCategory;
     }
 
     //수정 메소드

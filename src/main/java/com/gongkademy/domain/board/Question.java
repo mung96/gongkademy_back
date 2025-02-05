@@ -24,7 +24,7 @@ public class Question extends Board{
 
     @Builder
     private Question(String title, String body,Member member,Lecture lecture) {
-        super(title,body,member);
+        super(title,body,member,BoardCategory.QUESTION);
         this.lecture = lecture;
     }
 

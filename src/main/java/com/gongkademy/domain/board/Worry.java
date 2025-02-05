@@ -16,6 +16,6 @@ public class Worry extends Board {
 
     @Builder
     private Worry(String title, String body, Member member) {
-        super(title,body,member);
+        super(title,body,member,BoardCategory.WORRY);
     }
 }
