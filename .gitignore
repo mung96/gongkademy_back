@@ -11,7 +11,7 @@ application-dev.properties
 application-prod.properties
 
 ### SQL ###
-/src/main/resources/sql/*.txt
+/src/main/resources/sql/*
 schema.sql
 data.sql
 

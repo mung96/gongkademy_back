@@ -24,7 +24,9 @@ public enum ErrorCode {
     BOARD_CATEGORY_NOT_FOUND("존재하지 않는 게시글 카테고리입니다.",HttpStatus.NOT_FOUND),
     COMMENT_NOT_FOUND("존재하지 않는 댓글입니다.",HttpStatus.NOT_FOUND),
     NOT_BOARD_WRITER("게시글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN),
-    NOT_COMMENT_WRITER("댓글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN);
+    NOT_COMMENT_WRITER("댓글의 작성자가 아닙니다.",HttpStatus.FORBIDDEN),
+    //적절한 요청이 아닙니다.
+    NOT_VALID_QUESTION_REQUEST("강좌가 선택되지 않았습니다.",HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;

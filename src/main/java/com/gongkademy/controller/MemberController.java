@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/members")
+@RequestMapping("api/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -50,7 +50,7 @@ public class MemberController {
 
     @GetMapping("/courses")
     public ResponseEntity<CourseListResponse> getCourseList (@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                             @RequestParam(required = false, defaultValue = "0", value = "status") RegisterStatus status) {
+                                                             @RequestParam(required = false, value = "status") RegisterStatus status) {
         CourseListResponse courseListResponse = memberService.findCourseListByMemberIdAndRegisterStatus(principalDetails.getMember().getId(), status);
         return ResponseEntity.status(HttpStatus.OK).body(courseListResponse);
     }

@@ -12,7 +12,7 @@ public interface BoardService {
 
     BoardListResponse findBoardList(BoardCategory category, int page, BoardCriteria boardOrder);
 
-    BoardDetailResponse findBoardDetail(Long boardId);
+    BoardDetailResponse findBoardDetail(Long memberId,Long boardId);
 
     Long write(Long memberId, WriteBoardRequest board, BoardCategory category);
 

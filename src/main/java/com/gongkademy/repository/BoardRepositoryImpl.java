@@ -23,12 +23,12 @@ public class BoardRepositoryImpl implements BoardRepository{
     @Override
     public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
         if(category == QUESTION){
-            return em.createQuery("SELECT q FROM Question q ORDER BY q.createdAt ASC",Board.class)
+            return em.createQuery("SELECT q FROM Question q WHERE q.isDeleted = false ORDER BY q.createdAt DESC ",Board.class)
                     .setFirstResult((page-1)*20)
                     .setMaxResults(20)
                      .getResultList();
         }else if(category == WORRY){
-            return em.createQuery("SELECT w FROM Worry w ORDER BY w.createdAt ASC",Board.class)
+            return em.createQuery("SELECT w FROM Worry w WHERE w.isDeleted = false ORDER BY w.createdAt DESC",Board.class)
                      .setFirstResult((page-1)*20)
                      .setMaxResults(20)
                      .getResultList();
@@ -40,13 +40,13 @@ public class BoardRepositoryImpl implements BoardRepository{
     public List<Board> findAllByCategoryAndMemberId(Long memberId, BoardCategory category, int page,
                                                     BoardCriteria boardCriteria) {
         if(category == QUESTION){
-            return em.createQuery("SELECT q FROM Question q WHERE q.member.id = :memberId ORDER BY q.createdAt ASC",Board.class)
+            return em.createQuery("SELECT q FROM Question q WHERE q.member.id = :memberId And q.isDeleted = false  ORDER BY q.createdAt ASC",Board.class)
                     .setParameter("memberId",memberId)
                      .setFirstResult((page-1)*20)
                      .setMaxResults(20)
                      .getResultList();
         }else if(category == WORRY){
-            return em.createQuery("SELECT w FROM Worry w WHERE w.member.id = :memberId ORDER BY w.createdAt ASC",Board.class)
+            return em.createQuery("SELECT w FROM Worry w WHERE w.member.id = :memberId And w.isDeleted = false  ORDER BY w.createdAt ASC",Board.class)
                      .setParameter("memberId",memberId)
                      .setFirstResult((page-1)*20)
                      .setMaxResults(20)
@@ -59,11 +59,11 @@ public class BoardRepositoryImpl implements BoardRepository{
     public Long countAllByCategoryAndMemberId(Long memberId, BoardCategory category) {
         Long totalBoard = 0L;
         if(category == QUESTION){
-            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.member.id = :memberId",Long.class)
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.member.id = :memberId AND q.isDeleted = false",Long.class)
                            .setParameter("memberId",memberId)
                            .getSingleResult();
         }else if(category == WORRY){
-            totalBoard = em.createQuery("SELECT count(w) FROM Worry w WHERE w.member.id = :memberId",Long.class)
+            totalBoard = em.createQuery("SELECT count(w) FROM Worry w WHERE w.member.id = :memberId AND w.isDeleted = false",Long.class)
                            .setParameter("memberId",memberId)
                            .getSingleResult();
         }
@@ -74,10 +74,10 @@ public class BoardRepositoryImpl implements BoardRepository{
     public Long countAllByCategory(BoardCategory category) {
         Long totalBoard = 0L;
         if(category == QUESTION){
-            totalBoard = em.createQuery("SELECT count(q) FROM Question q",Long.class)
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.isDeleted = false",Long.class)
                       .getSingleResult();
         }else if(category == WORRY){
-            totalBoard = em.createQuery("SELECT count(w) FROM Worry w",Long.class)
+            totalBoard = em.createQuery("SELECT count(w) FROM Worry w WHERE w.isDeleted = false",Long.class)
                       .getSingleResult();
         }
         return ((totalBoard-1)/20)+1;
@@ -85,12 +85,19 @@ public class BoardRepositoryImpl implements BoardRepository{
 
     @Override
     public Optional<Board> findById(Long boardId) {
-        return Optional.ofNullable(em.find(Board.class, boardId));
+        List<Board> result = em.createQuery("SELECT b FROM Board b WHERE b.id = :boardId AND b.isDeleted = false", Board.class)
+                               .setParameter("boardId", boardId)
+                               .getResultList();
+        if (result.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(result.get(0));
+        }
     }
 
     @Override
     public List<Board> findAllByMemberId(Long memberId) {
-        return em.createQuery("SELECT b FROM Board b WHERE b.member.id = :memberId",Board.class)
+        return em.createQuery("SELECT b FROM Board b WHERE b.member.id = :memberId AND b.isDeleted = false",Board.class)
                 .setParameter("memberId",memberId)
                 .getResultList();
     }
@@ -118,7 +125,8 @@ public class BoardRepositoryImpl implements BoardRepository{
 
     @Override
     public Long delete(Board board) {
-        em.remove(board);
+        board.delete();
+        em.persist(board);
         return board.getId();
     }
 }

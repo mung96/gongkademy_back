@@ -1,10 +1,13 @@
 package com.gongkademy.domain.board;
 
+import com.gongkademy.domain.BaseSoftDeleteAndTimeEntity;
 import com.gongkademy.domain.BaseTimeEntity;
 import com.gongkademy.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +26,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorColumn(name="DTYPE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public abstract class Board extends BaseTimeEntity {
+public abstract class Board extends BaseSoftDeleteAndTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +40,19 @@ public abstract class Board extends BaseTimeEntity {
     @Column(nullable = false, length = 10_000)
     private String body;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BoardCategory boardCategory;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="member_id")
     private Member member;
 
-    protected Board(String title, String body, Member member) {
+    protected Board(String title, String body, Member member,BoardCategory boardCategory) {
         this.title = title;
         this.body = body;
         this.member = member;
+        this.boardCategory = boardCategory;
     }
 
     //수정 메소드
@@ -54,4 +62,5 @@ public abstract class Board extends BaseTimeEntity {
     public void changeBody(String body){
         this.body = body;
     }
+
 }

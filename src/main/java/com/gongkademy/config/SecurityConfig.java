@@ -34,8 +34,8 @@ public class SecurityConfig {
 
 
         httpSecurity.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/boards").permitAll()
+//                .requestMatchers("/api").permitAll()
+                .requestMatchers("/api/boards").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login((oauth2) -> oauth2
@@ -57,6 +57,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
         config.setAllowedHeaders(Arrays.asList("*"));
+        config.addExposedHeader("Location");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
