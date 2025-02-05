@@ -18,7 +18,7 @@ import com.gongkademy.service.dto.BoardItemDto;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.CourseItemDto;
 import com.gongkademy.service.dto.CourseListResponse;
-import com.gongkademy.service.dto.UpdateProfileRequest;
+import com.gongkademy.service.dto.UpdateProfileDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService{
     private final CommentRepository commentRepository;
 
     @Override
-    public String updateProfile(Long memberId, UpdateProfileRequest request) {
+    public String updateProfile(Long memberId, UpdateProfileDto request) {
         //가입한 회원인지 확인
         Member member = memberRepository.findById(memberId)
                                         .orElseThrow(()-> new CustomException(MEMBER_NOT_FOUND));
@@ -58,7 +58,7 @@ public class MemberServiceImpl implements MemberService{
                                                                                 .title(board.getTitle())
                                                                                 .body(board.getBody())
                                                                                 .date(board.getUpdatedAt().toString())
-                                                                                .courseTitle(boardCategory == QUESTION ? ((Question)board).getLecture().getCourse().getTitle() : null)
+                                                                                .courseTitle(boardCategory == QUESTION ? ((Question)board).getCourse().getTitle() : null)
                                                                                 .commentCount(commentRepository.findByBoardId(board.getId()).size())
                                                                                 .build()).toList();
 

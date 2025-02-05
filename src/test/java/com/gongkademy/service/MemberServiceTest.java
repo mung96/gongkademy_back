@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.gongkademy.domain.Member;
 import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
-import com.gongkademy.service.dto.UpdateProfileRequest;
+import com.gongkademy.service.dto.UpdateProfileDto;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class MemberServiceTest {
                               .build();
         //when
         em.persist(member);
-        memberService.updateProfile(member.getId(),new UpdateProfileRequest("유저2"));
+        memberService.updateProfile(member.getId(),new UpdateProfileDto("유저2"));
         Member findMember = em.find(Member.class,member.getId());
 
         //then
@@ -46,7 +46,7 @@ class MemberServiceTest {
         em.persist(defaultMember);
         em.persist(member);
         CustomException e = assertThrows(CustomException.class,
-                                       () -> memberService.updateProfile(member.getId(),new UpdateProfileRequest("유저1")));
+                                       () -> memberService.updateProfile(member.getId(),new UpdateProfileDto("유저1")));
 
         assertEquals(e.getErrorCode(),ErrorCode.DUPLICATED_NICKNAME);
     }

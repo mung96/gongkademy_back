@@ -1,14 +1,19 @@
 package com.gongkademy.controller;
 
+import com.gongkademy.controller.dto.MemberInfoResponse;
+import com.gongkademy.domain.Member;
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
 import com.gongkademy.domain.course.RegisterStatus;
+import com.gongkademy.exception.CustomException;
+import com.gongkademy.exception.ErrorCode;
+import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.service.BoardService;
 import com.gongkademy.service.MemberService;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.CourseListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
-import com.gongkademy.service.dto.UpdateProfileRequest;
+import com.gongkademy.service.dto.UpdateProfileDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,11 +34,24 @@ public class MemberController {
 
     private final MemberService memberService;
     private final BoardService boardService;
+    private final MemberRepository memberRepository;
+
+    @GetMapping
+    public ResponseEntity<MemberInfoResponse> getMemberInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Member member = memberRepository.findById(principalDetails.getMember().getId()).orElseThrow(()->new CustomException(
+                ErrorCode.MEMBER_NOT_FOUND));
+        MemberInfoResponse memberInfoResponse = MemberInfoResponse.builder().nickname(member.getNickname()).build();
+        return ResponseEntity.status(HttpStatus.OK).body(memberInfoResponse);
+    }
 
     @PatchMapping
-    public void updateProfile(@AuthenticationPrincipal PrincipalDetails principalDetails
-            ,@Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
-        memberService.updateProfile(principalDetails.getMember().getId(), updateProfileRequest);
+    public ResponseEntity<UpdateProfileDto> updateProfile(@AuthenticationPrincipal PrincipalDetails principalDetails
+            ,@Valid @RequestBody UpdateProfileDto updateProfileRequest) {
+        String updatedNickname = memberService.updateProfile(principalDetails.getMember().getId(), updateProfileRequest);
+        //TODO: 관리자는 닉네임으로 안됨.
+
+        UpdateProfileDto updateProfileResponse = UpdateProfileDto.builder().nickname(updatedNickname).build();
+        return ResponseEntity.status(HttpStatus.OK).body(updateProfileResponse);
     }
 
     //내가 쓴 게시글 조회
