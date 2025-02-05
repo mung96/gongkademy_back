@@ -71,6 +71,24 @@ public class BoardServiceImpl implements BoardService{
         return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
     }
 
+    @Override
+    public BoardListResponse findQuestionList( int page, BoardCriteria boardOrder, Long courseId, Long lectureId) {
+        List<BoardItemDto> boardList = boardRepository.findAllQuestionByCourseIdAndLectureId(courseId,lectureId,page).stream().map(question -> BoardItemDto.builder()
+                                                                                                                         .boardCategory(question.getBoardCategory())
+                                                                                                                         .boardId(question.getId())
+                                                                                                                         .title(question.getTitle())
+                                                                                                                         .body(question.getBody())
+                                                                                                                         .date(question.getUpdatedAt().toString())
+                                                                                                                         .courseTitle(question.getCourse().getTitle())
+                                                                                                                         .lectureTitle(question.getLecture() != null?question.getLecture().getTitle() : null)
+                                                                                                                         .commentCount(commentRepository.findByBoardId(question.getId()).size())
+                                                                                                                         .build()).toList();
+
+        Long totalPage = boardRepository.countAllQuestionByCourseIdAndLectureId(courseId,lectureId);
+
+        return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
+    }
+
     //TODO: 댓글 불러오는거랑 게시글 상세 불러오는게 분리가 되어야하네. 그래야 프론트에서 댓글변경시 그거만 불러오는게 가능
     @Override
     @Transactional(readOnly = true)

@@ -4,6 +4,8 @@ import com.gongkademy.domain.BaseTimeEntity;
 import com.gongkademy.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +30,10 @@ public class Play extends BaseTimeEntity {
     @Column(nullable = false)
     private int lastPlayedTime;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PlayStatus playStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="member_id")
     private Member member;
@@ -37,13 +43,17 @@ public class Play extends BaseTimeEntity {
     private Lecture lecture;
 
     @Builder
-    private Play(int lastPlayedTime, Member member, Lecture lecture) {
+    private Play(int lastPlayedTime, Member member, Lecture lecture, PlayStatus playStatus) {
         this.lastPlayedTime = lastPlayedTime;
         this.member = member;
         this.lecture = lecture;
+        this.playStatus = playStatus;
     }
 
     public void changeLastPlayedTime(int lastPlayedTime){
         this.lastPlayedTime = lastPlayedTime;
+    }
+    public void changePlayStatus(PlayStatus playStatus){
+        this.playStatus = playStatus;
     }
 }

@@ -43,9 +43,13 @@ public class Register extends BaseTimeEntity {
 
 
     @Builder
-    private Register(Member member, Course course) {
+    private Register(Member member, Course course, RegisterStatus registerStatus) {
         this.member = member;
         this.course = course;
-        this.registerStatus = RegisterStatus.IN_PROGRESS;
+        this.registerStatus = registerStatus;
+    }
+
+    public void changeRegisterStatus(RegisterStatus registerStatus){
+        this.registerStatus = registerStatus;
     }
 }

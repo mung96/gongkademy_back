@@ -31,7 +31,7 @@ public class Lecture extends BaseTimeEntity {
     //강의 시간 : 초 단위로 기록
     private int runtime;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
     //TODO: 강의 순서 unique 테스트코드 작성
     private int lectureOrder;
 
