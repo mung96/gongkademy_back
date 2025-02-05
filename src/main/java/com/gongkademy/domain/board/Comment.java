@@ -1,6 +1,7 @@
 package com.gongkademy.domain.board;
 
 
+import com.gongkademy.domain.BaseSoftDeleteAndTimeEntity;
 import com.gongkademy.domain.BaseTimeEntity;
 import com.gongkademy.domain.Member;
 import jakarta.persistence.CascadeType;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends BaseTimeEntity {
+public class Comment extends BaseSoftDeleteAndTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="comment_id")
@@ -36,6 +37,7 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name="board_id")
     private Board board;
+
 
     @Builder
     private Comment(String content, Member member, Board board) {

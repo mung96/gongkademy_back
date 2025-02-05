@@ -1,5 +1,6 @@
 package com.gongkademy.domain.board;
 
+import com.gongkademy.domain.BaseSoftDeleteAndTimeEntity;
 import com.gongkademy.domain.BaseTimeEntity;
 import com.gongkademy.domain.Member;
 import jakarta.persistence.Column;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorColumn(name="DTYPE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public abstract class Board extends BaseTimeEntity {
+public abstract class Board extends BaseSoftDeleteAndTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,4 +55,5 @@ public abstract class Board extends BaseTimeEntity {
     public void changeBody(String body){
         this.body = body;
     }
+
 }

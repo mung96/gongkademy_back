@@ -16,12 +16,14 @@ public class CommentRepositoryImpl implements CommentRepository{
     @Override
     public Optional<Comment> findById(Long commentId) {
         //TODO: test코드 작성해야함
-        return Optional.ofNullable(em.find(Comment.class, commentId));
+        return Optional.ofNullable(em.createQuery("SELECT c FROM Comment c WHERE c.id = :commentId AND c.isDeleted = false",Comment.class)
+                                     .setParameter("commentId",commentId)
+                                     .getSingleResult());
     }
 
     @Override
     public List<Comment> findByBoardId(Long boardId) {
-        return em.createQuery("SELECT c FROM Comment c WHERE c.board.id = :boardId ORDER BY c.createdAt DESC",Comment.class)
+        return em.createQuery("SELECT c FROM Comment c WHERE c.board.id = :boardId AND c.isDeleted = false ORDER BY c.createdAt DESC",Comment.class)
                 .setParameter("boardId",boardId)
                 .getResultList();
     }
@@ -34,7 +36,9 @@ public class CommentRepositoryImpl implements CommentRepository{
 
     @Override
     public Long delete(Comment comment) {
-        em.remove(comment);
+//        em.remove(comment);
+        comment.delete();
+        em.persist(comment);
         return comment.getId();
     }
 }

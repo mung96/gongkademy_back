@@ -14,4 +14,5 @@ public class CommentItemDto {
     private String nickname;
     private String content;
     private String date;
+    private Boolean isMine;
 }

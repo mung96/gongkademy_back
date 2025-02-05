@@ -70,11 +70,13 @@ public class BoardServiceImpl implements BoardService{
     @Transactional(readOnly = true)
     public BoardDetailResponse findBoardDetail(Long memberId,Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
+        log.info("게시판 상세 조회: {}",board);
         List<Comment> commentList = commentRepository.findByBoardId(boardId);
         List<CommentItemDto> commentDtoList = new ArrayList<>();
         for(Comment comment:commentList){
             commentDtoList.add(CommentItemDto.builder()
                                             .commentId(comment.getId())
+                                            .isMine(memberId.equals(comment.getMember().getId()))
                                              .content(comment.getContent())
                                              .nickname(comment.getMember().getNickname())
                                              .date(comment.getUpdatedAt().toString())
