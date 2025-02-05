@@ -26,7 +26,7 @@ public class PlayRepositoryImpl implements PlayRepository{
     @Override
     public Optional<Play> findByMemberIdAndCourseIdByModifiedTime(Long memberId, Long courseId) {
         List<Play> playList = em.createQuery(
-                                        "SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.course.id = :courseId ORDER BY p.modifiedTime DESC",
+                                        "SELECT p FROM Play p WHERE p.member.id = :memberId AND p.lecture.course.id = :courseId ORDER BY p.updatedAt DESC",
                                         Play.class)
                                 .setParameter("memberId", memberId)
                                 .setParameter("courseId", courseId)

@@ -37,6 +37,39 @@ public class BoardRepositoryImpl implements BoardRepository{
     }
 
     @Override
+    public List<Question> findAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId, int page) {
+        if(lectureId == null){
+            return em.createQuery("SELECT q FROM Question q WHERE q.course.id = :courseId AND q.isDeleted = false ORDER BY q.createdAt DESC ",Question.class)
+                     .setParameter("courseId",courseId)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }else{
+            return em.createQuery("SELECT q FROM Question q WHERE q.course.id = :courseId AND q.lecture.id = :lectureId AND q.isDeleted = false ORDER BY q.createdAt DESC ",Question.class)
+                     .setParameter("courseId",courseId)
+                     .setParameter("lectureId",lectureId)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }
+    }
+    @Override
+    public Long countAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId) {
+        Long totalBoard = 0L;
+        if(lectureId == null){
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.course.id = :courseId AND q.isDeleted = false  ",Long.class)
+                     .setParameter("courseId",courseId)
+                     .getSingleResult();
+        }else{
+            totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.course.id = :courseId AND q.lecture.id = :lectureId AND q.isDeleted = false  ",Long.class)
+                           .setParameter("courseId",courseId)
+                           .setParameter("lectureId",lectureId)
+                           .getSingleResult();
+        }
+        return ((totalBoard-1)/20)+1;
+    }
+
+    @Override
     public List<Board> findAllByCategoryAndMemberId(Long memberId, BoardCategory category, int page,
                                                     BoardCriteria boardCriteria) {
         if(category == QUESTION){

@@ -3,6 +3,7 @@ package com.gongkademy.repository;
 import com.gongkademy.domain.board.Board;
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
+import com.gongkademy.domain.board.Question;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,8 @@ public interface BoardRepository{
 //    List<Board> findTop4ByOrderByCommentCntDesc();
 
     List<Board> findAllByCategory(BoardCategory category,int page, BoardCriteria boardCriteria);
+    List<Question> findAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId,int page);
+    Long countAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId);
     List<Board> findAllByCategoryAndMemberId(Long memberId,BoardCategory category,int page, BoardCriteria boardCriteria);
     Long countAllByCategoryAndMemberId(Long memberId,BoardCategory category);
     Long countAllByCategory(BoardCategory category);
