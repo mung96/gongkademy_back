@@ -26,4 +26,5 @@ public interface CourseService {
     LectureDetailResponse findLectureDetail(Long memberId, Long lectureId);
 
     UrlResource findCourseNote(Long courseId);
+
 }

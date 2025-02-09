@@ -14,5 +14,5 @@ public class CourseDetailResponse {
     private String thumbnail;
     private String courseNote;
     private int courseTime;
-    private boolean isRegister;
+    private Boolean isRegister;
 }

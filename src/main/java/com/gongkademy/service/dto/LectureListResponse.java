@@ -11,7 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class LectureListResponse {
-    private boolean isRegister;
+    private Boolean isRegister;
+    private Integer playTime;
     private List<LectureItemDto> lectureList;
 }
 
