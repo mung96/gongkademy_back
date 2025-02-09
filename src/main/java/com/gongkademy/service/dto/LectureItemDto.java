@@ -14,5 +14,6 @@ public class LectureItemDto {
     private Long lectureId;
     private String title;
     private int runtime;
+    private int lectureOrder;
     private PlayStatus playStatus;
 }

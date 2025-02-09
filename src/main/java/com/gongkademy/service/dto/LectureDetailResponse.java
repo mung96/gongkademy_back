@@ -11,6 +11,9 @@ import lombok.Setter;
 @Builder
 public class LectureDetailResponse {
     private String title;
-    private int lastPlayedTime;
+    private Integer lastPlayedTime;
+    private Long lastLectureId;
+    private Long nextLectureId;
+    private Long prevLectureId;
     private String url;
 }

@@ -150,6 +150,7 @@ public class CourseServiceImpl implements CourseService {
                                                 .title(lecture.getTitle())
                                                 .runtime(lecture.getRuntime())
                                                 .playStatus(play ==  null ? null : play.getPlayStatus())
+                                                .lectureOrder(lecture.getLectureOrder())
                                                 .build());
         }
         return LectureListResponse.builder()
@@ -216,25 +217,34 @@ public class CourseServiceImpl implements CourseService {
         return play.getId();
     }
 
-    //강좌자료 다운로드
     @Override
     @Transactional(readOnly = true)
     public LectureDetailResponse findLectureDetail(Long memberId, Long lectureId) {
-        //수강 중인지 확인
         Long courseId = lectureRepository.findById(lectureId).get().getCourse().getId();
+        //수강 중인지 확인
         registerRepository.findByMemberIdAndCourseId(memberId, courseId).orElseThrow(()->new CustomException(REGISTER_NOT_FOUND));
 
         Lecture lecture = lectureRepository.findById(lectureId)
                                           .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
-        Play play = playRepository.findByMemberIdAndLectureId(memberId, lectureId).orElse(null);
+        Play play = playRepository.findByMemberIdAndLectureId(memberId, lecture.getId()).orElse(null);
+
+        Long lastLectureId = lectureRepository.findLastLectureIdByCourseId(courseId);
+        Long prevLectureId = lectureRepository.findPrevLectureIdByLectureId(lectureId);
+        Long nextLectureId = lectureRepository.findNextLectureIdByLectureId(lectureId);
 
         return LectureDetailResponse.builder()
                                     .title(lecture.getTitle())
                                     .url(lecture.getUrl())
                                     .lastPlayedTime(play == null ? 0 : play.getLastPlayedTime())
+                                    .prevLectureId(prevLectureId)
+                                    .nextLectureId(nextLectureId)
+                                    .lastLectureId(lastLectureId)
                                     .build();
     }
 
+    //강좌자료 다운로드
+    @Override
+    @Transactional(readOnly = true)
     public UrlResource findCourseNote(Long courseId) {
         Course course = courseRepository.findById(courseId)
                             .orElseThrow(()-> new CustomException(COURSE_NOT_FOUND));
