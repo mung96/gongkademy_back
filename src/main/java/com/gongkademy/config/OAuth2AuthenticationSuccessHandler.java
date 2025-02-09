@@ -17,11 +17,12 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final String REDIRECT_URL = "http://localhost:3000/redirect";
+    @Value("${front.url}")
+    private String frontUrl;
 
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        getRedirectStrategy().sendRedirect(request, response, REDIRECT_URL);
+        getRedirectStrategy().sendRedirect(request, response,frontUrl+"/redirect");
     }
 }

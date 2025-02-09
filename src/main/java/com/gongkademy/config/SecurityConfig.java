@@ -2,7 +2,10 @@ package com.gongkademy.config;
 
 import com.gongkademy.service.OAuth2UserService;
 import java.util.Arrays;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,10 +21,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Getter
 public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Value("${front.url}")
+    private String frontUrl;
 
 
     @Bean
@@ -54,7 +61,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedOrigins(Arrays.asList(frontUrl));
         config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT","PATCH"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setExposedHeaders(Arrays.asList("Location", "Content-Disposition"));
