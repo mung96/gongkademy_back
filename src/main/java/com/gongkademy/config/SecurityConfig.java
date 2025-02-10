@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final OAuth2LogoutSuccessHandler oAuth2LogoutSuccessHandler;
 
     @Value("${front.url}")
     private String frontUrl;
@@ -49,6 +50,11 @@ public class SecurityConfig {
                 .userInfoEndpoint((userInfoEndpointConfig) ->
                                           userInfoEndpointConfig.userService(oAuth2UserService))
                 .successHandler(authenticationSuccessHandler));
+
+        httpSecurity.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(oAuth2LogoutSuccessHandler));
+
 
         httpSecurity.sessionManagement((session) -> session
                         .sessionFixation(SessionFixationConfigurer::newSession));
