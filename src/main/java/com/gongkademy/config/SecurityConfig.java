@@ -42,7 +42,7 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests((auth) -> auth
 //                .requestMatchers("/api").permitAll()
-                .requestMatchers("/api/boards").permitAll()
+                .requestMatchers("/api/boards", "/api/auth/session/check").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login((oauth2) -> oauth2
