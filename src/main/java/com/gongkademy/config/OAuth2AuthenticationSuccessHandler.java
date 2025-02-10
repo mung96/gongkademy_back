@@ -23,7 +23,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        getRedirectStrategy().sendRedirect(request, response,frontUrl+"/redirect");
+        getRedirectStrategy().sendRedirect(request, response,frontUrl+"/redirect/login");
 
     }
 }
