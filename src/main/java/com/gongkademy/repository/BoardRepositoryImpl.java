@@ -37,6 +37,71 @@ public class BoardRepositoryImpl implements BoardRepository{
     }
 
     @Override
+    public List<Board> findBoardByKeyword(BoardCategory boardCategory, String keyword,int page) {
+        // category내에서 board의 title과 body에 keyword가 포함된 board중 해당 page를 반환한다.
+        return em.createQuery("SELECT b FROM Board b WHERE b.boardCategory = :boardCategory AND (b.title LIKE :keyword OR b.body LIKE :keyword) AND b.isDeleted = false ORDER BY b.createdAt DESC",Board.class)
+          .setParameter("boardCategory",boardCategory)
+          .setParameter("keyword","%"+keyword+"%")
+          .setFirstResult((page-1)*20)
+          .setMaxResults(20)
+          .getResultList();
+
+    }
+    @Override
+    public Long countTotalPageBoardByKeyword(BoardCategory category, String keyword) {
+        // category내에서 board의 title과 body에 keyword가 포함된 board수를 반환한다.
+        Long totalBoard =  em.createQuery("SELECT count(b) FROM Board b WHERE b.boardCategory = :boardCategory AND (b.title LIKE :keyword OR b.body LIKE :keyword) AND b.isDeleted = false",Long.class)
+          .setParameter("boardCategory",category)
+          .setParameter("keyword","%"+keyword+"%")
+          .getSingleResult();
+
+        return ((totalBoard-1)/20)+1;
+    }
+
+    @Override
+    public List<Question> findQuestionByKeyword(String keyword,Long courseId, Long lectureId, int page) {
+        //lecutreId가 null이면 courseId에 해당하는 Question중 keyword가 포함된 Question을 반환한다. lecutreId가 있다면 lectureId에 해당하는 Question중 keyword가 포함된 Question을 반환한다. 단 해당 page만 반환한다
+        if(lectureId == null){
+            return em.createQuery("SELECT q FROM Question q WHERE q.course.id = :courseId AND (q.title LIKE :keyword OR q.body LIKE :keyword) AND q.isDeleted = false ORDER BY q.createdAt DESC ",Question.class)
+                     .setParameter("courseId",courseId)
+                     .setParameter("keyword","%"+keyword+"%")
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }else{
+            return em.createQuery("SELECT q FROM Question q WHERE q.course.id = :courseId AND q.lecture.id = :lectureId AND (q.title LIKE :keyword OR q.body LIKE :keyword) AND q.isDeleted = false ORDER BY q.createdAt DESC ",Question.class)
+                     .setParameter("courseId",courseId)
+                     .setParameter("lectureId",lectureId)
+                     .setParameter("keyword","%"+keyword+"%")
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }
+    }
+
+
+    @Override
+    public Long countTotalPageQuestionByKeyword(String keyword, Long courseId, Long lectureId) {
+        //lecutreId가 null이면 courseId에 해당하는 Question중 keyword가 포함된 Question의 수를 반환한다..
+        Long totalBoard = 0L;
+        if(lectureId == null){
+             totalBoard = em.createQuery("SELECT count(q) FROM Question q WHERE q.course.id = :courseId AND (q.title LIKE :keyword OR q.body LIKE :keyword) AND q.isDeleted = false ",Long.class)
+                     .setParameter("courseId",courseId)
+                     .setParameter("keyword","%"+keyword+"%")
+                     .getSingleResult();
+        }else{
+//            lecutreId가 있다면 lectureId에 해당하는 Question중 keyword가 포함된 Question의 수를 반환한다.
+             totalBoard =  em.createQuery("SELECT count(q) FROM Question q WHERE q.course.id = :courseId AND q.lecture.id = :lectureId AND (q.title LIKE :keyword OR q.body LIKE :keyword) AND q.isDeleted = false ",Long.class)
+                     .setParameter("courseId",courseId)
+                     .setParameter("lectureId",lectureId)
+                     .setParameter("keyword","%"+keyword+"%")
+                     .getSingleResult();
+        }
+
+        return ((totalBoard-1)/20)+1;
+    }
+
+    @Override
     public List<Question> findAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId, int page) {
         if(lectureId == null){
             return em.createQuery("SELECT q FROM Question q WHERE q.course.id = :courseId AND q.isDeleted = false ORDER BY q.createdAt DESC ",Question.class)

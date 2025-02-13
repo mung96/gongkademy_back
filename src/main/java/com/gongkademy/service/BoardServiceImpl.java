@@ -89,6 +89,42 @@ public class BoardServiceImpl implements BoardService{
         return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
     }
 
+    @Override
+    public BoardListResponse findBoardListByKeyword(BoardCategory boardCategory, String keyword, int page) {
+        List<BoardItemDto> boardList = boardRepository.findBoardByKeyword(boardCategory,keyword,page).stream().map(board -> BoardItemDto.builder()
+                                                                                                                                             .boardCategory(board.getBoardCategory())
+                                                                                                                                             .boardId(board.getId())
+                                                                                                                                             .title(board.getTitle())
+                                                                                                                                             .body(board.getBody())
+                                                                                                                                             .date(board.getUpdatedAt().toString())
+                                                                                                                                             .courseTitle(boardCategory == QUESTION ? ((Question)board).getCourse().getTitle() : null)
+                                                                                                                                             .lectureTitle((boardCategory == QUESTION && ((Question)board).getLecture() != null) ?((Question)board).getLecture().getTitle() : null)
+                                                                                                                                             .commentCount(commentRepository.findByBoardId(board.getId()).size())
+                                                                                                                                             .build()).toList();
+
+        Long totalPage = boardRepository.countTotalPageBoardByKeyword(boardCategory,keyword);
+
+        return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
+    }
+
+    @Override
+    public BoardListResponse findQuestionListByKeyword(String keyword, int page, Long courseId, Long lectureId) {
+        List<BoardItemDto> boardList = boardRepository.findQuestionByKeyword(keyword,courseId,lectureId,page).stream().map(question -> BoardItemDto.builder()
+                                                                                                                                                           .boardCategory(question.getBoardCategory())
+                                                                                                                                                           .boardId(question.getId())
+                                                                                                                                                           .title(question.getTitle())
+                                                                                                                                                           .body(question.getBody())
+                                                                                                                                                           .date(question.getUpdatedAt().toString())
+                                                                                                                                                           .courseTitle(question.getCourse().getTitle())
+                                                                                                                                                           .lectureTitle(question.getLecture() != null?question.getLecture().getTitle() : null)
+                                                                                                                                                           .commentCount(commentRepository.findByBoardId(question.getId()).size())
+                                                                                                                                                           .build()).toList();
+
+        Long totalPage = boardRepository.countTotalPageQuestionByKeyword(keyword,courseId,lectureId);
+
+        return BoardListResponse.builder().boardList(boardList).totalPage(totalPage).build();
+    }
+
     //TODO: 댓글 불러오는거랑 게시글 상세 불러오는게 분리가 되어야하네. 그래야 프론트에서 댓글변경시 그거만 불러오는게 가능
     @Override
     @Transactional(readOnly = true)
