@@ -25,6 +25,8 @@ public class OAuth2LogoutSuccessHandler implements LogoutSuccessHandler {
 
         log.info("로그아웃에 성공했습니다. principalDetails: "+ SecurityContextHolder.getContext());
 
-        response.sendRedirect("/redirect/logout");
+        String referer = request.getHeader("referer");
+
+        response.sendRedirect(referer+"redirect/logout");
     }
 }
