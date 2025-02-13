@@ -14,6 +14,9 @@ public interface BoardService {
 
     BoardListResponse findQuestionList(int page, BoardCriteria boardOrder, Long courseId, Long lectureId);
 
+    BoardListResponse findBoardListByKeyword(BoardCategory boardCategory, String keyword, int page);
+    BoardListResponse findQuestionListByKeyword(String keyword, int page, Long courseId, Long lectureId);
+
     BoardDetailResponse findBoardDetail(Long memberId,Long boardId);
 
     Long write(Long memberId, WriteBoardRequest board, BoardCategory category);
