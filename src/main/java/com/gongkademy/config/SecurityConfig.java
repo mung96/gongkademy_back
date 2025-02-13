@@ -34,9 +34,7 @@ public class SecurityConfig {
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     @Value("${front.url}")
-    private String frontUrl;
-
-
+    private String[] frontUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
