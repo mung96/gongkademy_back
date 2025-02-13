@@ -14,6 +14,11 @@ public interface BoardRepository{
 //    List<Board> findTop4ByOrderByCommentCntDesc();
 
     List<Board> findAllByCategory(BoardCategory category,int page, BoardCriteria boardCriteria);
+
+    //검색 API
+    List<Board> findByBoardKeyword(BoardCategory category,String keyword,int page);
+    List<Question> findQuestionByKeyword(String keyword,Long courseId, Long lectureId, int page);
+
     List<Question> findAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId,int page);
     Long countAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId);
     List<Board> findAllByCategoryAndMemberId(Long memberId,BoardCategory category,int page, BoardCriteria boardCriteria);
