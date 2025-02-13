@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final OAuth2LogoutSuccessHandler oAuth2LogoutSuccessHandler;
 
     @Value("${front.url}")
     private String frontUrl;
@@ -42,13 +43,18 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests((auth) -> auth
 //                .requestMatchers("/api").permitAll()
-                .requestMatchers("/api/boards").permitAll()
+                .requestMatchers("/api/boards", "/api/auth/session/check").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login((oauth2) -> oauth2
                 .userInfoEndpoint((userInfoEndpointConfig) ->
                                           userInfoEndpointConfig.userService(oAuth2UserService))
                 .successHandler(authenticationSuccessHandler));
+
+        httpSecurity.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(oAuth2LogoutSuccessHandler));
+
 
         httpSecurity.sessionManagement((session) -> session
                         .sessionFixation(SessionFixationConfigurer::newSession));

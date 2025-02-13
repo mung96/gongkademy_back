@@ -21,6 +21,7 @@ public class PrincipalDetails implements OAuth2User {
     private final List<RoleType> roleTypes;
     private final Member member;
     private final Map<String, Object> attributes;
+    private final String sessionId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
