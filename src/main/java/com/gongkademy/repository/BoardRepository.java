@@ -16,14 +16,19 @@ public interface BoardRepository{
     List<Board> findAllByCategory(BoardCategory category,int page, BoardCriteria boardCriteria);
 
     //검색 API
-    List<Board> findByBoardKeyword(BoardCategory category,String keyword,int page);
+    List<Board> findBoardByKeyword(BoardCategory category,String keyword,int page);
     List<Question> findQuestionByKeyword(String keyword,Long courseId, Long lectureId, int page);
+
+    Long countTotalPageBoardByKeyword(BoardCategory category,String keyword);
+    Long countTotalPageQuestionByKeyword(String keyword,Long courseId, Long lectureId);
 
     List<Question> findAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId,int page);
     Long countAllQuestionByCourseIdAndLectureId(Long courseId, Long lectureId);
     List<Board> findAllByCategoryAndMemberId(Long memberId,BoardCategory category,int page, BoardCriteria boardCriteria);
-    Long countAllByCategoryAndMemberId(Long memberId,BoardCategory category);
     Long countAllByCategory(BoardCategory category);
+
+    Long countAllByCategoryAndMemberId(Long memberId,BoardCategory category);
+
     Optional<Board> findById(Long boardId);
     List<Board> findAllByMemberId(Long memberId);
     Long save(Board board);
