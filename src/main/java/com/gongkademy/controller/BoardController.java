@@ -41,14 +41,25 @@ public class BoardController {
                                                        @RequestParam(required = false, defaultValue = "1", value = "page") int page,
                                                        @RequestParam(required = false, defaultValue = "CREATED_AT", value = "criteria") BoardCriteria boardCriteria,
                                                         @RequestParam(required = false, value = "course") Long courseId,
-                                                       @RequestParam(required = false, value = "lecture") Long lectureId
+                                                       @RequestParam(required = false, value = "lecture") Long lectureId,
+                                                       @RequestParam(required = false, value = "keyword") String keyword
+
     ) {
+        //keyword는 ,형태로 온다.
         BoardListResponse boardList;
 
-        if(courseId != null){
-            boardList = boardService.findQuestionList(page,boardCriteria,courseId,lectureId);
+        if(courseId == null){
+            if(keyword == null){
+                boardList = boardService.findBoardList(boardCategory, page,boardCriteria);
+            }else{
+                boardList = boardService.findBoardListByKeyword(boardCategory,keyword,page);
+            }
         }else{
-            boardList = boardService.findBoardList(boardCategory, page,boardCriteria);
+            if(keyword == null){
+                boardList = boardService.findQuestionList(page,boardCriteria,courseId,lectureId);
+            }else{
+                boardList = boardService.findQuestionListByKeyword(keyword,page ,courseId,lectureId);
+            }
         }
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
@@ -60,6 +71,7 @@ public class BoardController {
         BoardDetailResponse boardDetail = boardService.findBoardDetail(principalDetails.getMember().getId(),boardId);
         return ResponseEntity.status(HttpStatus.OK).body(boardDetail);
     }
+
 
     //게시글 작성
     @PostMapping
