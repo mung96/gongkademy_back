@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.SessionFixationConfigurer;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,10 +30,11 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final OAuth2LogoutSuccessHandler oAuth2LogoutSuccessHandler;
+    private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
     @Value("${front.url}")
-    private String frontUrl;
-
+    private String[] frontUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -46,10 +50,17 @@ public class SecurityConfig {
                 .requestMatchers("/api/boards", "/api/auth/session/check").permitAll()
                 .anyRequest().authenticated());
 
-        httpSecurity.oauth2Login((oauth2) -> oauth2
-                .userInfoEndpoint((userInfoEndpointConfig) ->
-                                          userInfoEndpointConfig.userService(oAuth2UserService))
-                .successHandler(authenticationSuccessHandler));
+        httpSecurity.oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(authorizationEndpoint ->
+                                               authorizationEndpoint
+                                                       .authorizationRequestRepository(authorizationRequestRepository)
+                )
+                .userInfoEndpoint(userInfoEndpointConfig ->
+                                          userInfoEndpointConfig.userService(oAuth2UserService)
+                )
+                .successHandler(authenticationSuccessHandler)
+
+        );
 
         httpSecurity.logout(logout -> logout
                 .logoutUrl("/logout")

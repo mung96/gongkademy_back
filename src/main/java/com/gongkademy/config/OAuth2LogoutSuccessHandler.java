@@ -17,8 +17,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class OAuth2LogoutSuccessHandler implements LogoutSuccessHandler {
 
-    @Value("${front.url}")
-    private String frontUrl;
+
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -26,6 +25,8 @@ public class OAuth2LogoutSuccessHandler implements LogoutSuccessHandler {
 
         log.info("로그아웃에 성공했습니다. principalDetails: "+ SecurityContextHolder.getContext());
 
-        response.sendRedirect(frontUrl+"/redirect/logout");
+        String referer = request.getHeader("referer");
+
+        response.sendRedirect(referer+"redirect/logout");
     }
 }
