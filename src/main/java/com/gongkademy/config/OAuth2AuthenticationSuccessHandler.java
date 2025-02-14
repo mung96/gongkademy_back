@@ -2,6 +2,8 @@ package com.gongkademy.config;
 
 
 
+import com.gongkademy.properties.BackProperties;
+import com.gongkademy.properties.FrontProperties;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> delegate;
     public static final String REDIRECT_URI = "redirect_uri"; //redirect시 사용할 이름
     public static final String REFERER = "referer"; //redirect시 사용할 이름
+    private final BackProperties backProperties;
+    private final FrontProperties frontProperties;
 
 
     @Override
@@ -37,14 +41,35 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //redirect는 쿠키에 그대로 고
         //referer만 추출
-        String referer = CookieUtils.getCookie(request, REFERER).orElse(null).getValue();
-        String redirectUri = CookieUtils.getCookie(request, REDIRECT_URI).orElse(null).getValue();
+        Cookie refererCookie = CookieUtils.getCookie(request, REFERER).orElse(null);
+        Cookie redirectUriCookie = CookieUtils.getCookie(request, REDIRECT_URI).orElse(null);
 
-        if (referer != null) {
-            referer = URLDecoder.decode(referer, StandardCharsets.UTF_8);
+        String redirectUri;
+        String referer;
+
+        if (refererCookie != null) {
+            referer = URLDecoder.decode(refererCookie.getValue(), StandardCharsets.UTF_8);
+        }else{
+            String profile = backProperties.getActiveProfile();
+
+            if (profile.equals("local")){
+                referer = frontProperties.getLocalUrl();
+            }
+            else if(profile.equals("dev")){
+                referer = frontProperties.getDevUrl();
+            }
+            else if(profile.equals("prod")){
+                referer = frontProperties.getProdUrl();
+            }
+            else{
+                referer = frontProperties.getProdUrl();
+            }
         }
-        if (redirectUri != null) {
-            redirectUri = URLDecoder.decode(redirectUri, StandardCharsets.UTF_8);
+
+        if (redirectUriCookie != null) {
+            redirectUri = URLDecoder.decode(redirectUriCookie.getValue(), StandardCharsets.UTF_8);
+        }else{
+            redirectUri="/";
         }
 
         CookieUtils.deleteCookie(request, response, REFERER);

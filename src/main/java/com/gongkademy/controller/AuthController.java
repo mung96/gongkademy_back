@@ -27,6 +27,6 @@ public class AuthController {
         if(principalDetails == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(CheckSessionResponse.builder().isLogin(true).memberId(principalDetails.getMember().getId()).build());
+        return ResponseEntity.status(HttpStatus.OK).body(CheckSessionResponse.builder().isLogin(true).build());
     }
 }

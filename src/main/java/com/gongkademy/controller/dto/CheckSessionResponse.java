@@ -10,6 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CheckSessionResponse {
-    private Long memberId;
     private Boolean isLogin;
 }
