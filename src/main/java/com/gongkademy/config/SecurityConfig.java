@@ -1,11 +1,10 @@
 package com.gongkademy.config;
 
 import com.gongkademy.service.OAuth2UserService;
+import com.gongkademy.properties.FrontProperties;
 import java.util.Arrays;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,9 +31,8 @@ public class SecurityConfig {
     private final OAuth2LogoutSuccessHandler oAuth2LogoutSuccessHandler;
     private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final FrontProperties frontProperties;
 
-    @Value("${front.url}")
-    private String[] frontUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -78,7 +76,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList(frontUrl));
+        config.setAllowedOrigins(Arrays.asList(frontProperties.getLocalUrl(), frontProperties.getDevUrl(), frontProperties.getProdUrl()));
         config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT","PATCH"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setExposedHeaders(Arrays.asList("Location", "Content-Disposition"));
