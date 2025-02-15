@@ -36,8 +36,8 @@ public abstract class Board extends BaseSoftDeleteAndTimeEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Lob
-    @Column(nullable = false, length = 10_000)
+//    @Lob
+    @Column(nullable = false, length = 10_000,columnDefinition = "TEXT")
     private String body;
 
     @Column(nullable = false)
