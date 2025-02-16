@@ -40,14 +40,14 @@ public class InitDb implements CommandLineRunner {
                                   .build();
             em.persist(member);
 
-            for(int i=0;i<1000;i++){
+            for(int i=0;i<10;i++){
                 Board board = Worry.builder()
                                    .title("제목제목제목"+i)
                                    .body("본문본문본문본문"+i)
                                    .member(member)
                                    .build();
                 em.persist(board);
-                for(int j=0;j<20;j++){
+                for(int j=0;j<10;j++){
 //                    String content, Member member, Board board
                     Comment comment = Comment.builder()
                                              .content(i+"번 게시글 댓글댓글댓글"+j)
