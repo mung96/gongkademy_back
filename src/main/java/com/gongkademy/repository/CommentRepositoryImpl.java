@@ -21,6 +21,13 @@ public class CommentRepositoryImpl implements CommentRepository{
                                      .getSingleResult());
     }
 
+//    @Override
+//    public Optional<Comment> findById(Long commentId) {
+//        return Optional.ofNullable(em.createQuery("SELECT c FROM Comment c JOIN FETCH c.board WHERE c.id = :commentId AND c.isDeleted = false", Comment.class)
+//                                     .setParameter("commentId", commentId)
+//                                     .getSingleResult());
+//    }
+
     @Override
     public List<Comment> findByBoardId(Long boardId) {
         return em.createQuery("SELECT c FROM Comment c WHERE c.board.id = :boardId AND c.isDeleted = false ORDER BY c.createdAt DESC",Comment.class)
