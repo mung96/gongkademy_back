@@ -47,7 +47,7 @@ public class InitDb implements CommandLineRunner {
                                    .member(member)
                                    .build();
                 em.persist(board);
-                for(int j=0;j<100;j++){
+                for(int j=0;j<20;j++){
 //                    String content, Member member, Board board
                     Comment comment = Comment.builder()
                                              .content(i+"번 게시글 댓글댓글댓글"+j)
