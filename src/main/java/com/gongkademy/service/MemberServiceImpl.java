@@ -55,6 +55,7 @@ public class MemberServiceImpl implements MemberService{
         List<BoardItemDto> boardList = boardRepository.findAllByCategoryAndMemberId(memberId,boardCategory, page, boardCriteria)
                                                       .stream()
                                                       .map(board -> BoardItemDto.builder()
+                                                              .boardId(board.getId())
                                                                                 .title(board.getTitle())
                                                                                 .body(board.getBody())
                                                                                 .date(board.getUpdatedAt().toString())
