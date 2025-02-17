@@ -22,14 +22,13 @@ import com.gongkademy.repository.RegisterRepository;
 import com.gongkademy.service.dto.CourseDetailResponse;
 import com.gongkademy.service.dto.CourseItemDto;
 import com.gongkademy.service.dto.CourseListResponse;
+import com.gongkademy.service.dto.DownloadCourseNoteResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
-import com.gongkademy.utils.FileUtil;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +42,6 @@ public class CourseServiceImpl implements CourseService {
     private final RegisterRepository registerRepository;
     private final LectureRepository lectureRepository;
     private final PlayRepository playRepository;
-    private final FileUtil fileUtil;
 
     @Override
     public CourseListResponse findCourse() {
@@ -119,7 +117,7 @@ public class CourseServiceImpl implements CourseService {
         return CourseDetailResponse.builder()
                                     .title(course.getTitle())
                                     .thumbnail(course.getThumbnail())
-                                    .courseNote(course.getCourseNote())
+//                                    .courseNote(course.getCourseNote())
                                     .courseTime(courseTime)
                                     .isRegister(isRegister)
                                     .build();
@@ -185,7 +183,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Long saveLastPlayedTime(Long memberId, Long lectureId, int lastPlayedTime) {
         //TODO: 수정필요
-        Member member = memberRepository.findById(memberId)
+        memberRepository.findById(memberId)
                                         .orElseThrow(()-> new CustomException(MEMBER_NOT_FOUND));
         Lecture lecture = lectureRepository.findById(lectureId)
                                            .orElseThrow(()-> new CustomException(ErrorCode.LECTURE_NOT_FOUND));
@@ -245,10 +243,13 @@ public class CourseServiceImpl implements CourseService {
     //강좌자료 다운로드
     @Override
     @Transactional(readOnly = true)
-    public UrlResource findCourseNote(Long courseId) {
+    public DownloadCourseNoteResponse findCourseNote(Long memberId,Long courseId) {
         Course course = courseRepository.findById(courseId)
                             .orElseThrow(()-> new CustomException(COURSE_NOT_FOUND));
+        //REGISTER_NOT_FOUND
+        registerRepository.findByMemberIdAndCourseId(memberId,courseId)
+                                              .orElseThrow(()-> new CustomException(REGISTER_NOT_FOUND));
 
-        return fileUtil.getCourseNoteResource(course.getCourseNote());
+        return DownloadCourseNoteResponse.builder().courseNoteUrl(course.getCourseNote()).build();
     }
 }

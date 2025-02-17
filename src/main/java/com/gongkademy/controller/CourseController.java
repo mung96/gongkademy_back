@@ -4,6 +4,7 @@ import com.gongkademy.repository.CourseRepository;
 import com.gongkademy.service.CourseService;
 import com.gongkademy.service.dto.CourseDetailResponse;
 import com.gongkademy.service.dto.CourseListResponse;
+import com.gongkademy.service.dto.DownloadCourseNoteResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureListResponse;
 import com.gongkademy.service.dto.PrincipalDetails;
@@ -42,7 +43,7 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    //홈화면 강좌 목록 조회
+    //강좌 화면 강좌 목록 조회
     @GetMapping
     public ResponseEntity<CourseListResponse> getCourseList () {
         CourseListResponse courseListResponse = courseService.findCourse();
@@ -82,8 +83,13 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDetailResponse> getCourseDetail(@AuthenticationPrincipal PrincipalDetails principalDetails
             , @PathVariable Long courseId) {
+        CourseDetailResponse courseDetailResponse;
+        if(principalDetails == null) {
+           courseDetailResponse = courseService.findCourseDetail(null, courseId);
+        }else{
+            courseDetailResponse = courseService.findCourseDetail(principalDetails.getMember().getId(), courseId);
+        }
 
-        CourseDetailResponse courseDetailResponse = courseService.findCourseDetail(principalDetails.getMember().getId(), courseId);
         return ResponseEntity.status(HttpStatus.OK).body(courseDetailResponse);
     }
 
@@ -117,15 +123,22 @@ public class CourseController {
 
     //강좌 자료 다운
     @GetMapping("/{courseId}/note")
-    public ResponseEntity<Resource> downloadCourseNote (@PathVariable Long courseId) {
-        UrlResource courseNote = courseService.findCourseNote(courseId);
+    public ResponseEntity<DownloadCourseNoteResponse> downloadCourseNote (@AuthenticationPrincipal PrincipalDetails principalDetails,@PathVariable Long courseId) {
+        DownloadCourseNoteResponse downloadCourseNoteResponse = courseService.findCourseNote(principalDetails.getMember().getId(),courseId);
 
-        log.info("강좌자료 = {}", courseNote);
-
-        String contentDisposition = "attachment; filename=" + UriUtils.encode(courseNote.getFilename(), "UTF-8");
-
-        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition).body(courseNote);
+        return ResponseEntity.status(HttpStatus.OK).body(downloadCourseNoteResponse);
     }
+
+//    @GetMapping("/{courseId}/note")
+//    public ResponseEntity<Resource> downloadCourseNote (@PathVariable Long courseId) {
+//        UrlResource courseNote = courseService.findCourseNote(courseId);
+//
+//        log.info("강좌자료 = {}", courseNote);
+//
+//        String contentDisposition = "attachment; filename=" + UriUtils.encode(courseNote.getFilename(), "UTF-8");
+//
+//        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition).body(courseNote);
+//    }
 
 
 }

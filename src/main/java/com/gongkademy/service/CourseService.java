@@ -2,6 +2,7 @@ package com.gongkademy.service;
 
 import com.gongkademy.service.dto.CourseDetailResponse;
 import com.gongkademy.service.dto.CourseListResponse;
+import com.gongkademy.service.dto.DownloadCourseNoteResponse;
 import com.gongkademy.service.dto.LectureDetailResponse;
 import com.gongkademy.service.dto.LectureItemDto;
 import com.gongkademy.service.dto.LectureListResponse;
@@ -25,6 +26,6 @@ public interface CourseService {
 
     LectureDetailResponse findLectureDetail(Long memberId, Long lectureId);
 
-    UrlResource findCourseNote(Long courseId);
+    DownloadCourseNoteResponse findCourseNote(Long memberId, Long courseId);
 
 }
