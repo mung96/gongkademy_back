@@ -2,6 +2,7 @@ package com.gongkademy.config;
 
 import com.gongkademy.service.OAuth2UserService;
 import com.gongkademy.properties.FrontProperties;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,16 @@ public class SecurityConfig {
         httpSecurity.sessionManagement((session) -> session
                         .sessionFixation(SessionFixationConfigurer::newSession));
 
+        // 커스텀 인증 진입점 설정: 인증되지 않은 요청에 대해 401 에러 반환
+        httpSecurity.exceptionHandling(exception ->
+                                               exception.authenticationEntryPoint((request, response, authException) -> {
+                                                   response.setContentType("application/json;charset=UTF-8");
+                                                   response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                                   //TODO: 콘솔에 안띄우려면 200대를 터트려야하는구나.
+                                                   String json = "{\"message\": \"" +"로그인되지 않은 사용자입니다."+ "\"}";
+                                                   response.getWriter().write(json);
+                                               })
+        );
         return httpSecurity.build();
     }
 
