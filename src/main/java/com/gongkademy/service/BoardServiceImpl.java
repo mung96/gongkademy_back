@@ -136,7 +136,7 @@ public class BoardServiceImpl implements BoardService{
         for(Comment comment:commentList){
             commentDtoList.add(CommentItemDto.builder()
                                             .commentId(comment.getId())
-                                            .isMine(memberId.equals(comment.getMember().getId()))
+                                            .isMine(memberId != null ?memberId.equals(comment.getMember().getId()):null)
                                              .content(comment.getContent())
                                              .nickname(comment.getMember().getNickname())
                                              .date(comment.getUpdatedAt().toString())
@@ -145,7 +145,7 @@ public class BoardServiceImpl implements BoardService{
         return BoardDetailResponse.builder()
                 .boardCategory(board.getBoardCategory())
                 .boardId(board.getId())
-                .isMine(memberId.equals(board.getMember().getId()))
+                .isMine(memberId != null ?memberId.equals(board.getMember().getId()):null)
                 .title(board.getTitle())
                 .body(board.getBody())
                 .date(board.getUpdatedAt().toString())

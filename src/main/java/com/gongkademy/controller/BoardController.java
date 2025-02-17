@@ -67,8 +67,14 @@ public class BoardController {
     //게시글 상세 조회
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardDetailResponse> getBoardDetail(@AuthenticationPrincipal PrincipalDetails principalDetails,@PathVariable Long boardId){
+        BoardDetailResponse boardDetail;
+        if(principalDetails == null){
+             boardDetail = boardService.findBoardDetail(null,boardId);
+            return ResponseEntity.status(HttpStatus.OK).body(boardDetail);
+        }else{
+             boardDetail = boardService.findBoardDetail(principalDetails.getMember().getId(),boardId);
+        }
 
-        BoardDetailResponse boardDetail = boardService.findBoardDetail(principalDetails.getMember().getId(),boardId);
         return ResponseEntity.status(HttpStatus.OK).body(boardDetail);
     }
 

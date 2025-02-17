@@ -97,8 +97,13 @@ public class CourseController {
     @GetMapping("/{courseId}/lectures")
     public ResponseEntity<LectureListResponse> getLecture(@AuthenticationPrincipal PrincipalDetails principalDetails
             , @PathVariable Long courseId) {
-
-        LectureListResponse lectureList = courseService.findLectureList(principalDetails.getMember().getId(), courseId);
+        LectureListResponse lectureList;
+        if(principalDetails == null) {
+             lectureList = courseService.findLectureList(null, courseId);
+            return ResponseEntity.status(HttpStatus.OK).body(lectureList);
+        }else{
+            lectureList = courseService.findLectureList(principalDetails.getMember().getId(), courseId);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(lectureList);
     }
 
