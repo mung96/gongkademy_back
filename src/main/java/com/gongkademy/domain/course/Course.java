@@ -27,7 +27,7 @@ public class Course extends BaseTimeEntity {
     @Column(nullable = false)
     private String thumbnail;
 
-    //강좌 자료
+    @Column(columnDefinition = "TEXT")
     private String courseNote;
 
     @Builder

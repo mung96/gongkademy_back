@@ -44,8 +44,10 @@ public class SecurityConfig {
 
 
         httpSecurity.authorizeHttpRequests((auth) -> auth
-//                .requestMatchers("/api").permitAll()
-                .requestMatchers("/api/boards", "/api/auth/session/check").permitAll()
+//                                           api/courses/{courseId}/lectures
+//                                           api/courses/{courseId}
+                .requestMatchers("/api/boards", "/api/auth/session/check","api/courses","/api/courses/*",
+                                 "/api/courses/*/lectures" ).permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
