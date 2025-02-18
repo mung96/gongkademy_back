@@ -109,6 +109,8 @@ public class CourseServiceImpl implements CourseService {
         if(memberId != null){
             isRegister = registerRepository.findByMemberIdAndCourseId(memberId, courseId).isPresent();
         }
+
+        log.info("수강 신청 여부 - memberId: {}, courseId: {}",memberId,courseId);
         log.info("수강 신청 여부 - isRegister: {}",isRegister);
 
         //총 강좌 시간

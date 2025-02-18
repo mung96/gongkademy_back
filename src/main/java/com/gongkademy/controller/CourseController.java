@@ -84,6 +84,8 @@ public class CourseController {
     public ResponseEntity<CourseDetailResponse> getCourseDetail(@AuthenticationPrincipal PrincipalDetails principalDetails
             , @PathVariable Long courseId) {
         CourseDetailResponse courseDetailResponse;
+
+        log.info("강좌 상세 principalDetails = {}", principalDetails);
         if(principalDetails == null) {
            courseDetailResponse = courseService.findCourseDetail(null, courseId);
         }else{
