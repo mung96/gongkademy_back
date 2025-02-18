@@ -29,12 +29,14 @@ import com.gongkademy.service.dto.LectureListResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class CourseServiceImpl implements CourseService {
 
     private final MemberRepository memberRepository;
@@ -107,6 +109,7 @@ public class CourseServiceImpl implements CourseService {
         if(memberId != null){
             isRegister = registerRepository.findByMemberIdAndCourseId(memberId, courseId).isPresent();
         }
+        log.info("수강 신청 여부 - isRegister: {}",isRegister);
 
         //총 강좌 시간
         int courseTime = 0;

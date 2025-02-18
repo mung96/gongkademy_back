@@ -6,10 +6,12 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
+@Log4j2
 public class RegisterRepositoryImpl implements RegisterRepository {
 
     private final EntityManager em;
@@ -40,6 +42,11 @@ public class RegisterRepositoryImpl implements RegisterRepository {
                                         .setParameter("memberId", memberId)
                                         .setParameter("courseId", courseId)
                                         .getResultList();
+
+        log.info("RegisterList size: {}", registerList.size());
+        for (Register register : registerList) {
+            log.info("RegisterId: {}", register.getId());
+        }
 
         return registerList.isEmpty() ? Optional.empty() : Optional.of(registerList.get(0));
     }
