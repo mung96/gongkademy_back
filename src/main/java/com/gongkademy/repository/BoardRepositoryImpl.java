@@ -20,67 +20,67 @@ public class BoardRepositoryImpl implements BoardRepository{
 
     private final EntityManager em;
 
-    @Override
-    public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
-        if (category == QUESTION) {
-            return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture WHERE q.isDeleted = false ORDER BY q.createdAt DESC", Board.class)
-                     .setFirstResult((page - 1) * 20)
-                     .setMaxResults(20)
-                     .getResultList();
-        } else if (category == WORRY) {
-            return em.createQuery("SELECT w FROM Worry w JOIN FETCH w.member WHERE w.isDeleted = false ORDER BY w.createdAt DESC", Board.class)
-                     .setFirstResult((page - 1) * 20)
-                     .setMaxResults(20)
-                     .getResultList();
-        }
-        return List.of();
-    }
-    @Override
-    public List<Board> findBoardByKeyword(BoardCategory boardCategory, String keyword, int page) {
-        // category 내에서 board의 title과 body에 keyword가 포함된 board 중 해당 page를 반환한다.
-        if (boardCategory == BoardCategory.QUESTION) {
-            return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture WHERE q.boardCategory = :boardCategory AND (q.title LIKE :keyword OR q.body LIKE :keyword) AND q.isDeleted = false ORDER BY q.createdAt DESC", Board.class)
-                     .setParameter("boardCategory", boardCategory)
-                     .setParameter("keyword", "%" + keyword + "%")
-                     .setFirstResult((page - 1) * 20)
-                     .setMaxResults(20)
-                     .getResultList();
-        } else if (boardCategory == BoardCategory.WORRY) {
-            return em.createQuery("SELECT w FROM Worry w JOIN FETCH w.member WHERE w.boardCategory = :boardCategory AND (w.title LIKE :keyword OR w.body LIKE :keyword) AND w.isDeleted = false ORDER BY w.createdAt DESC", Board.class)
-                     .setParameter("boardCategory", boardCategory)
-                     .setParameter("keyword", "%" + keyword + "%")
-                     .setFirstResult((page - 1) * 20)
-                     .setMaxResults(20)
-                     .getResultList();
-        }
-        return List.of();
-    }
-    //    @Override
+//    @Override
 //    public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
-//        if(category == QUESTION){
-//            return em.createQuery("SELECT q FROM Question q WHERE q.isDeleted = false ORDER BY q.createdAt DESC ",Board.class)
-//                    .setFirstResult((page-1)*20)
-//                    .setMaxResults(20)
+//        if (category == QUESTION) {
+//            return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture WHERE q.isDeleted = false ORDER BY q.createdAt DESC", Board.class)
+//                     .setFirstResult((page - 1) * 20)
+//                     .setMaxResults(20)
 //                     .getResultList();
-//        }else if(category == WORRY){
-//            return em.createQuery("SELECT w FROM Worry w WHERE w.isDeleted = false ORDER BY w.createdAt DESC",Board.class)
-//                     .setFirstResult((page-1)*20)
+//        } else if (category == WORRY) {
+//            return em.createQuery("SELECT w FROM Worry w JOIN FETCH w.member WHERE w.isDeleted = false ORDER BY w.createdAt DESC", Board.class)
+//                     .setFirstResult((page - 1) * 20)
 //                     .setMaxResults(20)
 //                     .getResultList();
 //        }
 //        return List.of();
 //    }
 //    @Override
-//    public List<Board> findBoardByKeyword(BoardCategory boardCategory, String keyword,int page) {
-//        // category내에서 board의 title과 body에 keyword가 포함된 board중 해당 page를 반환한다.
-//        return em.createQuery("SELECT b FROM Board b WHERE b.boardCategory = :boardCategory AND (b.title LIKE :keyword OR b.body LIKE :keyword) AND b.isDeleted = false ORDER BY b.createdAt DESC",Board.class)
-//          .setParameter("boardCategory",boardCategory)
-//          .setParameter("keyword","%"+keyword+"%")
-//          .setFirstResult((page-1)*20)
-//          .setMaxResults(20)
-//          .getResultList();
-//
+//    public List<Board> findBoardByKeyword(BoardCategory boardCategory, String keyword, int page) {
+//        // category 내에서 board의 title과 body에 keyword가 포함된 board 중 해당 page를 반환한다.
+//        if (boardCategory == BoardCategory.QUESTION) {
+//            return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture WHERE q.boardCategory = :boardCategory AND (q.title LIKE :keyword OR q.body LIKE :keyword) AND q.isDeleted = false ORDER BY q.createdAt DESC", Board.class)
+//                     .setParameter("boardCategory", boardCategory)
+//                     .setParameter("keyword", "%" + keyword + "%")
+//                     .setFirstResult((page - 1) * 20)
+//                     .setMaxResults(20)
+//                     .getResultList();
+//        } else if (boardCategory == BoardCategory.WORRY) {
+//            return em.createQuery("SELECT w FROM Worry w JOIN FETCH w.member WHERE w.boardCategory = :boardCategory AND (w.title LIKE :keyword OR w.body LIKE :keyword) AND w.isDeleted = false ORDER BY w.createdAt DESC", Board.class)
+//                     .setParameter("boardCategory", boardCategory)
+//                     .setParameter("keyword", "%" + keyword + "%")
+//                     .setFirstResult((page - 1) * 20)
+//                     .setMaxResults(20)
+//                     .getResultList();
+//        }
+//        return List.of();
 //    }
+        @Override
+    public List<Board> findAllByCategory(BoardCategory category, int page, BoardCriteria boardCriteria) {
+        if(category == QUESTION){
+            return em.createQuery("SELECT q FROM Question q WHERE q.isDeleted = false ORDER BY q.createdAt DESC ",Board.class)
+                    .setFirstResult((page-1)*20)
+                    .setMaxResults(20)
+                     .getResultList();
+        }else if(category == WORRY){
+            return em.createQuery("SELECT w FROM Worry w WHERE w.isDeleted = false ORDER BY w.createdAt DESC",Board.class)
+                     .setFirstResult((page-1)*20)
+                     .setMaxResults(20)
+                     .getResultList();
+        }
+        return List.of();
+    }
+    @Override
+    public List<Board> findBoardByKeyword(BoardCategory boardCategory, String keyword,int page) {
+        // category내에서 board의 title과 body에 keyword가 포함된 board중 해당 page를 반환한다.
+        return em.createQuery("SELECT b FROM Board b WHERE b.boardCategory = :boardCategory AND (b.title LIKE :keyword OR b.body LIKE :keyword) AND b.isDeleted = false ORDER BY b.createdAt DESC",Board.class)
+          .setParameter("boardCategory",boardCategory)
+          .setParameter("keyword","%"+keyword+"%")
+          .setFirstResult((page-1)*20)
+          .setMaxResults(20)
+          .getResultList();
+
+    }
     @Override
     public Long countTotalPageBoardByKeyword(BoardCategory category, String keyword) {
         // category내에서 board의 title과 body에 keyword가 포함된 board수를 반환한다.
