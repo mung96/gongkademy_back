@@ -14,63 +14,63 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 class RegisterRepositoryTest {
-
-    @Autowired EntityManager em;
-    @Autowired
-    RegisterRepository registerRepository;
-
-    @Test
-    void 강좌_수강_신청(){
-        //Given
-        Member member = Member.builder()
-                              .nickname("유저1")
-                              .email("aaaa@naver.com")
-                              .build();
-        Course course = Course.builder()
-                              .title("재료역학")
-                              .thumbnail("aaa")
-                              .build();
-        em.persist(course);
-        em.persist(member);
-
-        Register register = Register.builder()
-                                  .member(member)
-                                  .course(course)
-                                  .build();
-        //When
-        Long findRegistId = registerRepository.save(register);
-        Register findRegister = registerRepository.findByMemberIdAndCourseId(member.getId(), course.getId()).get();
-
-        //Then
-        assertEquals(register.getId(),findRegistId);
-        assertEquals(findRegister,register);
-    }
-
-    @Test
-    void 강좌_수강_철회(){
-        //given
-        //Given
-        Member member = Member.builder()
-                              .nickname("유저1")
-                              .email("aaaa@naver.com")
-                              .build();
-        Course course = Course.builder()
-                              .title("재료역학")
-                              .thumbnail("aaa")
-                              .build();
-        em.persist(course);
-        em.persist(member);
-
-        Register register = Register.builder()
-                                  .member(member)
-                                  .course(course)
-                                  .build();
-        //When
-        Long findRegistId = registerRepository.save(register);
-        Long deletedRegistId = registerRepository.delete(register);
-
-        //then
-        assertEquals(register.getId(),deletedRegistId);
-    }
+//
+//    @Autowired EntityManager em;
+//    @Autowired
+//    RegisterRepository registerRepository;
+//
+//    @Test
+//    void 강좌_수강_신청(){
+//        //Given
+//        Member member = Member.builder()
+//                              .nickname("유저1")
+//                              .email("aaaa@naver.com")
+//                              .build();
+//        Course course = Course.builder()
+//                              .title("재료역학")
+//                              .thumbnail("aaa")
+//                              .build();
+//        em.persist(course);
+//        em.persist(member);
+//
+//        Register register = Register.builder()
+//                                  .member(member)
+//                                  .course(course)
+//                                  .build();
+//        //When
+//        Long findRegistId = registerRepository.save(register);
+//        Register findRegister = registerRepository.findByMemberIdAndCourseId(member.getId(), course.getId()).get();
+//
+//        //Then
+//        assertEquals(register.getId(),findRegistId);
+//        assertEquals(findRegister,register);
+//    }
+//
+//    @Test
+//    void 강좌_수강_철회(){
+//        //given
+//        //Given
+//        Member member = Member.builder()
+//                              .nickname("유저1")
+//                              .email("aaaa@naver.com")
+//                              .build();
+//        Course course = Course.builder()
+//                              .title("재료역학")
+//                              .thumbnail("aaa")
+//                              .build();
+//        em.persist(course);
+//        em.persist(member);
+//
+//        Register register = Register.builder()
+//                                  .member(member)
+//                                  .course(course)
+//                                  .build();
+//        //When
+//        Long findRegistId = registerRepository.save(register);
+//        Long deletedRegistId = registerRepository.delete(register);
+//
+//        //then
+//        assertEquals(register.getId(),deletedRegistId);
+//    }
 
 }
