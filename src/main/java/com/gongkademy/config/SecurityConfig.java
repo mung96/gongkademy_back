@@ -49,7 +49,8 @@ public class SecurityConfig {
 //                                           api/courses/{courseId}
                 .requestMatchers( "/api/auth/session/check",
                                   "/api/boards","/api/boards/*",
-                                  "api/courses","/api/courses/*", "/api/courses/*/lectures" ).permitAll()
+                                  "api/courses","/api/courses/*", "/api/courses/*/lectures"
+                                    ,"/health").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
