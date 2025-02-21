@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .requestMatchers( "/api/auth/session/check",
                                   "/api/boards","/api/boards/*",
                                   "api/courses","/api/courses/*", "/api/courses/*/lectures"
-                                    ,"/health").permitAll()
+                                    ,"/health,/login/oauth2/code/naver").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
