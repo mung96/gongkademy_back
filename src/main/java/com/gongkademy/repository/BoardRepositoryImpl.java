@@ -89,24 +89,24 @@ public class BoardRepositoryImpl implements BoardRepository{
 //                         .setMaxResults(20)
 //                         .getResultList();
 
-                log.info("댓글 순 쿼리 실행 + fetch쿼리");
-                return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture JOIN Comment c ON c.board.id = q.id WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
-                         .setFirstResult((page - 1) * 20)
-                         .setMaxResults(20)
-                         .getResultList();
+//                log.info("댓글 순 쿼리 실행 + fetch쿼리");
+//                return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture JOIN Comment c ON c.board.id = q.id WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
+//                         .setFirstResult((page - 1) * 20)
+//                         .setMaxResults(20)
+//                         .getResultList();
 
-//                log.info("댓글 순 쿼리 실행 + 서브쿼리");
-//                return em.createQuery(
-//                           "SELECT q FROM Question q " +
-//                                   "JOIN FETCH q.course c " +
-//                                   "JOIN FETCH q.lecture l " +
-//                                   "WHERE q.boardCategory = :boardCategory " +
-//                                   "ORDER BY (SELECT COUNT(cmt.id) FROM Comment cmt WHERE cmt.board = q) DESC",
-//                           Board.class
-//                           )
-//                         .setParameter("boardCategory", BoardCategory.QUESTION)
-//                           .setMaxResults(20)
-//                           .getResultList();
+                log.info("댓글 순 쿼리 실행 + 서브쿼리");
+                return em.createQuery(
+                           "SELECT q FROM Question q " +
+                                   "JOIN FETCH q.course c " +
+                                   "JOIN FETCH q.lecture l " +
+                                   "WHERE q.boardCategory = :boardCategory " +
+                                   "ORDER BY (SELECT COUNT(cmt.id) FROM Comment cmt WHERE cmt.board = q) DESC",
+                           Board.class
+                           )
+                         .setParameter("boardCategory", BoardCategory.QUESTION)
+                           .setMaxResults(20)
+                           .getResultList();
             }
 
         }else if(category == WORRY){
