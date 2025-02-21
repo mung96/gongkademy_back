@@ -73,6 +73,8 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardListResponse findQuestionList( int page, BoardCriteria boardOrder, Long courseId, Long lectureId) {
+
+        if(boardOrder != BoardCriteria.CREATED_AT && boardOrder != BoardCriteria.COMMENT_CNT) throw new CustomException(ErrorCode.BOARD_CATEGORY_NOT_FOUND);
         List<BoardItemDto> boardList = boardRepository.findAllQuestionByCourseIdAndLectureId(courseId,lectureId,page).stream().map(question -> BoardItemDto.builder()
                                                                                                                          .boardCategory(question.getBoardCategory())
                                                                                                                          .boardId(question.getId())
