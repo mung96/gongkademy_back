@@ -77,16 +77,17 @@ public class BoardRepositoryImpl implements BoardRepository{
                     .setMaxResults(20)
                      .getResultList();
             } else if(boardCriteria == BoardCriteria.COMMENT_CNT){
-                log.info("댓글 순 쿼리 실행 + 일반쿼리");
-                return em.createQuery("SELECT q FROM Question q JOIN Comment c ON c.board.id = q.id WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
-                         .setFirstResult((page - 1) * 20)
-                         .setMaxResults(20)
-                         .getResultList();
-
-//                return em.createQuery("SELECT q FROM Question q JOIN Comment c ON c.board.id = q.id  WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
+//                log.info("댓글 순 쿼리 실행 + 일반쿼리");
+//                return em.createQuery("SELECT q FROM Question q JOIN Comment c ON c.board.id = q.id WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
 //                         .setFirstResult((page - 1) * 20)
 //                         .setMaxResults(20)
 //                         .getResultList();
+
+                log.info("댓글 순 쿼리 실행 + fetch쿼리");
+                return em.createQuery("SELECT q FROM Question q JOIN Comment c ON c.board.id = q.id  WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
+                         .setFirstResult((page - 1) * 20)
+                         .setMaxResults(20)
+                         .getResultList();
 
 //                log.info("댓글 순 쿼리 실행 + fetch쿼리");
 //                return em.createQuery("SELECT q FROM Question q JOIN FETCH q.course JOIN FETCH q.lecture JOIN Comment c ON c.board.id = q.id WHERE q.boardCategory = 'QUESTION' GROUP BY q.id ORDER BY COUNT(c) DESC", Board.class)
