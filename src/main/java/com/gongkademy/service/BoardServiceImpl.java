@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
 
         List<BoardItemDto> boardList = boardRepository.findAllByCategory(boardCategory,page,boardCriteria).stream().map(board -> BoardItemDto.builder()
-                                                                    .boardCategory(board.getBoardCategory())
+                                                                    .boardCategory(board.getBoardCategory().toString())
                                                                      .boardId(board.getId())
                                                                      .title(board.getTitle())
                                                                      .body(board.getBody())
@@ -76,7 +76,7 @@ public class BoardServiceImpl implements BoardService{
 
         if(boardOrder != BoardCriteria.CREATED_AT && boardOrder != BoardCriteria.COMMENT_CNT) throw new CustomException(ErrorCode.BOARD_CATEGORY_NOT_FOUND);
         List<BoardItemDto> boardList = boardRepository.findAllQuestionByCourseIdAndLectureId(courseId,lectureId,page).stream().map(question -> BoardItemDto.builder()
-                                                                                                                         .boardCategory(question.getBoardCategory())
+                                                                                                                         .boardCategory(question.getBoardCategory().toString())
                                                                                                                          .boardId(question.getId())
                                                                                                                          .title(question.getTitle())
                                                                                                                          .body(question.getBody())
@@ -94,7 +94,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardListResponse findBoardListByKeyword(BoardCategory boardCategory, String keyword, int page) {
         List<BoardItemDto> boardList = boardRepository.findBoardByKeyword(boardCategory,keyword,page).stream().map(board -> BoardItemDto.builder()
-                                                                                                                                             .boardCategory(board.getBoardCategory())
+                                                                                                                                             .boardCategory(board.getBoardCategory().toString())
                                                                                                                                              .boardId(board.getId())
                                                                                                                                              .title(board.getTitle())
                                                                                                                                              .body(board.getBody())
@@ -112,7 +112,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardListResponse findQuestionListByKeyword(String keyword, int page, Long courseId, Long lectureId) {
         List<BoardItemDto> boardList = boardRepository.findQuestionByKeyword(keyword,courseId,lectureId,page).stream().map(question -> BoardItemDto.builder()
-                                                                                                                                                           .boardCategory(question.getBoardCategory())
+                                                                                                                                                           .boardCategory(question.getBoardCategory().toString())
                                                                                                                                                            .boardId(question.getId())
                                                                                                                                                            .title(question.getTitle())
                                                                                                                                                            .body(question.getBody())

@@ -2,6 +2,7 @@ package com.gongkademy.controller;
 
 import com.gongkademy.domain.board.BoardCategory;
 import com.gongkademy.domain.board.BoardCriteria;
+import com.gongkademy.repository.NativeBoardRepository;
 import com.gongkademy.service.BoardService;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardListResponse;
@@ -34,6 +35,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
     private final BoardService boardService;
+    private final  NativeBoardRepository nativeBoardRepository;
+
+    @GetMapping("/subquery")
+    public ResponseEntity<BoardListResponse> getSubQueryBoard(@RequestParam(value = "category") BoardCategory boardCategory,
+                                                       @RequestParam(required = false, defaultValue = "1", value = "page") int page,
+                                                       @RequestParam(required = false, defaultValue = "CREATED_AT", value = "criteria") BoardCriteria boardCriteria,
+                                                       @RequestParam(required = false, value = "course") Long courseId,
+                                                       @RequestParam(required = false, value = "lecture") Long lectureId,
+                                                       @RequestParam(required = false, value = "keyword") String keyword
+    ) {
+
+        BoardListResponse boardListResponse = nativeBoardRepository.findAllByCategory(page);
+
+        return ResponseEntity.status(HttpStatus.OK).body(boardListResponse);
+    }
 
     //게시글 목록 조회
     @GetMapping
