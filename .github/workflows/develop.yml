@@ -23,7 +23,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: application.yml 파일 만들기
+      - name: application.properties 파일 만들기
         run: echo "${{ secrets.APPLICATION_DEV_PROPERTIES }}" > ./src/main/resources/application.properties
 
       - name: 테스트 및 빌드하기
@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.EC2_DEV_USERNAME }}
           key: ${{ secrets.EC2_DEV_PRIVATE_KEY }}
           source: project.jar
-          target: /home/ubuntu/instagram-server/tobe
+          target: /home/ubuntu/${{ vars.REPOSITORY_NAME }}/tobe
 
       - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
@@ -49,10 +49,10 @@ jobs:
           key: ${{ secrets.EC2_DEV_PRIVATE_KEY }}
           script_stop: true
           script: |   
-             rm -rf /home/ubuntu/instagram-server/current  
-             mkdir /home/ubuntu/instagram-server/current 
-             mv /home/ubuntu/instagram-server/tobe/project.jar /home/ubuntu/instagram-server/current/project.jar 
-             cd /home/ubuntu/instagram-server/current
+             rm -rf /home/ubuntu/${{ vars.REPOSITORY_NAME }}/current  
+             mkdir /home/ubuntu/${{ vars.REPOSITORY_NAME }}/current 
+             mv /home/ubuntu/${{ vars.REPOSITORY_NAME }}/tobe/project.jar /home/ubuntu/${{ vars.REPOSITORY_NAME }}/current/project.jar 
+             cd /home/ubuntu/${{ vars.REPOSITORY_NAME }}/current
              sudo fuser -k -n tcp 80 || true
-             nohup java -jar project.jar --server.port=80 > ./output.log 2>&1 & 
-             rm -rf /home/ubuntu/instagram-server/tobe
+             nohup java -jar project.jar > ./output.log 2>&1 & 
+             rm -rf /home/ubuntu/${{ vars.REPOSITORY_NAME }}/tobe
