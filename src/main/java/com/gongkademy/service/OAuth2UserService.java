@@ -9,6 +9,7 @@ import com.gongkademy.domain.RoleType;
 import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.repository.HasRoleRepository;
 import com.gongkademy.repository.RoleRepository;
+import com.gongkademy.service.dto.KakaoResponse;
 import com.gongkademy.service.dto.NaverResponse;
 import com.gongkademy.service.dto.OAuth2Response;
 import com.gongkademy.service.dto.PrincipalDetails;
@@ -42,7 +43,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2Response oAuth2Response = null;
         if(registrationId.equals("naver")){
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-        } else {
+        } else if (registrationId.equals("kakao")){
+            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+        }else{
             return null;
         }
 

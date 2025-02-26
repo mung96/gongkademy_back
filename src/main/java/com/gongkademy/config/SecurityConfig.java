@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -29,6 +30,7 @@ public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
     private final OAuth2LogoutSuccessHandler oAuth2LogoutSuccessHandler;
     private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
     private final ClientRegistrationRepository clientRegistrationRepository;
@@ -50,7 +52,7 @@ public class SecurityConfig {
                 .requestMatchers( "/api/auth/session/check",
                                   "/api/boards","/api/boards/*",
                                   "api/courses","/api/courses/*", "/api/courses/*/lectures"
-                                    ,"/health","/login/oauth2/code/naver").permitAll()
+                                    ,"/health","/login/oauth2/code/kakao").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
@@ -62,6 +64,7 @@ public class SecurityConfig {
                                           userInfoEndpointConfig.userService(oAuth2UserService)
                 )
                 .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
 
         );
 
