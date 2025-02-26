@@ -8,14 +8,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -34,6 +32,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public static final String REFERER = "referer"; //redirect시 사용할 이름
     private final BackProperties backProperties;
     private final FrontProperties frontProperties;
+    private final CookieUtils cookieUtils;
 
 
     @Override
@@ -41,8 +40,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //redirect는 쿠키에 그대로 고
         //referer만 추출
-        Cookie refererCookie = CookieUtils.getCookie(request, REFERER).orElse(null);
-        Cookie redirectUriCookie = CookieUtils.getCookie(request, REDIRECT_URI).orElse(null);
+        Cookie refererCookie = cookieUtils.getCookie(request, REFERER).orElse(null);
+        Cookie redirectUriCookie = cookieUtils.getCookie(request, REDIRECT_URI).orElse(null);
 
         String redirectUri;
         String referer;
@@ -72,8 +71,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             redirectUri="/";
         }
 
-        CookieUtils.deleteCookie(request, response, REFERER);
-        CookieUtils.deleteCookie(request, response, REDIRECT_URI);
+        cookieUtils.deleteCookie(request, response, REFERER);
+        cookieUtils.deleteCookie(request, response, REDIRECT_URI);
 
         getRedirectStrategy().sendRedirect(request, response,referer+"redirect/login?redirect_uri="+redirectUri);
     }
