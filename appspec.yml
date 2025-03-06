@@ -8,6 +8,7 @@ files:
     # EC2의 어떤 경로에 저장할 지 지정한다.
     destination: /home/ubuntu/gongkademy_back
 
+file_exists_behavior: OVERWRITE
 permissions:
   - object: /
     owner: ubuntu
