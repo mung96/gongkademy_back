@@ -36,3 +36,17 @@ function find_idle_port()
       echo "8082"
     fi
 }
+
+# 활성화 profile의 port 찾기
+function find_active_port()
+{
+    IDLE_PROFILE=$(find_idle_profile)
+
+    if [ ${IDLE_PROFILE} == prod2 ]
+    then
+      echo "8081"
+    else
+      echo "8082"
+    fi
+}
+
