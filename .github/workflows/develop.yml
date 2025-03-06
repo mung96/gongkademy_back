@@ -49,7 +49,7 @@ jobs:
         run: aws deploy create-deployment
           --application-name gongkademy-server
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name Production
+          --deployment-group-name Test
           --s3-location bucket=test-gongkademy-server,bundleType=tgz,key=$GITHUB_SHA.tar.gz
 
 
