@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .requestMatchers( "/api/auth/session/check",
                                   "/api/boards","/api/boards/*",
                                   "api/courses","/api/courses/*", "/api/courses/*/lectures"
-                                    ,"/health","/login/oauth2/code/kakao").permitAll()
+                                    ,"/health","/profile","/login/oauth2/code/kakao").permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2Login(oauth2 -> oauth2
