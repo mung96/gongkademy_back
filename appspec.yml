@@ -24,9 +24,6 @@ hooks:
       timeout: 60
       runas: ubuntu
   AfterAllowTraffic:
-    - location: scripts/switch.sh     # Nginx 프록시 전환 (새 서버로)
-      timeout: 60
-      runas: ubuntu
     - location: scripts/stop.sh       # 기존 서버 종료
       timeout: 60
       runas: ubuntu
