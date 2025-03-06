@@ -12,18 +12,21 @@ file_exists_behavior: OVERWRITE
 permissions:
   - object: /
     owner: ubuntu
-    group: ubuntu
+    group: ubuntuw
 
 hooks:
-  AfterInstall:
-    - location: scripts/stop.sh # nginx와 연결되어 있지 않은 스프링 부트를 종료
-      timeout: 60
-      runas: ubuntu
   ApplicationStart:
-    - location: scripts/start.sh # nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작
+    - location: scripts/start.sh    # 새 서버 기동 (기존 서버는 유지)
       timeout: 60
       runas: ubuntu
   ValidateService:
-    - location: scripts/health.sh # 새 스프링 부트가 정상적으로 실행됐는지 확인
+    - location: scripts/health.sh     # 새 서버의 Health Check 수행
+      timeout: 60
+      runas: ubuntu
+  AfterAllowTraffic:
+    - location: scripts/switch.sh     # Nginx 프록시 전환 (새 서버로)
+      timeout: 60
+      runas: ubuntu
+    - location: scripts/stop.sh       # 기존 서버 종료
       timeout: 60
       runas: ubuntu

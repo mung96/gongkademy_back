@@ -31,11 +31,3 @@ nohup java -jar \
     $REPOSITORY/current/$JAR_NAME > $REPOSITORY/current/output-$IDLE_PROFILE.log 2>&1 &
 
 echo "> 새 애플리케이션이 실행되었습니다. (포트: $IDLE_PORT)"
-
-# Nginx 포트 변경
-echo "> Nginx 설정 변경 및 재시작"
-sleep 10  # 새로운 서비스가 완전히 실행될 시간을 줌
-echo "set \$service_url http://127.0.0.1:$IDLE_PORT;" | sudo tee /etc/nginx/conf.d/service-url.inc
-sudo systemctl reload nginx
-
-echo "> 배포 완료! 현재 서비스 포트: $IDLE_PORT"
