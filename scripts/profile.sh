@@ -29,7 +29,7 @@ function find_idle_port()
 {
     IDLE_PROFILE=$(find_idle_profile)
 
-    if [ "${IDLE_PROFILE}" == prod1 ]
+    if [ ${IDLE_PROFILE} == prod1 ]
     then
       echo "8081"
     else
@@ -42,7 +42,7 @@ function find_active_port()
 {
     IDLE_PROFILE=$(find_idle_profile)
 
-  if [ "${IDLE_PROFILE}" == "prod2" ]
+  if [ ${IDLE_PROFILE} == prod2 ]
   then
     echo "8081"
   else

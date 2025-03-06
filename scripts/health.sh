@@ -13,7 +13,7 @@ sleep 10
 
 for RETRY_COUNT in {1..10}
 do
-  RESPONSE=$(curl -s http://localhost:${ACTIVE_PORT}/profile)
+  RESPONSE=$(curl -s http://localhost/profile)
   UP_COUNT=$(echo ${RESPONSE} | grep 'prod' | wc -l)
   IDLE_PORT=$(find_idle_port)
   IDLE_PROFILE=$(find_idle_profile)
