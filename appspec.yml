@@ -12,7 +12,7 @@ file_exists_behavior: OVERWRITE
 permissions:
   - object: /
     owner: ubuntu
-    group: ubuntuw
+    group: ubuntu
 
 hooks:
   ApplicationStart:
