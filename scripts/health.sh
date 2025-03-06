@@ -15,6 +15,9 @@ for RETRY_COUNT in {1..10}
 do
   RESPONSE=$(curl -s http://localhost:${ACTIVE_PORT}/profile)
   UP_COUNT=$(echo ${RESPONSE} | grep 'prod' | wc -l)
+  IDLE_PORT=$(find_idle_port)
+  IDLE_PROFILE=$(find_idle_profile)
+
 
   if [ ${UP_COUNT} -ge 1 ]
   then
@@ -23,6 +26,8 @@ do
       break
   else
       echo "> Health check의 응답을 알 수 없거나 혹은 실행 상태가 아닙니다."
+      echo "> IDLE_PORT: ${IDLE_PORT}"
+      echo "> IDLE_PROFILE: ${IDLE_PROFILE}"
       echo "> Health check: ${RESPONSE}"
   fi
 
