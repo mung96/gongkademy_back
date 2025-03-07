@@ -1,0 +1,27 @@
+version: 0.0
+os: linux
+
+files:
+  # S3에 저장한 파일들 중 destination(AWS EC2)으로 이동시킬 대상을 지정한다.
+  # / 이라고 지정하면 S3에 저장한 전체 파일을 뜻한다.
+  - source: /
+    # EC2의 어떤 경로에 저장할 지 지정한다.
+    destination: /home/ubuntu/gongkademy_back/current
+
+file_exists_behavior: OVERWRITE
+permissions:
+  - object: /
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  ApplicationStart:
+    - location: scripts/start.sh    # 새 서버 기동 (기존 서버는 유지)
+      timeout: 60
+      runas: ubuntu
+
+  ValidateService:
+    - location: scripts/health.sh     # 새 서버의 Health Check 수행
+      timeout: 60
+      runas: ubuntu
+

@@ -2,6 +2,7 @@ package com.gongkademy.service.dto;
 
 import com.gongkademy.domain.Member;
 import com.gongkademy.domain.RoleType;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 @Getter
 @RequiredArgsConstructor
 @Builder
-public class PrincipalDetails implements OAuth2User {
+public class PrincipalDetails implements OAuth2User, Serializable {
 
     private final List<RoleType> roleTypes;
     private final Member member;

@@ -16,7 +16,7 @@ public class ELBController {
     @GetMapping("/health")
     public HttpStatus healthCheck(){
 
-        log.info("ELB Health Check 요청이 들어왔습니다.");
+        log.info("ELB Health Check 요청이 들어왔습니다.!!");
 
         return HttpStatus.OK;
     }
