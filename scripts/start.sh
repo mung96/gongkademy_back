@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+exec >> /path/to/deploy.log 2>&1
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
@@ -11,7 +11,7 @@ JAR_NAME=project.jar
 # 현재 실행 중인 포트 확인
 NEW_PORT=$(find_idle_port)
 NEW_PROFILE=$(find_idle_profile)
-
+PREV_PORT=$(find_active_port)
 
 echo "> 배포할 프로파일: $NEW_PROFILE (포트: $NEW_PORT)"
 
@@ -34,3 +34,17 @@ echo "set \$service_url http://127.0.0.1:$NEW_PORT;" | sudo tee /etc/nginx/conf.
 sudo systemctl reload nginx
 
 echo "> 배포 완료! 현재 서비스 포트: $NEW_PORT"
+
+
+
+echo "> $PREV_PORT에서 구동중인 애플리케이션 pid 확인"
+PREV_PID=$(lsof -ti tcp:${PREV_PORT})
+
+if [ -z ${PREV_PID} ]
+then
+  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
+else
+  echo "> kill -15 $PREV_PID"
+  kill -15 ${PREV_PID}
+  sleep 5
+fi
