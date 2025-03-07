@@ -4,7 +4,7 @@
 
 # 쉬고 있는 profile 찾기: real1이 사용중이면 real2가 쉬고 있고, 반대면 real1이 쉬고 있음
 
-exec >> /path/to/deploy.log 2>&1
+exec >> /home/ubuntu/deploy.log 2>&1
 function find_idle_profile()
 {
     RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/profile) # 1

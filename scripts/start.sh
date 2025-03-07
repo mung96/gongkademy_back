@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-exec >> /path/to/deploy.log 2>&1
+exec >> /home/ubuntu/deploy.log 2>&1
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
