@@ -9,6 +9,7 @@ import com.gongkademy.exception.CustomException;
 import com.gongkademy.exception.ErrorCode;
 import com.gongkademy.repository.MemberRepository;
 import com.gongkademy.service.BoardService;
+import com.gongkademy.service.BoardServiceVer1;
 import com.gongkademy.service.MemberService;
 import com.gongkademy.service.dto.BoardListResponse;
 import com.gongkademy.service.dto.CourseListResponse;
