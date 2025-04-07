@@ -23,7 +23,7 @@ public class View {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="view_id")
+    @Column(name="views_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +33,7 @@ public class View {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="board_id")
     private Board board;
+
 
     @Builder
     private View(Member member, Board board) {

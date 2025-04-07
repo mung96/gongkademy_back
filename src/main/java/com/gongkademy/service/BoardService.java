@@ -127,12 +127,15 @@ public class BoardService  {
     }
 
     //TODO: 댓글 불러오는거랑 게시글 상세 불러오는게 분리가 되어야하네. 그래야 프론트에서 댓글변경시 그거만 불러오는게 가능
-    @Transactional(readOnly = true)
+    @Transactional
     public BoardDetailResponse findBoardDetail(Long memberId,Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
         log.info("게시판 상세 조회: {}",board);
 
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new CustomException(MEMBER_NOT_FOUND));
+        Member member = null;
+        if(memberId != null){
+             member = memberRepository.findById(memberId).orElseThrow(()->new CustomException(MEMBER_NOT_FOUND));
+        }
 
         //조회수 불러오기
         Long viewCount = viewRepository.countByBoard_Id(boardId);
