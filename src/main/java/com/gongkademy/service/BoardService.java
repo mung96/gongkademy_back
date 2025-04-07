@@ -9,6 +9,7 @@ import static com.gongkademy.exception.ErrorCode.NOT_BOARD_WRITER;
 import static com.gongkademy.exception.ErrorCode.NOT_COMMENT_WRITER;
 import static com.gongkademy.exception.ErrorCode.NOT_VALID_QUESTION_REQUEST;
 
+import com.gongkademy.domain.View;
 import com.gongkademy.domain.board.Comment;
 import com.gongkademy.domain.course.Course;
 import com.gongkademy.domain.course.Lecture;
@@ -25,6 +26,7 @@ import com.gongkademy.repository.CommentRepository;
 import com.gongkademy.repository.CourseRepository;
 import com.gongkademy.repository.LectureRepository;
 import com.gongkademy.repository.MemberRepository;
+import com.gongkademy.repository.ViewRepository;
 import com.gongkademy.service.dto.BoardDetailResponse;
 import com.gongkademy.service.dto.BoardItemDto;
 import com.gongkademy.service.dto.BoardListResponse;
@@ -50,6 +52,7 @@ public class BoardService  {
     private final CourseRepository courseRepository;
     private final LectureRepository lectureRepository;
     private final CommentRepository commentRepository;
+    private final ViewRepository viewRepository;
 
     @Transactional(readOnly = true)
     public BoardListResponse findBoardList(BoardCategory boardCategory, int page, BoardCriteria boardCriteria) {
@@ -128,6 +131,17 @@ public class BoardService  {
     public BoardDetailResponse findBoardDetail(Long memberId,Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()->new CustomException(BOARD_NOT_FOUND));
         log.info("게시판 상세 조회: {}",board);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new CustomException(MEMBER_NOT_FOUND));
+
+        //조회수 불러오기
+        Long viewCount = viewRepository.countByBoard_Id(boardId);
+
+        //조회수 기록
+        View view = View.builder().member(member).board(board).build();
+        viewRepository.save(view);
+
+        //댓글 리스트 조회
         List<Comment> commentList = commentRepository.findByBoardId(boardId);
         List<CommentItemDto> commentDtoList = new ArrayList<>();
         for(Comment comment:commentList){
@@ -150,6 +164,7 @@ public class BoardService  {
                 .commentList(commentDtoList)
                 .courseTitle(board.getBoardCategory() == QUESTION ? ((Question)board).getCourse().getTitle() : null)
                 .lectureTitle((board.getBoardCategory() == QUESTION && ((Question)board).getLecture() != null) ?((Question)board).getLecture().getTitle() : null)
+                .viewCount(viewCount)
                 .build();
     }
 

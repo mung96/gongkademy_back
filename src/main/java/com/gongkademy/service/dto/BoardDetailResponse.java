@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class BoardDetailResponse {
+    //TODO: Dto도 객체지향적으로 못바꾸려나
     private Long boardId;
     private String title;
     private String body;
@@ -22,4 +23,6 @@ public class BoardDetailResponse {
     private Boolean isMine;
     private BoardCategory boardCategory;
     private List<CommentItemDto> commentList;
+    private Long viewCount;
+
 }
